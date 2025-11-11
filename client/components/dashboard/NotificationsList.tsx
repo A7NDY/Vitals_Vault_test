@@ -20,7 +20,9 @@ const items: Item[] = [
 export default function NotificationsList() {
   return (
     <div className="rounded-xl border bg-white p-5 shadow-sm">
-      <div className="mb-4 text-sm font-medium text-slate-700">System Notifications</div>
+      <div className="mb-4 text-sm font-medium text-slate-700">
+        System Notifications
+      </div>
       <ul className="space-y-4">
         {items.map((item, i) => (
           <li key={i} className="flex items-start gap-3">
@@ -28,7 +30,9 @@ export default function NotificationsList() {
               <AlertTriangle className="h-4 w-4" />
             </div>
             <div>
-              <div className="text-sm font-medium text-slate-800">{item.title}</div>
+              <div className="text-sm font-medium text-slate-800">
+                {item.title}
+              </div>
               <div className="text-sm text-slate-600">{item.description}</div>
             </div>
           </li>

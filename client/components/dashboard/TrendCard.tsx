@@ -36,7 +36,9 @@ export default function TrendCard({
       <div className="mb-4 flex items-end justify-between">
         <div>
           <div className="text-sm text-slate-500">{title}</div>
-          <div className="mt-2 text-2xl font-semibold text-slate-900">{change}</div>
+          <div className="mt-2 text-2xl font-semibold text-slate-900">
+            {change}
+          </div>
           <div className="text-xs text-emerald-600">Last 30 Days {change}</div>
         </div>
       </div>
@@ -50,17 +52,35 @@ export default function TrendCard({
             </linearGradient>
           </defs>
 
-          <path d={path} fill="none" stroke={color} strokeWidth={3} strokeLinejoin="round" strokeLinecap="round" />
+          <path
+            d={path}
+            fill="none"
+            stroke={color}
+            strokeWidth={3}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
 
           {/* Filled area */}
-          <path d={`${path} L ${w - 16} ${h - 16} L 16 ${h - 16} Z`} fill="url(#grad)" opacity="0.9" />
+          <path
+            d={`${path} L ${w - 16} ${h - 16} L 16 ${h - 16} Z`}
+            fill="url(#grad)"
+            opacity="0.9"
+          />
 
           {/* X labels */}
           {months.map((m, i) => {
             const stepX = (w - 32) / (months.length - 1);
             const x = 16 + i * stepX;
             return (
-              <text key={m} x={x} y={h - 4} fontSize={10} fill="#64748b" textAnchor="middle">
+              <text
+                key={m}
+                x={x}
+                y={h - 4}
+                fontSize={10}
+                fill="#64748b"
+                textAnchor="middle"
+              >
                 {m}
               </text>
             );

@@ -17,7 +17,10 @@ export default function Header() {
     <header className="sticky top-0 z-30 w-full border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container flex h-14 items-center justify-between gap-4">
         <div className="flex items-center gap-6">
-          <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight text-slate-800">
+          <Link
+            to="/"
+            className="flex items-center gap-2 font-semibold tracking-tight text-slate-800"
+          >
             <div className="h-6 w-6 rounded-sm bg-slate-900" />
             <span>Vitals Vault Admin</span>
           </Link>
@@ -32,7 +35,7 @@ export default function Header() {
                     "rounded-md px-3 py-1.5 text-slate-600 hover:text-slate-900",
                     isActive || (item.to === "/" && location.pathname === "/")
                       ? "bg-slate-100 text-slate-900"
-                      : "hover:bg-slate-100"
+                      : "hover:bg-slate-100",
                   )
                 }
                 end={item.to === "/"}
