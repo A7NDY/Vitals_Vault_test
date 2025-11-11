@@ -23,11 +23,11 @@ const pending = [
 ];
 
 const approved = [
-  { name: "Ethan Walker", condition: "Pediatrics", visits: 12, status: "Active" },
-  { name: "Sophia Clark", condition: "Orthopedics", visits: 7, status: "Active" },
-  { name: "Noah Turner", condition: "Ophthalmology", visits: 3, status: "Suspended" },
-  { name: "Ava Mitchell", condition: "Psychiatry", visits: 14, status: "Active" },
-  { name: "Liam Foster", condition: "Urology", visits: 5, status: "Active" },
+  { name: "John Doe", condition: "Hypertension", visits: 5, status: "Active" },
+  { name: "Maria Gonzalez", condition: "Diabetes", visits: 8, status: "Active" },
+  { name: "Liam Nguyen", condition: "Asthma", visits: 2, status: "Suspended" },
+  { name: "Noelle Patel", condition: "Depression", visits: 6, status: "Active" },
+  { name: "Grace Kim", condition: "Dermatology", visits: 3, status: "Active" },
 ];
 
 export default function Patients() {
