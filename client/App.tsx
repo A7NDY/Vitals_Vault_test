@@ -11,6 +11,7 @@ import Patients from "./pages/Patients";
 import Doctors from "./pages/Doctors";
 import Algen from "./pages/Algen";
 import Billing from "./pages/Billing";
+import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
