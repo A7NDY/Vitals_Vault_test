@@ -27,7 +27,7 @@ export default function Login() {
   }
 
   return (
-    <MainLayout>
+    <MainLayout hideHeader>
       <div className="mx-auto max-w-3xl py-12">
         <h1 className="text-center text-2xl font-semibold text-slate-900">Welcome to Vitals Vault</h1>
         <p className="mt-2 text-center text-sm text-slate-600">Please select your role to log in.</p>
