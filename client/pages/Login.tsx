@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 import MainLayout from "@/components/layout/MainLayout";
 
 const hero = "https://cdn.builder.io/api/v1/image/assets%2Fff7b5ae39b16499bb6e615caac5bc024%2Fae721b986124463ca5d9fb22cf23c41c?format=webp&width=1200";
@@ -7,6 +10,22 @@ export default function Login() {
   const [role, setRole] = useState<"Doctor" | "Patient" | "Admin">("Patient");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  function handleLogin() {
+    if (!email || !password) {
+      toast({ title: "Missing fields", description: "Please enter email and password." });
+      return;
+    }
+
+    toast({ title: "Signed in", description: `Welcome back, ${role}` });
+
+    setTimeout(() => {
+      if (role === "Doctor") navigate("/doctors");
+      else if (role === "Patient") navigate("/patients");
+      else navigate("/billing");
+    }, 500);
+  }
 
   return (
     <MainLayout>
@@ -41,7 +60,7 @@ export default function Login() {
           </div>
 
           <div className="mt-6">
-            <button className="w-full rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-sky-700">Log In</button>
+            <button onClick={handleLogin} className="w-full rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-sky-700">Log In</button>
           </div>
 
           <p className="mt-6 text-center text-xs text-slate-400">© 2024 Vitals Vault. All rights reserved.</p>
