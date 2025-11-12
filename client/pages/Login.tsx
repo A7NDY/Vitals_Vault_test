@@ -11,6 +11,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   function handleLogin() {
     if (!email || !password) {
@@ -20,18 +21,8 @@ export default function Login() {
 
     toast({ title: "Signed in", description: `Welcome back, ${role}` });
 
-    // persist auth state
-    try {
-      // lazy import to avoid circulars
-      const authModule = await import("@/context/AuthContext");
-      const { useAuth } = authModule; // not used directly
-    } catch (e) {
-      // ignore
-    }
-
-    // Save user into localStorage via context - use a global event as we can't call hook here synchronously
-    const user = { email, role } as any;
-    localStorage.setItem("vv_user", JSON.stringify(user));
+    // persist auth state via context
+    login({ email, role });
 
     setTimeout(() => {
       if (role === "Doctor") navigate("/doctors");
