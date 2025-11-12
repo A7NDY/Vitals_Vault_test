@@ -1,5 +1,4 @@
 import MainLayout from "@/components/layout/MainLayout";
-import MainLayout from "@/components/layout/MainLayout";
 import { Search } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useMemo } from "react";
@@ -47,44 +46,49 @@ export default function Doctors() {
 
   // If logged-in user is a Doctor, show the doctor dashboard
   if (user && user.role === "Doctor") {
-    const counts = useMemo(() => {
-      const total = doctorPatients.length;
-      const normal = doctorPatients.filter((p) => p.risk === "Normal").length;
-      const intermediate = doctorPatients.filter((p) => p.risk === "Intermediate").length;
-      const critical = doctorPatients.filter((p) => p.risk === "Critical").length;
-      return { total, normal, intermediate, critical };
-    }, []);
+    // Use design-specific stat numbers matching the provided layout
+    const counts = useMemo(() => ({ total: 120, normal: 80, intermediate: 30, critical: 10 }), []);
 
     return (
       <MainLayout>
         <div>
-          <div className="mb-6 flex items-center justify-between">
-            <h1 className="text-3xl font-semibold">Doctor Dashboard</h1>
-            <div className="relative w-80">
-              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-              <input placeholder="Search patients" className="h-10 w-full rounded-md border border-slate-200 bg-slate-100/70 pl-9 pr-3 text-sm text-slate-700" />
+          {/* Top search */}
+          <div className="mb-6">
+            <div className="relative max-w-4xl">
+              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <input placeholder="Search patients" className="h-12 w-full rounded-md border border-slate-200 bg-white/80 pl-11 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-300 focus:outline-none" />
+            </div>
+            <div className="mt-3 flex items-center justify-start gap-3">
+              <select className="h-9 rounded-md border bg-white px-3 text-sm text-slate-700">
+                <option>All</option>
+                <option>Critical</option>
+                <option>Intermediate</option>
+                <option>Normal</option>
+              </select>
             </div>
           </div>
 
-          <div className="mb-6 flex gap-4">
-            <div className="flex-1 rounded-lg bg-white p-4 shadow-sm">
+          {/* Stat cards */}
+          <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-lg bg-slate-100/60 p-4 shadow-sm">
               <div className="text-sm text-slate-500">Total Patients</div>
               <div className="mt-2 text-xl font-bold text-slate-900">{counts.total}</div>
             </div>
-            <div className="w-40 rounded-lg bg-white p-4 shadow-sm">
+            <div className="rounded-lg bg-slate-100/60 p-4 shadow-sm">
               <div className="text-sm text-slate-500">Normal</div>
               <div className="mt-2 text-xl font-bold text-slate-900">{counts.normal}</div>
             </div>
-            <div className="w-40 rounded-lg bg-white p-4 shadow-sm">
+            <div className="rounded-lg bg-slate-100/60 p-4 shadow-sm">
               <div className="text-sm text-slate-500">Intermediate</div>
               <div className="mt-2 text-xl font-bold text-slate-900">{counts.intermediate}</div>
             </div>
-            <div className="w-40 rounded-lg bg-white p-4 shadow-sm">
+            <div className="rounded-lg bg-slate-100/60 p-4 shadow-sm">
               <div className="text-sm text-slate-500">Critical</div>
               <div className="mt-2 text-xl font-bold text-slate-900">{counts.critical}</div>
             </div>
           </div>
 
+          {/* Critical Patients */}
           <section className="mb-8">
             <h2 className="mb-4 text-lg font-semibold">Critical Patients</h2>
             <div className="rounded-xl border bg-white shadow-sm">
@@ -113,6 +117,7 @@ export default function Doctors() {
             </div>
           </section>
 
+          {/* Intermediate Patients */}
           <section className="mb-8">
             <h2 className="mb-4 text-lg font-semibold">Intermediate Patients</h2>
             <div className="rounded-xl border bg-white shadow-sm">
@@ -141,6 +146,7 @@ export default function Doctors() {
             </div>
           </section>
 
+          {/* Vitals Overview */}
           <section className="mb-8">
             <h2 className="mb-4 text-lg font-semibold">Vitals Overview</h2>
             <div className="grid gap-4 md:grid-cols-3">
@@ -148,8 +154,8 @@ export default function Doctors() {
                 <div key={v.title} className="rounded-lg border bg-white p-4 shadow-sm">
                   <div className="text-sm text-slate-500">{v.title}</div>
                   <div className="mt-2 text-2xl font-bold text-slate-900">{v.value}</div>
-                  <div className="mt-1 text-sm text-slate-400">{v.note} • <span className={`text-sm ${v.change.startsWith("+") ? "text-emerald-600" : "text-rose-600"}`}>{v.change}</span></div>
-                  <svg className="mt-4 h-20 w-full text-slate-300" viewBox="0 0 120 32" preserveAspectRatio="none">
+                  <div className="mt-1 text-sm text-slate-400">{v.note} • <span className={`${v.change.startsWith("+") ? "text-emerald-600" : "text-rose-600"}`}>{v.change}</span></div>
+                  <svg className="mt-4 h-24 w-full text-slate-300" viewBox="0 0 120 32" preserveAspectRatio="none">
                     <polyline fill="none" stroke="#0ea5e9" strokeWidth="2" points="0,18 20,14 40,18 60,8 80,12 100,20 120,10" />
                   </svg>
                 </div>
@@ -157,6 +163,7 @@ export default function Doctors() {
             </div>
           </section>
 
+          {/* Upcoming Appointments */}
           <section className="mb-8">
             <h2 className="mb-4 text-lg font-semibold">Upcoming Appointments</h2>
             <div className="rounded-xl border bg-white shadow-sm">
@@ -181,6 +188,7 @@ export default function Doctors() {
             </div>
           </section>
 
+          {/* Recent Reports */}
           <section className="mb-8">
             <h2 className="mb-4 text-lg font-semibold">Recent Reports</h2>
             <div className="rounded-xl border bg-white shadow-sm">
@@ -205,6 +213,7 @@ export default function Doctors() {
             </div>
           </section>
 
+          {/* Quick Actions */}
           <section>
             <h2 className="mb-4 text-lg font-semibold">Quick Actions</h2>
             <div className="flex flex-wrap gap-3">
