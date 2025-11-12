@@ -71,7 +71,12 @@ export default function Header() {
             <Bell className="h-4 w-4" />
             <span className="absolute -top-0.5 -right-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-semibold text-white">2</span>
           </button>
+
           <img src="https://i.pravatar.cc/40?img=65" alt="User avatar" className="h-9 w-9 rounded-full border" />
+
+          <button onClick={handleLogout} className="hidden md:inline-flex items-center gap-2 rounded-md border bg-white px-3 py-1 text-sm text-slate-700 hover:bg-slate-50">
+            Logout
+          </button>
         </div>
       </div>
     </header>
