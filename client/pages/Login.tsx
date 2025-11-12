@@ -22,7 +22,7 @@ export default function Login() {
     setTimeout(() => {
       if (role === "Doctor") navigate("/doctors");
       else if (role === "Patient") navigate("/patients");
-      else navigate("/billing");
+      else navigate("/dashboard");
     }, 500);
   }
 
