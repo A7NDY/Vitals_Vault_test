@@ -11,6 +11,11 @@ import Patients from "./pages/Patients";
 import Doctors from "./pages/Doctors";
 import Algen from "./pages/Algen";
 import Billing from "./pages/Billing";
+import Vitals from "./pages/Vitals";
+import Medications from "./pages/Medications";
+import Reports from "./pages/Reports";
+import Appointments from "./pages/Appointments";
+import Messages from "./pages/Messages";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 
