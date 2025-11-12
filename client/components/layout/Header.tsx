@@ -3,7 +3,7 @@ import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
-  { to: "/", label: "Dashboard" },
+  { to: "/dashboard", label: "Dashboard" },
   { to: "/patients", label: "Patients" },
   { to: "/doctors", label: "Doctors" },
   { to: "/algen", label: "Algen" },
