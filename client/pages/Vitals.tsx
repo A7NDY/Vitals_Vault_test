@@ -124,7 +124,7 @@ export default function Vitals() {
                 <Activity className="h-4 w-4" /> Fitbit
               </button>
               <button onClick={() => handleSync("Google Fit")} className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
-                <Smartwatch className="h-4 w-4" /> Google Fit
+                <Activity className="h-4 w-4" /> Google Fit
               </button>
               <button onClick={() => handleSync("Apple Health")} className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
                 <Zap className="h-4 w-4" /> Apple Health
