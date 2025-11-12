@@ -2,6 +2,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 export default function Header() {
   const location = useLocation();
@@ -16,7 +17,15 @@ export default function Header() {
     { to: "/billing", label: "Billing" },
   ];
 
-  if (user && user.role === "Patient") {
+  if (user && user.role === "Doctor") {
+    nav = [
+      { to: "/dashboard", label: "Dashboard" },
+      { to: "/patients", label: "My Patients" },
+      { to: "/appointments", label: "Appointments" },
+      { to: "/reports", label: "Reports" },
+      { to: "/messages", label: "Messages" },
+    ];
+  } else if (user && user.role === "Patient") {
     nav = [
       { to: "/patients", label: "Dashboard" },
       { to: "/vitals", label: "Vitals" },
