@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { Search, Plus } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { useMemo, useState } from "react";
 
 type Patient = {
   name: string;
