@@ -12,22 +12,52 @@ export default function Vitals() {
   const [weight, setWeight] = useState("");
   const [symptoms, setSymptoms] = useState("");
 
+  const [saved, setSaved] = useState<any[]>(() => {
+    try {
+      const raw = localStorage.getItem("vv_vitals");
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  function persist(records: any[]) {
+    try {
+      localStorage.setItem("vv_vitals", JSON.stringify(records));
+    } catch (e) {
+      // ignore
+    }
+  }
+
   function handleSave() {
     if (!datetime) {
       toast({ title: "Missing date", description: "Please select date & time for the reading." });
       return;
     }
 
-    // Simple validation example
     if (!bp && !hr && !bg && !spO2 && !weight) {
       toast({ title: "No vitals", description: "Please enter at least one vital value or sync from a wearable." });
       return;
     }
 
-    // Mock save
+    const record = {
+      id: Date.now().toString(),
+      datetime,
+      bp: bp || null,
+      hr: hr || null,
+      bg: bg || null,
+      spO2: spO2 || null,
+      weight: weight || null,
+      symptoms: symptoms || null,
+    };
+
+    const next = [record, ...saved].slice(0, 50);
+    setSaved(next);
+    persist(next);
+
     toast({ title: "Vitals saved", description: "Your vitals have been recorded." });
 
-    // Clear form (optional)
+    setDatetime("");
     setBp("");
     setHr("");
     setBg("");
@@ -38,7 +68,6 @@ export default function Vitals() {
 
   function handleSync(source: string) {
     toast({ title: `Sync requested`, description: `Attempting to sync from ${source}...` });
-    // mock autofill
     setTimeout(() => {
       setBp("120/80");
       setHr("72");
@@ -105,6 +134,20 @@ export default function Vitals() {
 
           <div className="flex justify-end">
             <button onClick={handleSave} className="rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-sky-700">Save &amp; Send</button>
+          </div>
+        </div>
+
+        {/* Recent entries */}
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold mb-4">Recent Vitals</h2>
+          <div className="space-y-3">
+            {saved.length === 0 && <div className="text-sm text-slate-500">No vitals recorded yet.</div>}
+            {saved.map((r) => (
+              <div key={r.id} className="rounded-md border bg-white p-3">
+                <div className="text-sm font-medium">{new Date(r.datetime).toLocaleString()}</div>
+                <div className="mt-1 text-sm text-slate-600">BP: {r.bp || "—"} • HR: {r.hr || "—"} • SpO2: {r.spO2 || "—"}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
