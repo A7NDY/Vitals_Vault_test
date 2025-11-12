@@ -1,11 +1,12 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
   const location = useLocation();
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   let nav = [
     { to: "/dashboard", label: "Dashboard" },
@@ -24,6 +25,15 @@ export default function Header() {
       { to: "/appointments", label: "Appointments" },
       { to: "/messages", label: "Messages" },
     ];
+  }
+
+  function handleLogout() {
+    try {
+      logout();
+    } catch (e) {
+      // ignore
+    }
+    navigate("/");
   }
 
   return (
