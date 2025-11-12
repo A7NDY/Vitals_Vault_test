@@ -1,12 +1,12 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import * as Router from "react-router-dom";
 import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import * as Router from "react-router-dom";
 
 export default function Header() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location = Router.useLocation();
+  const navigate = Router.useNavigate();
   const { user, logout } = useAuth();
 
   let nav = [
@@ -49,14 +49,14 @@ export default function Header() {
     <header className="sticky top-0 z-30 w-full border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container flex h-14 items-center justify-between gap-4">
         <div className="flex items-center gap-6">
-          <Link to="/" className="flex items-center gap-2 font-semibold tracking-tight text-slate-800">
+          <Router.Link to="/" className="flex items-center gap-2 font-semibold tracking-tight text-slate-800">
             <div className="h-6 w-6 rounded-sm bg-slate-900" />
             <span>Vitals Vault</span>
-          </Link>
+          </Router.Link>
 
           <nav className="hidden md:flex items-center gap-1 text-sm">
             {nav.map((item) => (
-              <NavLink
+              <Router.NavLink
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
@@ -70,7 +70,7 @@ export default function Header() {
                 end={item.to === "/"}
               >
                 {item.label}
-              </NavLink>
+              </Router.NavLink>
             ))}
           </nav>
         </div>
