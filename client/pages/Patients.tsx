@@ -12,16 +12,76 @@ type Patient = {
 };
 
 const PATIENTS: Patient[] = [
-  { name: "Sophia Carter", age: 65, gender: "Female", lastUpdate: "2023-11-15", status: "Critical" },
-  { name: "Ethan Bennett", age: 72, gender: "Male", lastUpdate: "2023-11-18", status: "Stable" },
-  { name: "Olivia Hayes", age: 58, gender: "Female", lastUpdate: "2023-11-20", status: "Stable" },
-  { name: "Liam Foster", age: 60, gender: "Male", lastUpdate: "2023-11-17", status: "Stable" },
-  { name: "Ava Morgan", age: 68, gender: "Female", lastUpdate: "2023-11-19", status: "Stable" },
-  { name: "Noah Parker", age: 75, gender: "Male", lastUpdate: "2023-11-16", status: "Stable" },
-  { name: "Isabella Reed", age: 62, gender: "Female", lastUpdate: "2023-11-21", status: "Stable" },
-  { name: "Jackson Cole", age: 69, gender: "Male", lastUpdate: "2023-11-22", status: "Stable" },
-  { name: "Mia Hughes", age: 55, gender: "Female", lastUpdate: "2023-11-23", status: "Stable" },
-  { name: "Aiden Brooks", age: 70, gender: "Male", lastUpdate: "2023-11-24", status: "Stable" },
+  {
+    name: "Sophia Carter",
+    age: 65,
+    gender: "Female",
+    lastUpdate: "2023-11-15",
+    status: "Critical",
+  },
+  {
+    name: "Ethan Bennett",
+    age: 72,
+    gender: "Male",
+    lastUpdate: "2023-11-18",
+    status: "Stable",
+  },
+  {
+    name: "Olivia Hayes",
+    age: 58,
+    gender: "Female",
+    lastUpdate: "2023-11-20",
+    status: "Stable",
+  },
+  {
+    name: "Liam Foster",
+    age: 60,
+    gender: "Male",
+    lastUpdate: "2023-11-17",
+    status: "Stable",
+  },
+  {
+    name: "Ava Morgan",
+    age: 68,
+    gender: "Female",
+    lastUpdate: "2023-11-19",
+    status: "Stable",
+  },
+  {
+    name: "Noah Parker",
+    age: 75,
+    gender: "Male",
+    lastUpdate: "2023-11-16",
+    status: "Stable",
+  },
+  {
+    name: "Isabella Reed",
+    age: 62,
+    gender: "Female",
+    lastUpdate: "2023-11-21",
+    status: "Stable",
+  },
+  {
+    name: "Jackson Cole",
+    age: 69,
+    gender: "Male",
+    lastUpdate: "2023-11-22",
+    status: "Stable",
+  },
+  {
+    name: "Mia Hughes",
+    age: 55,
+    gender: "Female",
+    lastUpdate: "2023-11-23",
+    status: "Stable",
+  },
+  {
+    name: "Aiden Brooks",
+    age: 70,
+    gender: "Male",
+    lastUpdate: "2023-11-24",
+    status: "Stable",
+  },
 ];
 
 export default function Patients() {
@@ -34,7 +94,9 @@ export default function Patients() {
       <MainLayout>
         <div className="mb-8">
           <h1 className="text-3xl font-semibold">Welcome back, {shortName}</h1>
-          <p className="mt-4 text-slate-600">Your recent vitals and messages.</p>
+          <p className="mt-4 text-slate-600">
+            Your recent vitals and messages.
+          </p>
 
           <div className="mt-6 grid grid-cols-3 gap-4 md:grid-cols-6">
             <div className="rounded-lg bg-white p-4 shadow-sm">
@@ -84,8 +146,12 @@ export default function Patients() {
               </ul>
 
               <div className="mt-6 flex gap-3">
-                <button className="rounded-md bg-sky-600 px-3 py-2 text-sm text-white">Log Vitals</button>
-                <button className="rounded-md border px-3 py-2 text-sm">View Reports</button>
+                <button className="rounded-md bg-sky-600 px-3 py-2 text-sm text-white">
+                  Log Vitals
+                </button>
+                <button className="rounded-md border px-3 py-2 text-sm">
+                  View Reports
+                </button>
               </div>
             </div>
 
@@ -93,10 +159,16 @@ export default function Patients() {
               <h3 className="text-lg font-medium">Recent Messages</h3>
               <div className="mt-4 rounded-md bg-white p-4 shadow-sm">
                 <div className="flex items-start gap-3">
-                  <img src="https://i.pravatar.cc/40?img=65" className="h-9 w-9 rounded-full" />
+                  <img
+                    src="https://i.pravatar.cc/40?img=65"
+                    className="h-9 w-9 rounded-full"
+                  />
                   <div>
                     <div className="text-sm font-medium">Dr. Emily Carter</div>
-                    <div className="text-xs text-slate-500">Your blood pressure is slightly elevated. Please monitor it closely.</div>
+                    <div className="text-xs text-slate-500">
+                      Your blood pressure is slightly elevated. Please monitor
+                      it closely.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -125,12 +197,24 @@ export default function Patients() {
     <MainLayout>
       <div className="mb-6">
         <div className="relative max-w-4xl">
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search" className="h-12 w-full rounded-md border border-slate-200 bg-white/80 pl-11 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-300 focus:outline-none" />
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            size={18}
+          />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search"
+            className="h-12 w-full rounded-md border border-slate-200 bg-white/80 pl-11 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-300 focus:outline-none"
+          />
         </div>
 
         <div className="mt-3">
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="h-9 rounded-md border bg-white px-3 text-sm text-slate-700">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="h-9 rounded-md border bg-white px-3 text-sm text-slate-700"
+          >
             <option>All</option>
             <option>Critical</option>
             <option>Stable</option>
@@ -144,28 +228,50 @@ export default function Patients() {
           <table className="min-w-full divide-y divide-slate-200">
             <thead className="bg-slate-50/60">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Age</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Gender</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Last Update</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Action</th>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Age
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Gender
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Last Update
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Action
+                </th>
               </tr>
             </thead>
 
             <tbody className="divide-y divide-slate-200 bg-white">
               {filtered.map((p) => (
                 <tr key={p.name}>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">{p.name}</td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
+                    {p.name}
+                  </td>
                   <td className="px-6 py-4 text-sm text-slate-600">{p.age}</td>
-                  <td className="px-6 py-4 text-sm text-slate-600">{p.gender}</td>
-                  <td className="px-6 py-4 text-sm text-slate-600">{p.lastUpdate}</td>
+                  <td className="px-6 py-4 text-sm text-slate-600">
+                    {p.gender}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-slate-600">
+                    {p.lastUpdate}
+                  </td>
                   <td className="px-6 py-4 text-sm">
-                    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${p.status === "Critical" ? "bg-rose-50 text-rose-600" : "bg-slate-100 text-slate-700"}`}>
+                    <span
+                      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${p.status === "Critical" ? "bg-rose-50 text-rose-600" : "bg-slate-100 text-slate-700"}`}
+                    >
                       {p.status}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-sky-600">View Profile</td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-sky-600">
+                    View Profile
+                  </td>
                 </tr>
               ))}
             </tbody>

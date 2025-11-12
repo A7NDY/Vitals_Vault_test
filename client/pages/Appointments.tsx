@@ -13,9 +13,27 @@ type Appt = {
 };
 
 const SAMPLE: Appt[] = [
-  { id: "a1", date: "2024-07-15", time: "10:00", doctor: "Dr. Emily Carter", type: "Check-up" },
-  { id: "a2", date: "2024-07-22", time: "14:00", doctor: "Dr. Robert Harris", type: "Consultation" },
-  { id: "a3", date: "2024-08-05", time: "11:30", doctor: "Dr. Emily Carter", type: "Follow-up" },
+  {
+    id: "a1",
+    date: "2024-07-15",
+    time: "10:00",
+    doctor: "Dr. Emily Carter",
+    type: "Check-up",
+  },
+  {
+    id: "a2",
+    date: "2024-07-22",
+    time: "14:00",
+    doctor: "Dr. Robert Harris",
+    type: "Consultation",
+  },
+  {
+    id: "a3",
+    date: "2024-08-05",
+    time: "11:30",
+    doctor: "Dr. Emily Carter",
+    type: "Follow-up",
+  },
 ];
 
 function loadAppts() {
@@ -40,8 +58,20 @@ export default function Appointments() {
 
   useEffect(() => persistAppts(appts), [appts]);
 
-  const upcoming = useMemo(() => appts.filter((a) => new Date(`${a.date}T${a.time}`).getTime() >= Date.now()).slice(0, 10), [appts]);
-  const history = useMemo(() => appts.filter((a) => new Date(`${a.date}T${a.time}`).getTime() < Date.now()).slice(0, 20), [appts]);
+  const upcoming = useMemo(
+    () =>
+      appts
+        .filter((a) => new Date(`${a.date}T${a.time}`).getTime() >= Date.now())
+        .slice(0, 10),
+    [appts],
+  );
+  const history = useMemo(
+    () =>
+      appts
+        .filter((a) => new Date(`${a.date}T${a.time}`).getTime() < Date.now())
+        .slice(0, 20),
+    [appts],
+  );
 
   // form
   const [doctor, setDoctor] = useState("Dr. Emily Carter");
@@ -51,18 +81,27 @@ export default function Appointments() {
 
   function submitRequest() {
     if (!date || !time || !doctor) {
-      toast({ title: "Missing fields", description: "Please select a doctor, date and time." });
+      toast({
+        title: "Missing fields",
+        description: "Please select a doctor, date and time.",
+      });
       return;
     }
     const a: Appt = { id: Date.now().toString(), date, time, doctor, type };
     setAppts((s) => [a, ...s]);
-    toast({ title: "Request submitted", description: `Appointment requested for ${date} ${time}` });
+    toast({
+      title: "Request submitted",
+      description: `Appointment requested for ${date} ${time}`,
+    });
     setDate("");
     setTime("");
   }
 
   function joinCall(id: string) {
-    toast({ title: "Joining call", description: "Opening telehealth link (mock)..." });
+    toast({
+      title: "Joining call",
+      description: "Opening telehealth link (mock)...",
+    });
     // in real app, open meeting URL
   }
 
@@ -87,18 +126,36 @@ export default function Appointments() {
               <tbody>
                 {upcoming.map((a) => (
                   <tr key={a.id} className="border-t">
-                    <td className="py-3 px-4 text-sm text-slate-700">{new Date(a.date).toLocaleDateString()}</td>
-                    <td className="py-3 px-4 text-sm text-slate-600">{a.time}</td>
-                    <td className="py-3 px-4 text-sm text-slate-600">{a.doctor}</td>
-                    <td className="py-3 px-4 text-sm text-slate-600">{a.type}</td>
+                    <td className="py-3 px-4 text-sm text-slate-700">
+                      {new Date(a.date).toLocaleDateString()}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-slate-600">
+                      {a.time}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-slate-600">
+                      {a.doctor}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-slate-600">
+                      {a.type}
+                    </td>
                     <td className="py-3 px-4 text-sm">
-                      <button onClick={() => joinCall(a.id)} className="text-sky-600 hover:underline">Join Call</button>
+                      <button
+                        onClick={() => joinCall(a.id)}
+                        className="text-sky-600 hover:underline"
+                      >
+                        Join Call
+                      </button>
                     </td>
                   </tr>
                 ))}
                 {upcoming.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="py-8 text-center text-sm text-slate-500">No upcoming appointments</td>
+                    <td
+                      colSpan={5}
+                      className="py-8 text-center text-sm text-slate-500"
+                    >
+                      No upcoming appointments
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -120,16 +177,31 @@ export default function Appointments() {
               <tbody>
                 {history.map((a) => (
                   <tr key={a.id} className="border-t">
-                    <td className="py-3 px-4 text-sm text-slate-700">{new Date(a.date).toLocaleDateString()}</td>
-                    <td className="py-3 px-4 text-sm text-slate-600">{a.time}</td>
-                    <td className="py-3 px-4 text-sm text-slate-600">{a.doctor}</td>
-                    <td className="py-3 px-4 text-sm text-slate-600">{a.type}</td>
-                    <td className="py-3 px-4 text-sm text-slate-600">{a.notes || "—"}</td>
+                    <td className="py-3 px-4 text-sm text-slate-700">
+                      {new Date(a.date).toLocaleDateString()}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-slate-600">
+                      {a.time}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-slate-600">
+                      {a.doctor}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-slate-600">
+                      {a.type}
+                    </td>
+                    <td className="py-3 px-4 text-sm text-slate-600">
+                      {a.notes || "—"}
+                    </td>
                   </tr>
                 ))}
                 {history.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="py-8 text-center text-sm text-slate-500">No past appointments</td>
+                    <td
+                      colSpan={5}
+                      className="py-8 text-center text-sm text-slate-500"
+                    >
+                      No past appointments
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -143,7 +215,11 @@ export default function Appointments() {
             <div className="space-y-3">
               <div>
                 <label className="block text-sm text-slate-600">Doctor</label>
-                <select value={doctor} onChange={(e) => setDoctor(e.target.value)} className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm">
+                <select
+                  value={doctor}
+                  onChange={(e) => setDoctor(e.target.value)}
+                  className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                >
                   <option>Dr. Emily Carter</option>
                   <option>Dr. Robert Harris</option>
                   <option>Dr. David Lee</option>
@@ -152,7 +228,11 @@ export default function Appointments() {
 
               <div>
                 <label className="block text-sm text-slate-600">Type</label>
-                <select value={type} onChange={(e) => setType(e.target.value)} className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm">
+                <select
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                >
                   <option>Consultation</option>
                   <option>Check-up</option>
                   <option>Follow-up</option>
@@ -161,16 +241,31 @@ export default function Appointments() {
 
               <div>
                 <label className="block text-sm text-slate-600">Date</label>
-                <input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm" />
+                <input
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  type="date"
+                  className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                />
               </div>
 
               <div>
                 <label className="block text-sm text-slate-600">Time</label>
-                <input value={time} onChange={(e) => setTime(e.target.value)} type="time" className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm" />
+                <input
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  type="time"
+                  className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                />
               </div>
 
               <div className="flex justify-end">
-                <button onClick={submitRequest} className="rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white">Submit Request</button>
+                <button
+                  onClick={submitRequest}
+                  className="rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white"
+                >
+                  Submit Request
+                </button>
               </div>
             </div>
           </div>

@@ -48,7 +48,10 @@ export default function Header() {
     <header className="sticky top-0 z-30 w-full border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container flex h-14 items-center justify-between gap-4">
         <div className="flex items-center gap-6">
-          <Router.Link to="/" className="flex items-center gap-2 font-semibold tracking-tight text-slate-800">
+          <Router.Link
+            to="/"
+            className="flex items-center gap-2 font-semibold tracking-tight text-slate-800"
+          >
             <div className="h-6 w-6 rounded-sm bg-slate-900" />
             <span>Vitals Vault</span>
           </Router.Link>
@@ -77,12 +80,21 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <button className="relative inline-flex h-9 w-9 items-center justify-center rounded-full border bg-white text-slate-600 hover:bg-slate-50">
             <Bell className="h-4 w-4" />
-            <span className="absolute -top-0.5 -right-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-semibold text-white">2</span>
+            <span className="absolute -top-0.5 -right-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-semibold text-white">
+              2
+            </span>
           </button>
 
-          <img src="https://i.pravatar.cc/40?img=65" alt="User avatar" className="h-9 w-9 rounded-full border" />
+          <img
+            src="https://i.pravatar.cc/40?img=65"
+            alt="User avatar"
+            className="h-9 w-9 rounded-full border"
+          />
 
-          <button onClick={handleLogout} className="hidden md:inline-flex items-center gap-2 rounded-md border bg-white px-3 py-1 text-sm text-slate-700 hover:bg-slate-50">
+          <button
+            onClick={handleLogout}
+            className="hidden md:inline-flex items-center gap-2 rounded-md border bg-white px-3 py-1 text-sm text-slate-700 hover:bg-slate-50"
+          >
             Logout
           </button>
         </div>
