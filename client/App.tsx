@@ -38,6 +38,11 @@ const App = () => (
 
             {/* Patients area (Patient + Admin) */}
             <Route path="/patients" element={<ProtectedRoute allowedRoles={["Patient"]}><Patients /></ProtectedRoute>} />
+            <Route path="/vitals" element={<ProtectedRoute allowedRoles={["Patient"]}><Vitals /></ProtectedRoute>} />
+            <Route path="/medications" element={<ProtectedRoute allowedRoles={["Patient"]}><Medications /></ProtectedRoute>} />
+            <Route path="/reports" element={<ProtectedRoute allowedRoles={["Patient"]}><Reports /></ProtectedRoute>} />
+            <Route path="/appointments" element={<ProtectedRoute allowedRoles={["Patient"]}><Appointments /></ProtectedRoute>} />
+            <Route path="/messages" element={<ProtectedRoute allowedRoles={["Patient"]}><Messages /></ProtectedRoute>} />
 
             {/* Billing - admin only */}
             <Route path="/billing" element={<ProtectedRoute allowedRoles={["Admin"]}><Billing /></ProtectedRoute>} />
