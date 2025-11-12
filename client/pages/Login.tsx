@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import MainLayout from "@/components/layout/MainLayout";
+import { useAuth } from "@/context/AuthContext";
 
 const hero = "https://cdn.builder.io/api/v1/image/assets%2Fff7b5ae39b16499bb6e615caac5bc024%2Fae721b986124463ca5d9fb22cf23c41c?format=webp&width=1200";
 
