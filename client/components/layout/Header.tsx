@@ -5,6 +5,8 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
   const location = useLocation();
+  const { user } = useAuth();
+
   let nav = [
     { to: "/dashboard", label: "Dashboard" },
     { to: "/patients", label: "Patients" },
@@ -13,20 +15,15 @@ export default function Header() {
     { to: "/billing", label: "Billing" },
   ];
 
-  try {
-    const { user } = useAuth();
-    if (user && user.role === "Patient") {
-      nav = [
-        { to: "/patients", label: "Dashboard" },
-        { to: "/vitals", label: "Vitals" },
-        { to: "/medications", label: "Medications" },
-        { to: "/reports", label: "Reports" },
-        { to: "/appointments", label: "Appointments" },
-        { to: "/messages", label: "Messages" },
-      ];
-    }
-  } catch (e) {
-    // If no auth context available (e.g., on login page), keep admin nav
+  if (user && user.role === "Patient") {
+    nav = [
+      { to: "/patients", label: "Dashboard" },
+      { to: "/vitals", label: "Vitals" },
+      { to: "/medications", label: "Medications" },
+      { to: "/reports", label: "Reports" },
+      { to: "/appointments", label: "Appointments" },
+      { to: "/messages", label: "Messages" },
+    ];
   }
 
   return (
