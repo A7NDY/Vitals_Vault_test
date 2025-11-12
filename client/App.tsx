@@ -16,25 +16,40 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+import { AuthProvider } from "@/context/AuthContext";
+import ProtectedRoute from "@/components/AuthRoute";
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          {/* Make login the main page */}
-          <Route path="/" element={<Login />} />
-          <Route path="/dashboard" element={<Index />} />
-          <Route path="/patients" element={<Patients />} />
-          <Route path="/doctors" element={<Doctors />} />
-          <Route path="/algen" element={<Algen />} />
-          <Route path="/billing" element={<Billing />} />
-          <Route path="/login" element={<Login />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Make login the main page */}
+            <Route path="/" element={<Login />} />
+
+            {/* Admin dashboard only */}
+            <Route path="/dashboard" element={<ProtectedRoute allowedRoles={["Admin"]}><Index /></ProtectedRoute>} />
+
+            {/* Doctors area (Doctor + Admin) */}
+            <Route path="/doctors" element={<ProtectedRoute allowedRoles={["Doctor"]}><Doctors /></ProtectedRoute>} />
+
+            {/* Patients area (Patient + Admin) */}
+            <Route path="/patients" element={<ProtectedRoute allowedRoles={["Patient"]}><Patients /></ProtectedRoute>} />
+
+            {/* Billing - admin only */}
+            <Route path="/billing" element={<ProtectedRoute allowedRoles={["Admin"]}><Billing /></ProtectedRoute>} />
+
+            <Route path="/algen" element={<ProtectedRoute allowedRoles={["Admin"]}><Algen /></ProtectedRoute>} />
+
+            <Route path="/login" element={<Login />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
