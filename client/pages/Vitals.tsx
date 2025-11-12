@@ -1,6 +1,6 @@
 import { useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
-import { Activity, Smartwatch, Zap } from "lucide-react";
+import { Activity, Zap } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 export default function Vitals() {
