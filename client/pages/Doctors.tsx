@@ -118,6 +118,7 @@ const reports = ["Report 1", "Report 2", "Report 3", "Report 4", "Report 5"];
 
 export default function Doctors() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   // If logged-in user is a Doctor, show the doctor dashboard
   if (user && user.role === "Doctor") {
