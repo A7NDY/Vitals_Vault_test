@@ -18,6 +18,7 @@ import Medications from "./pages/Medications";
 import Reports from "./pages/Reports";
 import Appointments from "./pages/Appointments";
 import DoctorAppointments from "./pages/DoctorAppointments";
+import DoctorReports from "./pages/DoctorReports";
 import Messages from "./pages/Messages";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
@@ -36,6 +37,16 @@ function AppointmentsRouter() {
   }
 
   return <Appointments />;
+}
+
+function ReportsRouter() {
+  const { user } = useAuth();
+
+  if (user?.role === "Doctor") {
+    return <DoctorReports />;
+  }
+
+  return <Reports />;
 }
 
 const App = () => (
@@ -61,7 +72,7 @@ const App = () => (
             <Route path="/patients" element={<ProtectedRoute allowedRoles={["Patient"]}><Patients /></ProtectedRoute>} />
             <Route path="/vitals" element={<ProtectedRoute allowedRoles={["Patient"]}><Vitals /></ProtectedRoute>} />
             <Route path="/medications" element={<ProtectedRoute allowedRoles={["Patient"]}><Medications /></ProtectedRoute>} />
-            <Route path="/reports" element={<ProtectedRoute allowedRoles={["Patient", "Doctor"]}><Reports /></ProtectedRoute>} />
+            <Route path="/reports" element={<ProtectedRoute allowedRoles={["Patient", "Doctor"]}><ReportsRouter /></ProtectedRoute>} />
             <Route path="/appointments" element={<ProtectedRoute allowedRoles={["Patient", "Doctor"]}><AppointmentsRouter /></ProtectedRoute>} />
             <Route path="/messages" element={<ProtectedRoute allowedRoles={["Patient", "Doctor"]}><Messages /></ProtectedRoute>} />
 
