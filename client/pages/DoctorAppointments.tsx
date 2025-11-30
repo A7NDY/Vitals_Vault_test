@@ -218,9 +218,9 @@ export default function DoctorAppointments() {
 
               {/* Weekday headers */}
               <div className="grid grid-cols-7 gap-1 mb-2">
-                {["S", "M", "T", "W", "T", "F", "S"].map((day) => (
+                {["S", "M", "T", "W", "T", "F", "S"].map((day, idx) => (
                   <div
-                    key={day}
+                    key={`weekday-${idx}`}
                     className="h-8 flex items-center justify-center text-xs font-medium text-slate-600"
                   >
                     {day}
