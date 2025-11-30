@@ -30,6 +30,8 @@ function saveRegisteredUsers(users: RegisteredUser[]) {
   }
 }
 
+const ADMIN_PASSKEY = "admin123";
+
 export default function Register() {
   const [role, setRole] = useState<"Doctor" | "Patient" | "Admin">("Patient");
   const [fullName, setFullName] = useState("");
@@ -37,6 +39,7 @@ export default function Register() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [adminPasskey, setAdminPasskey] = useState("");
   const navigate = useNavigate();
 
   function handleRegister() {
@@ -45,6 +48,23 @@ export default function Register() {
       toast({
         title: "Missing fields",
         description: "Please fill in all fields.",
+      });
+      return;
+    }
+
+    // Admin passkey validation
+    if (role === "Admin" && !adminPasskey) {
+      toast({
+        title: "Missing passkey",
+        description: "Please enter the admin passkey.",
+      });
+      return;
+    }
+
+    if (role === "Admin" && adminPasskey !== ADMIN_PASSKEY) {
+      toast({
+        title: "Invalid passkey",
+        description: "The admin passkey you entered is incorrect.",
       });
       return;
     }
