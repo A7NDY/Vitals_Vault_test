@@ -140,7 +140,9 @@ export default function PatientProfile() {
       <div>
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Patient Overview</h1>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Patient Overview
+          </h1>
           <p className="text-slate-600">
             Manage patient health data and interactions
           </p>
@@ -389,9 +391,7 @@ export default function PatientProfile() {
         {/* Other Tabs */}
         {activeTab !== "Vitals Graphs" && (
           <div className="rounded-lg border bg-white p-8 text-center shadow-sm">
-            <p className="text-slate-600">
-              {activeTab} content coming soon
-            </p>
+            <p className="text-slate-600">{activeTab} content coming soon</p>
           </div>
         )}
 

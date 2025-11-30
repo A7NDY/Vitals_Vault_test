@@ -104,7 +104,9 @@ export default function DoctorAppointments() {
 
   // Form states
   const [formPatient, setFormPatient] = useState("Ava Thompson");
-  const [formType, setFormType] = useState<"Check-up" | "Consultation" | "Follow-up">("Check-up");
+  const [formType, setFormType] = useState<
+    "Check-up" | "Consultation" | "Follow-up"
+  >("Check-up");
   const [formDate, setFormDate] = useState("");
   const [formTime, setFormTime] = useState("");
   const [formNotes, setFormNotes] = useState("");
@@ -132,7 +134,9 @@ export default function DoctorAppointments() {
     () =>
       appts
         .filter((a) => new Date(`${a.date}T${a.time}`).getTime() < Date.now())
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+        .sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+        ),
     [appts],
   );
 
@@ -140,7 +144,9 @@ export default function DoctorAppointments() {
     () =>
       appts
         .filter((a) => new Date(`${a.date}T${a.time}`).getTime() >= Date.now())
-        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
+        .sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+        ),
     [appts],
   );
 
@@ -175,11 +181,15 @@ export default function DoctorAppointments() {
   }
 
   const prevMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1));
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1),
+    );
   };
 
   const nextMonth = () => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1));
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1),
+    );
   };
 
   const calendarDays = [];
@@ -232,7 +242,11 @@ export default function DoctorAppointments() {
               <div className="grid grid-cols-7 gap-1">
                 {calendarDays.map((day, idx) => {
                   const dateKey = day
-                    ? formatDate(currentDate.getFullYear(), currentDate.getMonth(), day)
+                    ? formatDate(
+                        currentDate.getFullYear(),
+                        currentDate.getMonth(),
+                        day,
+                      )
                     : `empty-${idx}`;
                   return (
                     <button

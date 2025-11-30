@@ -8,7 +8,14 @@ interface PatientReport {
   id: string;
   patientName: string;
   date: string; // YYYY-MM-DD
-  reportType: "Blood Test" | "MRI Scan" | "ECG" | "X-Ray" | "Ultrasound" | "CT Scan" | "Physical Exam";
+  reportType:
+    | "Blood Test"
+    | "MRI Scan"
+    | "ECG"
+    | "X-Ray"
+    | "Ultrasound"
+    | "CT Scan"
+    | "Physical Exam";
 }
 
 const SAMPLE_REPORTS: PatientReport[] = [
@@ -81,7 +88,9 @@ function persistDoctorReports(reports: PatientReport[]) {
 
 export default function DoctorReports() {
   const { user } = useAuth();
-  const [reports, setReports] = useState<PatientReport[]>(() => loadDoctorReports());
+  const [reports, setReports] = useState<PatientReport[]>(() =>
+    loadDoctorReports(),
+  );
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");

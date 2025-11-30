@@ -100,7 +100,9 @@ export default function MyPatients() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState<"All" | "Critical" | "Stable">("All");
+  const [filterStatus, setFilterStatus] = useState<
+    "All" | "Critical" | "Stable"
+  >("All");
 
   const filteredPatients = useMemo(() => {
     return patientsData.filter((patient) => {
@@ -149,7 +151,9 @@ export default function MyPatients() {
               <select
                 value={filterStatus}
                 onChange={(e) =>
-                  setFilterStatus(e.target.value as "All" | "Critical" | "Stable")
+                  setFilterStatus(
+                    e.target.value as "All" | "Critical" | "Stable",
+                  )
                 }
                 className="border-none bg-transparent text-sm text-slate-700 focus:outline-none"
               >

@@ -60,7 +60,13 @@ const approved = [
 
 // Data used by doctor dashboard
 const doctorPatients = [
-  { id: "1", name: "Liam Carter", age: 65, lastUpdate: "2023-11-15", risk: "Critical" },
+  {
+    id: "1",
+    name: "Liam Carter",
+    age: 65,
+    lastUpdate: "2023-11-15",
+    risk: "Critical",
+  },
   {
     id: "2",
     name: "Olivia Bennett",
@@ -68,7 +74,13 @@ const doctorPatients = [
     lastUpdate: "2023-11-10",
     risk: "Critical",
   },
-  { id: "3", name: "Noah Harper", age: 58, lastUpdate: "2023-11-05", risk: "Critical" },
+  {
+    id: "3",
+    name: "Noah Harper",
+    age: 58,
+    lastUpdate: "2023-11-05",
+    risk: "Critical",
+  },
   {
     id: "4",
     name: "Ethan Clark",

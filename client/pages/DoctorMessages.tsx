@@ -2,7 +2,14 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import { Send, Paperclip, X, AlertCircle, Calendar, FileText } from "lucide-react";
+import {
+  Send,
+  Paperclip,
+  X,
+  AlertCircle,
+  Calendar,
+  FileText,
+} from "lucide-react";
 
 interface DoctorMessage {
   id: string;
@@ -147,7 +154,10 @@ function loadDoctorConversations() {
 
 function persistDoctorConversations(conversations: Conversation[]) {
   try {
-    localStorage.setItem("vv_doctor_conversations", JSON.stringify(conversations));
+    localStorage.setItem(
+      "vv_doctor_conversations",
+      JSON.stringify(conversations),
+    );
   } catch (e) {
     // ignore
   }
@@ -158,7 +168,9 @@ export default function DoctorMessages() {
   const [conversations, setConversations] = useState<Conversation[]>(() =>
     loadDoctorConversations(),
   );
-  const [selectedConvId, setSelectedConvId] = useState(SAMPLE_CONVERSATIONS[0].id);
+  const [selectedConvId, setSelectedConvId] = useState(
+    SAMPLE_CONVERSATIONS[0].id,
+  );
   const [messageText, setMessageText] = useState("");
   const [alerts, setAlerts] = useState<SystemAlert[]>(SYSTEM_ALERTS);
   const endRef = useRef<HTMLDivElement | null>(null);
@@ -260,7 +272,9 @@ export default function DoctorMessages() {
                     <p className="text-xs text-slate-600 truncate">
                       {conv.lastMessage}
                     </p>
-                    <p className="text-xs text-slate-500 mt-1">{conv.lastTime}</p>
+                    <p className="text-xs text-slate-500 mt-1">
+                      {conv.lastTime}
+                    </p>
                   </div>
                   {conv.unread && (
                     <div className="h-2 w-2 rounded-full bg-sky-500 mt-2" />

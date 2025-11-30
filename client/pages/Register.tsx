@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import MainLayout from "@/components/layout/MainLayout";
 
-const hero = "https://cdn.builder.io/api/v1/image/assets%2Fff7b5ae39b16499bb6e615caac5bc024%2Fae721b986124463ca5d9fb22cf23c41c?format=webp&width=1200";
+const hero =
+  "https://cdn.builder.io/api/v1/image/assets%2Fff7b5ae39b16499bb6e615caac5bc024%2Fae721b986124463ca5d9fb22cf23c41c?format=webp&width=1200";
 
 interface RegisteredUser {
   email: string;
@@ -187,7 +188,8 @@ export default function Register() {
                 className="w-full rounded-md border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:border-orange-300 focus:outline-none"
               />
               <p className="mt-2 text-xs text-slate-600">
-                Admin account creation requires a secret passkey. Contact your administrator if you don't have one.
+                Admin account creation requires a secret passkey. Contact your
+                administrator if you don't have one.
               </p>
             </div>
           )}
