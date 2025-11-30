@@ -18,8 +18,8 @@ export default function Header() {
 
   if (user && user.role === "Doctor") {
     nav = [
-      { to: "/dashboard", label: "Dashboard" },
-      { to: "/patients", label: "My Patients" },
+      { to: "/doctors", label: "Dashboard" },
+      { to: "/my-patients", label: "My Patients" },
       { to: "/appointments", label: "Appointments" },
       { to: "/reports", label: "Reports" },
       { to: "/messages", label: "Messages" },
