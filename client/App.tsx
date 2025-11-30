@@ -22,6 +22,7 @@ import DoctorReports from "./pages/DoctorReports";
 import DoctorMessages from "./pages/DoctorMessages";
 import Messages from "./pages/Messages";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -93,6 +94,7 @@ const App = () => (
             <Route path="/algen" element={<ProtectedRoute allowedRoles={["Admin"]}><Algen /></ProtectedRoute>} />
 
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
