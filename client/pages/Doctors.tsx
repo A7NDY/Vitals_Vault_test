@@ -261,7 +261,7 @@ export default function Doctors() {
                     {doctorPatients
                       .filter((p) => p.risk === "Intermediate")
                       .map((p) => (
-                        <tr key={p.name}>
+                        <tr key={p.id}>
                           <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
                             {p.name}
                           </td>
@@ -272,7 +272,12 @@ export default function Doctors() {
                             {p.lastUpdate}
                           </td>
                           <td className="whitespace-nowrap px-6 py-4 text-sm text-sky-600">
-                            View Profile
+                            <button
+                              onClick={() => navigate(`/patient/${p.id}`)}
+                              className="hover:underline cursor-pointer"
+                            >
+                              View Profile
+                            </button>
                           </td>
                         </tr>
                       ))}
