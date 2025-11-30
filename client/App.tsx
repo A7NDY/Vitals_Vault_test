@@ -26,6 +26,17 @@ const queryClient = new QueryClient();
 
 import { AuthProvider } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/AuthRoute";
+import { useAuth } from "@/context/AuthContext";
+
+const AppointmentsRouter = () => {
+  const { user } = useAuth();
+
+  if (user?.role === "Doctor") {
+    return <DoctorAppointments />;
+  }
+
+  return <Appointments />;
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
