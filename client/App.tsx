@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Patients from "./pages/Patients";
 import Doctors from "./pages/Doctors";
+import MyPatients from "./pages/MyPatients";
 import Algen from "./pages/Algen";
 import Billing from "./pages/Billing";
 import Vitals from "./pages/Vitals";
@@ -40,6 +41,7 @@ const App = () => (
 
             {/* Doctors area (Doctor + Admin) */}
             <Route path="/doctors" element={<ProtectedRoute allowedRoles={["Doctor"]}><Doctors /></ProtectedRoute>} />
+            <Route path="/my-patients" element={<ProtectedRoute allowedRoles={["Doctor"]}><MyPatients /></ProtectedRoute>} />
 
             {/* Patients area (Patient + Admin) */}
             <Route path="/patients" element={<ProtectedRoute allowedRoles={["Patient"]}><Patients /></ProtectedRoute>} />
