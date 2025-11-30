@@ -67,6 +67,13 @@ export default function Login() {
             <button onClick={handleLogin} className="w-full rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-sky-700">Log In</button>
           </div>
 
+          <div className="mt-4 text-center">
+            <p className="text-sm text-slate-600">
+              Don't have an account?{" "}
+              <a href="/register" className="text-sky-600 hover:underline font-medium">Sign Up</a>
+            </p>
+          </div>
+
           <p className="mt-6 text-center text-xs text-slate-400">© 2024 Vitals Vault. All rights reserved.</p>
         </div>
       </div>
