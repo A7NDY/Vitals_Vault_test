@@ -2,6 +2,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import { Search } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Patient {
   id: string;
@@ -97,6 +98,7 @@ const patientsData: Patient[] = [
 
 export default function MyPatients() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"All" | "Critical" | "Stable">("All");
 
@@ -212,7 +214,10 @@ export default function MyPatients() {
                       </span>
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm">
-                      <button className="text-sky-600 hover:text-sky-700 hover:underline">
+                      <button
+                        onClick={() => navigate(`/patient/${patient.id}`)}
+                        className="text-sky-600 hover:text-sky-700 hover:underline"
+                      >
                         View Profile
                       </button>
                     </td>
