@@ -230,36 +230,41 @@ export default function DoctorAppointments() {
 
               {/* Calendar days */}
               <div className="grid grid-cols-7 gap-1">
-                {calendarDays.map((day, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => {
-                      if (day) {
-                        const dateStr = formatDate(
-                          currentDate.getFullYear(),
-                          currentDate.getMonth(),
-                          day,
-                        );
-                        setSelectedDate(dateStr);
-                      }
-                    }}
-                    disabled={!day}
-                    className={`h-8 text-sm rounded flex items-center justify-center ${
-                      !day
-                        ? "text-slate-300"
-                        : selectedDate ===
-                            formatDate(
-                              currentDate.getFullYear(),
-                              currentDate.getMonth(),
-                              day,
-                            )
-                          ? "bg-sky-500 text-white font-semibold"
-                          : "hover:bg-slate-100 text-slate-700"
-                    }`}
-                  >
-                    {day}
-                  </button>
-                ))}
+                {calendarDays.map((day, idx) => {
+                  const dateKey = day
+                    ? formatDate(currentDate.getFullYear(), currentDate.getMonth(), day)
+                    : `empty-${idx}`;
+                  return (
+                    <button
+                      key={dateKey}
+                      onClick={() => {
+                        if (day) {
+                          const dateStr = formatDate(
+                            currentDate.getFullYear(),
+                            currentDate.getMonth(),
+                            day,
+                          );
+                          setSelectedDate(dateStr);
+                        }
+                      }}
+                      disabled={!day}
+                      className={`h-8 text-sm rounded flex items-center justify-center ${
+                        !day
+                          ? "text-slate-300"
+                          : selectedDate ===
+                              formatDate(
+                                currentDate.getFullYear(),
+                                currentDate.getMonth(),
+                                day,
+                              )
+                            ? "bg-sky-500 text-white font-semibold"
+                            : "hover:bg-slate-100 text-slate-700"
+                      }`}
+                    >
+                      {day}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
