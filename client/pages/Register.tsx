@@ -135,7 +135,10 @@ export default function Register() {
             </label>
             <div className="flex items-center gap-4">
               <button
-                onClick={() => setRole("Doctor")}
+                onClick={() => {
+                  setRole("Doctor");
+                  setAdminPasskey("");
+                }}
                 className={`rounded-tl-md rounded-bl-md px-4 py-2 text-sm ${
                   role === "Doctor"
                     ? "bg-slate-100 text-slate-900"
@@ -145,7 +148,10 @@ export default function Register() {
                 Doctor
               </button>
               <button
-                onClick={() => setRole("Patient")}
+                onClick={() => {
+                  setRole("Patient");
+                  setAdminPasskey("");
+                }}
                 className={`px-4 py-2 text-sm ${
                   role === "Patient"
                     ? "bg-slate-100 text-slate-900"
@@ -166,6 +172,25 @@ export default function Register() {
               </button>
             </div>
           </div>
+
+          {/* Admin Passkey Field */}
+          {role === "Admin" && (
+            <div className="mt-6 rounded-md border border-orange-200 bg-orange-50 p-4">
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Secret Admin Passkey
+              </label>
+              <input
+                type="password"
+                value={adminPasskey}
+                onChange={(e) => setAdminPasskey(e.target.value)}
+                placeholder="Enter admin passkey"
+                className="w-full rounded-md border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:border-orange-300 focus:outline-none"
+              />
+              <p className="mt-2 text-xs text-slate-600">
+                Admin account creation requires a secret passkey. Contact your administrator if you don't have one.
+              </p>
+            </div>
+          )}
 
           {/* Hero Image */}
           <div className="mt-6 h-40 w-full overflow-hidden rounded-md bg-slate-50">
