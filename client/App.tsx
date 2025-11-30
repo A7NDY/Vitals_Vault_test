@@ -17,6 +17,7 @@ import Vitals from "./pages/Vitals";
 import Medications from "./pages/Medications";
 import Reports from "./pages/Reports";
 import Appointments from "./pages/Appointments";
+import DoctorAppointments from "./pages/DoctorAppointments";
 import Messages from "./pages/Messages";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
@@ -50,7 +51,7 @@ const App = () => (
             <Route path="/vitals" element={<ProtectedRoute allowedRoles={["Patient"]}><Vitals /></ProtectedRoute>} />
             <Route path="/medications" element={<ProtectedRoute allowedRoles={["Patient"]}><Medications /></ProtectedRoute>} />
             <Route path="/reports" element={<ProtectedRoute allowedRoles={["Patient", "Doctor"]}><Reports /></ProtectedRoute>} />
-            <Route path="/appointments" element={<ProtectedRoute allowedRoles={["Patient", "Doctor"]}><Appointments /></ProtectedRoute>} />
+            <Route path="/appointments" element={<ProtectedRoute allowedRoles={["Patient", "Doctor"]}><AppointmentsRouter /></ProtectedRoute>} />
             <Route path="/messages" element={<ProtectedRoute allowedRoles={["Patient", "Doctor"]}><Messages /></ProtectedRoute>} />
 
             {/* Billing - admin only */}
