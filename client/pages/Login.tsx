@@ -7,6 +7,23 @@ import { useAuth } from "@/context/AuthContext";
 const hero =
   "https://cdn.builder.io/api/v1/image/assets%2Fff7b5ae39b16499bb6e615caac5bc024%2Fae721b986124463ca5d9fb22cf23c41c?format=webp&width=1200";
 
+interface RegisteredUser {
+  email: string;
+  password: string;
+  fullName: string;
+  role: "Doctor" | "Patient" | "Admin";
+  phone: string;
+}
+
+function getRegisteredUsers(): RegisteredUser[] {
+  try {
+    const raw = localStorage.getItem("vv_registered_users");
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
 export default function Login() {
   const [role, setRole] = useState<"Doctor" | "Patient" | "Admin">("Patient");
   const [email, setEmail] = useState("");
@@ -23,7 +40,23 @@ export default function Login() {
       return;
     }
 
-    toast({ title: "Signed in", description: `Welcome back, ${role}` });
+    // Get registered users from localStorage
+    const registeredUsers = getRegisteredUsers();
+
+    // Find user with matching email and password
+    const foundUser = registeredUsers.find(
+      (user) => user.email === email && user.password === password && user.role === role
+    );
+
+    if (!foundUser) {
+      toast({
+        title: "Login failed",
+        description: "Invalid email, password, or role. Please check your credentials or sign up if you're new.",
+      });
+      return;
+    }
+
+    toast({ title: "Signed in", description: `Welcome back, ${foundUser.fullName}!` });
 
     // persist auth state via context
     login({ email, role });
