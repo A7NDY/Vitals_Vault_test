@@ -150,12 +150,12 @@ export default function Login() {
           <div className="mt-4 text-center">
             <p className="text-sm text-slate-600">
               Don't have an account?{" "}
-              <a
-                href="/register"
-                className="text-sky-600 hover:underline font-medium"
+              <button
+                onClick={() => navigate("/register")}
+                className="text-sky-600 hover:underline font-medium bg-none border-none cursor-pointer"
               >
                 Sign Up
-              </a>
+              </button>
             </p>
           </div>
 
