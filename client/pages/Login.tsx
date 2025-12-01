@@ -45,18 +45,25 @@ export default function Login() {
 
     // Find user with matching email and password
     const foundUser = registeredUsers.find(
-      (user) => user.email === email && user.password === password && user.role === role
+      (user) =>
+        user.email === email &&
+        user.password === password &&
+        user.role === role,
     );
 
     if (!foundUser) {
       toast({
         title: "Login failed",
-        description: "Invalid email, password, or role. Please check your credentials or sign up if you're new.",
+        description:
+          "Invalid email, password, or role. Please check your credentials or sign up if you're new.",
       });
       return;
     }
 
-    toast({ title: "Signed in", description: `Welcome back, ${foundUser.fullName}!` });
+    toast({
+      title: "Signed in",
+      description: `Welcome back, ${foundUser.fullName}!`,
+    });
 
     // persist auth state via context
     login({ email, role });
