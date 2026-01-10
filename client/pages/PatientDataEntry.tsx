@@ -32,27 +32,77 @@ export default function PatientDataEntry() {
 
   const [data, setData] = useState<PatientData>(initialData);
 
-  function calculateBMI(h: string, w: string) {
+  function calculateBMI(h: string, w: string, age: string, gender: string): string {
     if (!h || !w) return "";
+
     const heightM = parseInt(h) / 100;
     const weightKg = parseInt(w);
+    const ageNum = parseInt(age);
     const bmi = (weightKg / (heightM * heightM)).toFixed(1);
+    const bmiNum = parseFloat(bmi);
 
     let category = "";
-    const bmiNum = parseFloat(bmi);
-    if (bmiNum < 18.5) category = "Underweight";
-    else if (bmiNum < 25) category = "Normal";
-    else if (bmiNum < 30) category = "Overweight";
-    else category = "Obese";
+    let healthNote = "";
 
-    return `${bmi} (${category})`;
+    // Age-adjusted BMI categories
+    if (ageNum < 18) {
+      // Young adults
+      if (bmiNum < 18.5) category = "Underweight";
+      else if (bmiNum < 25) category = "Normal";
+      else if (bmiNum < 30) category = "Overweight";
+      else category = "Obese";
+    } else if (ageNum >= 18 && ageNum < 40) {
+      // Adults
+      if (bmiNum < 18.5) category = "Underweight";
+      else if (bmiNum < 25) category = "Normal";
+      else if (bmiNum < 30) category = "Overweight";
+      else category = "Obese";
+    } else if (ageNum >= 40 && ageNum < 65) {
+      // Middle-aged adults
+      if (bmiNum < 18.5) category = "Underweight";
+      else if (bmiNum < 25) category = "Normal";
+      else if (bmiNum < 30) category = "Overweight";
+      else category = "Obese";
+    } else {
+      // Seniors (65+) - slightly higher BMI is often healthier
+      if (bmiNum < 18.5) category = "Underweight";
+      else if (bmiNum < 25) category = "Normal";
+      else if (bmiNum < 30) category = "Slightly Overweight (Age-Adjusted)";
+      else if (bmiNum < 35) category = "Overweight";
+      else category = "Obese";
+      healthNote = " (Note: Slightly higher BMI may be protective for seniors)";
+    }
+
+    // Gender-specific note
+    let genderNote = "";
+    if (gender === "Female" && bmiNum >= 25 && bmiNum < 30) {
+      genderNote = " (Women may have different health risks at same BMI)";
+    }
+
+    return `${bmi} (${category})${genderNote || healthNote}`;
+  }
+
+  function handleAgeChange(value: string) {
+    setData((prev) => ({
+      ...prev,
+      age: value,
+      bmi: calculateBMI(prev.height, prev.weight, value, prev.gender),
+    }));
+  }
+
+  function handleGenderChange(value: string) {
+    setData((prev) => ({
+      ...prev,
+      gender: value as "Male" | "Female" | "Other" | "",
+      bmi: calculateBMI(prev.height, prev.weight, prev.age, value),
+    }));
   }
 
   function handleHeightChange(value: string) {
     setData((prev) => ({
       ...prev,
       height: value,
-      bmi: calculateBMI(value, prev.weight),
+      bmi: calculateBMI(value, prev.weight, prev.age, prev.gender),
     }));
   }
 
@@ -60,7 +110,7 @@ export default function PatientDataEntry() {
     setData((prev) => ({
       ...prev,
       weight: value,
-      bmi: calculateBMI(prev.height, value),
+      bmi: calculateBMI(prev.height, value, prev.age, prev.gender),
     }));
   }
 
