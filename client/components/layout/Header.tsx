@@ -22,6 +22,7 @@ export default function Header() {
       { to: "/my-patients", label: "My Patients" },
       { to: "/appointments", label: "Appointments" },
       { to: "/reports", label: "Reports" },
+      { to: "/alerts", label: "Alerts" },
       { to: "/messages", label: "Messages" },
     ];
   } else if (user && user.role === "Patient") {
