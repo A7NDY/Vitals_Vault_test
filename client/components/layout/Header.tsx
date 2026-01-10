@@ -79,11 +79,20 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="relative inline-flex h-9 w-9 items-center justify-center rounded-full border bg-white text-slate-600 hover:bg-slate-50">
+          <button
+            onClick={() => user?.role === "Doctor" && navigate("/alerts")}
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-full border bg-white text-slate-600 hover:bg-slate-50"
+          >
             <Bell className="h-4 w-4" />
-            <span className="absolute -top-0.5 -right-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-semibold text-white">
-              2
-            </span>
+            {user?.role === "Doctor" && (
+              <span
+                className="absolute -top-0.5 -right-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-white"
+                id="alert-badge"
+                style={{ background: "var(--alert-color, #ef4444)" }}
+              >
+                ?
+              </span>
+            )}
           </button>
 
           <img
