@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
-import { Activity, Zap } from "lucide-react";
+import { Activity, Zap, AlertTriangle, AlertCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
+import VitalsAnalyzer, { VitalAnalysis, PatientBaseline } from "@/lib/vitals-analysis";
+import { PatientDataStorage } from "@/lib/storage";
 
 export default function Vitals() {
   const [datetime, setDatetime] = useState<string>("");
