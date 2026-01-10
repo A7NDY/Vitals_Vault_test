@@ -87,6 +87,19 @@ const PATIENTS: Patient[] = [
 
 export default function Patients() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Check if patient has completed data entry on first login
+  useEffect(() => {
+    if (user && user.role === "Patient") {
+      const storageKey = `vv_patient_data_${user.email}`;
+      const hasData = localStorage.getItem(storageKey);
+
+      if (!hasData) {
+        navigate("/patient-data-entry");
+      }
+    }
+  }, [user, navigate]);
 
   // If logged-in user is a patient, show patient dashboard
   if (user && user.role === "Patient") {
