@@ -11,6 +11,7 @@ import Patients from "./pages/Patients";
 import Doctors from "./pages/Doctors";
 import MyPatients from "./pages/MyPatients";
 import PatientProfile from "./pages/PatientProfile";
+import PatientDataEntry from "./pages/PatientDataEntry";
 import Algen from "./pages/Algen";
 import Billing from "./pages/Billing";
 import Vitals from "./pages/Vitals";
