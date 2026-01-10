@@ -94,6 +94,8 @@ class Storage {
 
 interface PatientData {
   // Section 1: Physical & Demographic
+  age: string;
+  gender: "Male" | "Female" | "Other" | "";
   height: string;
   weight: string;
   bmi: string;
