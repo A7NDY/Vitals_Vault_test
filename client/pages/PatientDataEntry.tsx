@@ -105,10 +105,10 @@ export default function PatientDataEntry() {
   }
 
   function handleSave() {
-    if (!data.height || !data.weight || !data.bloodGroup) {
+    if (!data.age || !data.gender || !data.height || !data.weight || !data.bloodGroup) {
       toast({
         title: "Missing required fields",
-        description: "Please fill in Height, Weight, and Blood Group.",
+        description: "Please fill in Age, Gender, Height, Weight, and Blood Group.",
       });
       return;
     }
