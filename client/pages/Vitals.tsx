@@ -316,12 +316,54 @@ export default function Vitals() {
           <h2 className="text-lg font-semibold mb-4">Recent Vitals</h2>
           <div className="space-y-3">
             {saved.length === 0 && <div className="text-sm text-slate-500">No vitals recorded yet.</div>}
-            {saved.map((r) => (
-              <div key={r.id} className="rounded-md border bg-white p-3">
-                <div className="text-sm font-medium">{new Date(r.datetime).toLocaleString()}</div>
-                <div className="mt-1 text-sm text-slate-600">BP: {r.bp || "—"} • HR: {r.hr || "—"} • SpO2: {r.spO2 || "—"}</div>
-              </div>
-            ))}
+            {saved.map((r) => {
+              const hasCritical = r.analysis?.some((a: VitalAnalysis) => a.status === "Critical");
+              const hasWarning = r.analysis?.some((a: VitalAnalysis) => a.status === "Warning");
+              const hasAnalysis = r.analysis && r.analysis.length > 0;
+
+              return (
+                <div
+                  key={r.id}
+                  className={`rounded-md border p-3 ${
+                    hasCritical
+                      ? "border-red-300 bg-red-50"
+                      : hasWarning
+                        ? "border-orange-300 bg-orange-50"
+                        : hasAnalysis
+                          ? "border-green-300 bg-green-50"
+                          : "bg-white"
+                  }`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <div className="text-sm font-medium">{new Date(r.datetime).toLocaleString()}</div>
+                      <div className="mt-1 text-sm text-slate-600">BP: {r.bp || "—"} • HR: {r.hr || "—"} • SpO2: {r.spO2 || "—"}</div>
+                    </div>
+                    {hasCritical && (
+                      <div className="flex items-center gap-1 rounded-md bg-red-100 px-2 py-1">
+                        <AlertTriangle className="h-4 w-4 text-red-600" />
+                        <span className="text-xs font-bold text-red-700">CRITICAL</span>
+                      </div>
+                    )}
+                    {hasWarning && !hasCritical && (
+                      <div className="flex items-center gap-1 rounded-md bg-orange-100 px-2 py-1">
+                        <AlertCircle className="h-4 w-4 text-orange-600" />
+                        <span className="text-xs font-bold text-orange-700">WARNING</span>
+                      </div>
+                    )}
+                  </div>
+                  {hasAnalysis && (
+                    <div className="mt-2 pt-2 border-t border-current border-opacity-20">
+                      <div className="text-xs text-slate-600">
+                        {r.analysis.map((a: VitalAnalysis) => (
+                          <div key={a.vital}>• {a.vital}: {a.status}</div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
