@@ -242,6 +242,75 @@ export default function Vitals() {
           </div>
         </div>
 
+        {/* Analysis Results */}
+        {showAnalysis && analysisResults.length > 0 && (
+          <div className="mt-8 rounded-lg border-2 border-sky-200 bg-sky-50 p-6">
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">📊 Vitals Analysis</h2>
+            <div className="space-y-4">
+              {analysisResults.map((analysis) => {
+                const isNormal = analysis.status === "Normal";
+                const isWarning = analysis.status === "Warning";
+                const isCritical = analysis.status === "Critical";
+
+                return (
+                  <div
+                    key={analysis.vital}
+                    className={`rounded-md p-4 ${
+                      isCritical
+                        ? "border-l-4 border-red-600 bg-red-50"
+                        : isWarning
+                          ? "border-l-4 border-orange-600 bg-orange-50"
+                          : "border-l-4 border-green-600 bg-green-50"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="mt-1">
+                        {isCritical && <AlertTriangle className="h-5 w-5 text-red-600" />}
+                        {isWarning && <AlertCircle className="h-5 w-5 text-orange-600" />}
+                        {isNormal && <div className="h-5 w-5 rounded-full bg-green-600" />}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between">
+                          <div className="font-semibold text-slate-900">{analysis.vital}</div>
+                          <div
+                            className={`text-xs font-bold px-2 py-1 rounded ${
+                              isCritical
+                                ? "bg-red-100 text-red-800"
+                                : isWarning
+                                  ? "bg-orange-100 text-orange-800"
+                                  : "bg-green-100 text-green-800"
+                            }`}
+                          >
+                            {analysis.status}
+                          </div>
+                        </div>
+
+                        <div className="mt-2 text-sm text-slate-700">
+                          <div>
+                            <strong>Current:</strong> {analysis.currentValue}
+                            {analysis.vital.includes("Pressure") ? " mmHg" : analysis.vital === "Oxygen Saturation" ? "%" : ""}
+                          </div>
+                          <div>
+                            <strong>Normal Range:</strong> {analysis.lowerLimit.toFixed(1)}-{analysis.upperLimit.toFixed(1)}
+                            {analysis.vital.includes("Pressure") ? " mmHg" : analysis.vital === "Oxygen Saturation" ? "%" : ""}
+                          </div>
+                        </div>
+
+                        <div className="mt-2 text-sm">
+                          <div className="text-slate-700">{analysis.reason}</div>
+                          <div className={`mt-2 font-medium ${isCritical ? "text-red-700" : isWarning ? "text-orange-700" : "text-green-700"}`}>
+                            {analysis.recommendedAction}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {/* Recent entries */}
         <div className="mt-8">
           <h2 className="text-lg font-semibold mb-4">Recent Vitals</h2>
