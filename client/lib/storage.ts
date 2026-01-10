@@ -88,4 +88,73 @@ class Storage {
   }
 }
 
+/**
+ * Patient Data Utilities
+ */
+
+interface PatientData {
+  // Section 1: Physical & Demographic
+  height: string;
+  weight: string;
+  bmi: string;
+  bloodGroup: string;
+
+  // Section 2: Medical History
+  chronicConditions: {
+    diabetes: boolean;
+    hypertension: boolean;
+    heartDisease: boolean;
+    asthmaOrCOPD: boolean;
+  };
+  pastSurgeries: string;
+  ongoingConditions: string;
+  familyHistory: string;
+  pregnancyStatus: "Not Applicable / No" | "Yes";
+
+  // Section 3: Medications
+  medications: Array<{
+    id: string;
+    name: string;
+    dosage: string;
+    frequency: string;
+    duration: string;
+  }>;
+}
+
+export const PatientDataStorage = {
+  /**
+   * Get patient data from localStorage
+   * @param email - Patient's email
+   */
+  getPatientData(email: string): PatientData | null {
+    return Storage.get<PatientData>(`vv_patient_data_${email}`);
+  },
+
+  /**
+   * Save patient data to localStorage
+   * @param email - Patient's email
+   * @param data - Patient data to save
+   */
+  savePatientData(email: string, data: PatientData): void {
+    Storage.set(`vv_patient_data_${email}`, data);
+  },
+
+  /**
+   * Check if patient has completed data entry
+   * @param email - Patient's email
+   */
+  hasPatientData(email: string): boolean {
+    return Storage.has(`vv_patient_data_${email}`);
+  },
+
+  /**
+   * Delete patient data
+   * @param email - Patient's email
+   */
+  deletePatientData(email: string): void {
+    Storage.remove(`vv_patient_data_${email}`);
+  },
+};
+
 export default Storage;
+export type { PatientData };
