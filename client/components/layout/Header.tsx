@@ -1,4 +1,5 @@
 import { Bell } from "lucide-react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import * as Router from "react-router-dom";
@@ -7,6 +8,26 @@ export default function Header() {
   const location = Router.useLocation();
   const navigate = Router.useNavigate();
   const { user, logout } = useAuth();
+  const [alertCount, setAlertCount] = useState(0);
+
+  useEffect(() => {
+    if (user?.role === "Doctor") {
+      const updateAlertCount = () => {
+        try {
+          const raw = localStorage.getItem("vv_doctor_alerts");
+          const alerts = raw ? JSON.parse(raw) : [];
+          const unread = alerts.filter((a: any) => !a.read).length;
+          setAlertCount(unread);
+        } catch (e) {
+          setAlertCount(0);
+        }
+      };
+
+      updateAlertCount();
+      const interval = setInterval(updateAlertCount, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [user?.role]);
 
   let nav = [
     { to: "/dashboard", label: "Dashboard" },
