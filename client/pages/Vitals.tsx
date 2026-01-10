@@ -7,6 +7,7 @@ import VitalsAnalyzer, { VitalAnalysis, PatientBaseline } from "@/lib/vitals-ana
 import { PatientDataStorage } from "@/lib/storage";
 
 export default function Vitals() {
+  const { user } = useAuth();
   const [datetime, setDatetime] = useState<string>("");
   const [bp, setBp] = useState("");
   const [hr, setHr] = useState("");
@@ -14,6 +15,8 @@ export default function Vitals() {
   const [spO2, setSpO2] = useState("");
   const [weight, setWeight] = useState("");
   const [symptoms, setSymptoms] = useState("");
+  const [analysisResults, setAnalysisResults] = useState<VitalAnalysis[]>([]);
+  const [showAnalysis, setShowAnalysis] = useState(false);
 
   const [saved, setSaved] = useState<any[]>(() => {
     try {
@@ -23,6 +26,26 @@ export default function Vitals() {
       return [];
     }
   });
+
+  // Load patient baseline data
+  const [patientData, setPatientData] = useState<PatientBaseline | null>(null);
+
+  useEffect(() => {
+    if (user?.email) {
+      const data = PatientDataStorage.getPatientData(user.email);
+      if (data) {
+        setPatientData({
+          age: parseInt(data.age),
+          gender: data.gender as "Male" | "Female" | "Other",
+          chronicConditions: data.chronicConditions,
+          baselineHeartRate: undefined,
+          baselineSystolicBP: undefined,
+          baselineDiastolicBP: undefined,
+          baselineSpO2: undefined,
+        });
+      }
+    }
+  }, [user?.email]);
 
   function persist(records: any[]) {
     try {
