@@ -119,7 +119,7 @@ export default function PatientDataEntry() {
       return;
     }
 
-    savePatientData(user.email, data);
+    PatientDataStorage.savePatientData(user.email, data);
     toast({
       title: "Success",
       description: "Your health information has been saved.",
