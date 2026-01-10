@@ -216,7 +216,7 @@ export default function PatientDataEntry() {
               <input
                 type="number"
                 value={data.age}
-                onChange={(e) => setData((prev) => ({ ...prev, age: e.target.value }))}
+                onChange={(e) => handleAgeChange(e.target.value)}
                 placeholder="e.g. 35"
                 className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-sky-300 focus:outline-none"
               />
@@ -229,12 +229,7 @@ export default function PatientDataEntry() {
               </label>
               <select
                 value={data.gender}
-                onChange={(e) =>
-                  setData((prev) => ({
-                    ...prev,
-                    gender: e.target.value as "Male" | "Female" | "Other" | "",
-                  }))
-                }
+                onChange={(e) => handleGenderChange(e.target.value)}
                 className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-sky-300 focus:outline-none"
               >
                 <option value="">Select Gender</option>
