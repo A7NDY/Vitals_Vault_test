@@ -158,6 +158,42 @@ export default function PatientDataEntry() {
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
+            {/* Age */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700">
+                Age (years)
+              </label>
+              <input
+                type="number"
+                value={data.age}
+                onChange={(e) => setData((prev) => ({ ...prev, age: e.target.value }))}
+                placeholder="e.g. 35"
+                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-sky-300 focus:outline-none"
+              />
+            </div>
+
+            {/* Gender */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700">
+                Gender
+              </label>
+              <select
+                value={data.gender}
+                onChange={(e) =>
+                  setData((prev) => ({
+                    ...prev,
+                    gender: e.target.value as "Male" | "Female" | "Other" | "",
+                  }))
+                }
+                className="mt-1 w-full rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-sky-300 focus:outline-none"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
             {/* Height */}
             <div>
               <label className="block text-sm font-medium text-slate-700">
