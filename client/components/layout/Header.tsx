@@ -105,13 +105,9 @@ export default function Header() {
             className="relative inline-flex h-9 w-9 items-center justify-center rounded-full border bg-white text-slate-600 hover:bg-slate-50"
           >
             <Bell className="h-4 w-4" />
-            {user?.role === "Doctor" && (
-              <span
-                className="absolute -top-0.5 -right-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-semibold text-white"
-                id="alert-badge"
-                style={{ background: "var(--alert-color, #ef4444)" }}
-              >
-                ?
+            {user?.role === "Doctor" && alertCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-semibold text-white">
+                {alertCount > 9 ? "9+" : alertCount}
               </span>
             )}
           </button>
