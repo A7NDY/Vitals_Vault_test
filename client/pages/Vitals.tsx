@@ -66,22 +66,61 @@ export default function Vitals() {
       return;
     }
 
+    // Parse BP (format: 120/80)
+    let systolicBP: number | undefined;
+    let diastolicBP: number | undefined;
+    if (bp) {
+      const [sbp, dbp] = bp.split("/").map((x) => parseInt(x));
+      if (!isNaN(sbp)) systolicBP = sbp;
+      if (!isNaN(dbp)) diastolicBP = dbp;
+    }
+
     const record = {
       id: Date.now().toString(),
       datetime,
       bp: bp || null,
-      hr: hr || null,
-      bg: bg || null,
-      spO2: spO2 || null,
-      weight: weight || null,
+      systolicBP,
+      diastolicBP,
+      hr: hr ? parseInt(hr) : null,
+      bg: bg ? parseInt(bg) : null,
+      spO2: spO2 ? parseInt(spO2) : null,
+      weight: weight ? parseInt(weight) : null,
       symptoms: symptoms || null,
+      analysis: [] as VitalAnalysis[],
     };
+
+    // Run vitals analysis
+    if (patientData) {
+      const analyses = VitalsAnalyzer.analyzeAllVitals(
+        {
+          id: record.id,
+          timestamp: datetime,
+          heartRate: record.hr || undefined,
+          systolicBP: record.systolicBP,
+          diastolicBP: record.diastolicBP,
+          spO2: record.spO2,
+          weight: record.weight,
+          bloodSugar: record.bg || undefined,
+          symptoms: record.symptoms || undefined,
+        },
+        patientData,
+      );
+      record.analysis = analyses;
+      setAnalysisResults(analyses);
+      setShowAnalysis(true);
+
+      // Create alert if there are warnings or critical
+      if (VitalsAnalyzer.hasAlerts(analyses)) {
+        const severity = VitalsAnalyzer.getHighestSeverity(analyses);
+        createDoctorAlert(record, analyses, user?.email);
+      }
+    }
 
     const next = [record, ...saved].slice(0, 50);
     setSaved(next);
     persist(next);
 
-    toast({ title: "Vitals saved", description: "Your vitals have been recorded." });
+    toast({ title: "Vitals saved", description: "Your vitals have been recorded and analyzed." });
 
     setDatetime("");
     setBp("");
@@ -90,6 +129,46 @@ export default function Vitals() {
     setSpO2("");
     setWeight("");
     setSymptoms("");
+  }
+
+  function createDoctorAlert(record: any, analyses: VitalAnalysis[], patientEmail?: string) {
+    if (!patientEmail) return;
+
+    // Get all doctor alerts from localStorage
+    const alertsKey = "vv_doctor_alerts";
+    let alerts: any[] = [];
+    try {
+      const raw = localStorage.getItem(alertsKey);
+      alerts = raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      alerts = [];
+    }
+
+    // Create alert entry
+    const alert = {
+      id: Date.now().toString(),
+      patientEmail,
+      timestamp: new Date().toISOString(),
+      readingTime: record.datetime,
+      severity: VitalsAnalyzer.getHighestSeverity(analyses),
+      vitals: {
+        bp: record.bp,
+        hr: record.hr,
+        spO2: record.spO2,
+        bloodSugar: record.bg,
+      },
+      analyses: analyses.filter((a) => a.status !== "Normal"),
+      message: `Patient ${patientEmail} has out-of-range vitals requiring attention.`,
+      read: false,
+    };
+
+    // Add to alerts and persist
+    const updated = [alert, ...alerts].slice(0, 100);
+    try {
+      localStorage.setItem(alertsKey, JSON.stringify(updated));
+    } catch (e) {
+      console.error("Error saving alert:", e);
+    }
   }
 
   function handleSync(source: string) {
