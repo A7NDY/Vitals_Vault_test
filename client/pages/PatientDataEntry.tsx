@@ -32,7 +32,12 @@ export default function PatientDataEntry() {
 
   const [data, setData] = useState<PatientData>(initialData);
 
-  function calculateBMI(h: string, w: string, age: string, gender: string): string {
+  function calculateBMI(
+    h: string,
+    w: string,
+    age: string,
+    gender: string,
+  ): string {
     if (!h || !w) return "";
 
     const heightM = parseInt(h) / 100;
@@ -114,7 +119,9 @@ export default function PatientDataEntry() {
     }));
   }
 
-  function handleChronicConditionChange(condition: keyof typeof data.chronicConditions) {
+  function handleChronicConditionChange(
+    condition: keyof typeof data.chronicConditions,
+  ) {
     setData((prev) => ({
       ...prev,
       chronicConditions: {
@@ -155,10 +162,17 @@ export default function PatientDataEntry() {
   }
 
   function handleSave() {
-    if (!data.age || !data.gender || !data.height || !data.weight || !data.bloodGroup) {
+    if (
+      !data.age ||
+      !data.gender ||
+      !data.height ||
+      !data.weight ||
+      !data.bloodGroup
+    ) {
       toast({
         title: "Missing required fields",
-        description: "Please fill in Age, Gender, Height, Weight, and Blood Group.",
+        description:
+          "Please fill in Age, Gender, Height, Weight, and Blood Group.",
       });
       return;
     }
@@ -190,7 +204,9 @@ export default function PatientDataEntry() {
     <MainLayout>
       <div className="mx-auto max-w-4xl py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Patient Data Entry</h1>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Patient Data Entry
+          </h1>
           <p className="mt-2 text-slate-600">
             Complete the sections below to set up your patient record.
           </p>
@@ -344,7 +360,9 @@ export default function PatientDataEntry() {
                     }
                     className="h-4 w-4 rounded border-slate-300"
                   />
-                  <span className="text-sm text-slate-700">{condition.label}</span>
+                  <span className="text-sm text-slate-700">
+                    {condition.label}
+                  </span>
                 </label>
               ))}
             </div>
@@ -420,7 +438,9 @@ export default function PatientDataEntry() {
                     onChange={(e) =>
                       setData((prev) => ({
                         ...prev,
-                        pregnancyStatus: e.target.value as "Not Applicable / No" | "Yes",
+                        pregnancyStatus: e.target.value as
+                          | "Not Applicable / No"
+                          | "Yes",
                       }))
                     }
                     className="h-4 w-4"
@@ -456,7 +476,10 @@ export default function PatientDataEntry() {
           ) : (
             <div className="space-y-4">
               {data.medications.map((med) => (
-                <div key={med.id} className="rounded-md border border-slate-200 p-4">
+                <div
+                  key={med.id}
+                  className="rounded-md border border-slate-200 p-4"
+                >
                   <div className="mb-3 flex items-center justify-between">
                     <h3 className="text-sm font-medium text-slate-700">
                       Medicine Entry

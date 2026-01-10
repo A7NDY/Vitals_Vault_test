@@ -9,12 +9,14 @@ Your app currently has three data storage options. Choose based on your needs:
 **How it works:** Data stored in browser's local storage (survives page refresh, but only on that device)
 
 ### Pros:
+
 - ✅ No backend needed
 - ✅ Works offline
 - ✅ Great for prototyping
 - ✅ No server costs
 
 ### Cons:
+
 - ❌ Data lost if user clears browser cache
 - ❌ Data only on that device (not synced)
 - ❌ Limited storage (~5-10MB)
@@ -22,35 +24,39 @@ Your app currently has three data storage options. Choose based on your needs:
 - ❌ Not suitable for production
 
 ### Current Storage Keys in Your App:
+
 ```
 vv_registered_users    → Array of all registered users
 vv_user               → Currently logged-in user
 ```
 
 ### How to Use:
+
 The app includes a clean Storage utility in `client/lib/storage.ts`:
 
 ```typescript
-import Storage from '@/lib/storage';
+import Storage from "@/lib/storage";
 
 // Get data
-const user = Storage.get('vv_user');
-const users = Storage.get('vv_registered_users', []);
+const user = Storage.get("vv_user");
+const users = Storage.get("vv_registered_users", []);
 
 // Save data
-Storage.set('vv_user', { email: 'john@example.com', role: 'Doctor' });
+Storage.set("vv_user", { email: "john@example.com", role: "Doctor" });
 
 // Remove data
-Storage.remove('vv_user');
+Storage.remove("vv_user");
 
 // Clear everything
 Storage.clear();
 
 // Check if exists
-if (Storage.has('vv_user')) { /* ... */ }
+if (Storage.has("vv_user")) {
+  /* ... */
+}
 
 // With expiration (expires in 30 minutes)
-Storage.set('session_token', token, 30);
+Storage.set("session_token", token, 30);
 ```
 
 ---
@@ -60,9 +66,11 @@ Storage.set('session_token', token, 30);
 For a real healthcare application, use **Supabase** or **Neon**:
 
 ### Supabase (PostgreSQL + Auth)
+
 **Best for:** Full backend with authentication
 
 Features:
+
 - PostgreSQL database
 - Built-in user authentication
 - Real-time features (websockets)
@@ -70,15 +78,18 @@ Features:
 - Auto-generated REST API
 
 ### Neon (Serverless PostgreSQL)
+
 **Best for:** If you need only the database
 
 Features:
+
 - Serverless PostgreSQL
 - Auto-scaling
 - Perfect with Prisma ORM
 - No need to manage servers
 
 ### Pros:
+
 - ✅ Data persists permanently
 - ✅ Synced across all devices
 - ✅ Share data between users
@@ -88,6 +99,7 @@ Features:
 - ✅ Production-ready
 
 ### Cons:
+
 - ❌ Requires internet connection
 - ❌ Minimal setup cost (usually free tier available)
 - ❌ Slightly more complex to implement
@@ -97,6 +109,7 @@ Features:
 ## **Implementation Strategy**
 
 ### Current Setup (Just LocalStorage):
+
 1. User registers → saved to `localStorage`
 2. User logs in → credentials checked against `localStorage`
 3. User data → retrieved from `localStorage`
@@ -104,13 +117,17 @@ Features:
 **Status:** ✅ Working but not persistent across devices
 
 ### For Small Team/MVP:
+
 Keep using **localStorage** but improve reliability:
+
 - Use the `Storage` utility in `client/lib/storage.ts`
 - Add seed data for demo users
 - Provide export/import functionality
 
 ### For Production App:
+
 Migrate to **Supabase**:
+
 1. Connect Supabase MCP → [Open MCP](#open-mcp-popover)
 2. Create `users` table with Supabase
 3. Replace localStorage calls with Supabase queries
@@ -169,9 +186,11 @@ CREATE TABLE messages (
 ## **Next Steps**
 
 ### To Keep Using LocalStorage:
+
 No changes needed! The `Storage` utility in `client/lib/storage.ts` provides a cleaner interface.
 
 ### To Migrate to Supabase:
+
 1. Tell me when you're ready
 2. I'll help you:
    - Set up Supabase tables
@@ -180,6 +199,7 @@ No changes needed! The `Storage` utility in `client/lib/storage.ts` provides a c
    - Ensure security with row-level security (RLS)
 
 ### Questions?
+
 - **How much data?** If just demo/testing → localStorage is fine
 - **Need sharing?** Different users need same data → use database
 - **Production?** Always use database for security & persistence
@@ -190,16 +210,20 @@ No changes needed! The `Storage` utility in `client/lib/storage.ts` provides a c
 ## **Sample: Converting Login to Use Database**
 
 ### Current (LocalStorage):
+
 ```typescript
-const users = JSON.parse(localStorage.getItem('vv_registered_users') || '[]');
-const foundUser = users.find(u => u.email === email && u.password === password);
+const users = JSON.parse(localStorage.getItem("vv_registered_users") || "[]");
+const foundUser = users.find(
+  (u) => u.email === email && u.password === password,
+);
 ```
 
 ### Future (Supabase):
+
 ```typescript
 const { data, error } = await supabase.auth.signInWithPassword({
   email: email,
-  password: password
+  password: password,
 });
 ```
 
