@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MainLayout from "@/components/layout/MainLayout";
 import { Search, Plus } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
