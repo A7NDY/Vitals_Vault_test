@@ -3,57 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/context/AuthContext";
+import { PatientDataStorage, PatientData } from "@/lib/storage";
 import { X } from "lucide-react";
-
-interface PatientData {
-  // Section 1: Physical & Demographic
-  height: string;
-  weight: string;
-  bmi: string;
-  bloodGroup: string;
-
-  // Section 2: Medical History
-  chronicConditions: {
-    diabetes: boolean;
-    hypertension: boolean;
-    heartDisease: boolean;
-    asthmaOrCOPD: boolean;
-  };
-  pastSurgeries: string;
-  ongoingConditions: string;
-  familyHistory: string;
-  pregnancyStatus: "Not Applicable / No" | "Yes";
-
-  // Section 3: Medications
-  medications: Array<{
-    id: string;
-    name: string;
-    dosage: string;
-    frequency: string;
-    duration: string;
-  }>;
-}
-
-function getStorageKey(email: string) {
-  return `vv_patient_data_${email}`;
-}
-
-function loadPatientData(email: string): PatientData | null {
-  try {
-    const raw = localStorage.getItem(getStorageKey(email));
-    return raw ? JSON.parse(raw) : null;
-  } catch (e) {
-    return null;
-  }
-}
-
-function savePatientData(email: string, data: PatientData) {
-  try {
-    localStorage.setItem(getStorageKey(email), JSON.stringify(data));
-  } catch (e) {
-    console.error("Error saving patient data:", e);
-  }
-}
 
 export default function PatientDataEntry() {
   const { user } = useAuth();
