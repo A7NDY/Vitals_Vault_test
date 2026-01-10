@@ -11,6 +11,8 @@ export default function PatientDataEntry() {
   const navigate = useNavigate();
 
   const initialData: PatientData = {
+    age: "",
+    gender: "",
     height: "",
     weight: "",
     bmi: "",
