@@ -105,6 +105,18 @@ export default function MyPatients() {
   const [filterStatus, setFilterStatus] = useState<
     "All" | "Critical" | "Stable"
   >("All");
+  const [incomingRequests, setIncomingRequests] = useState<any[]>([]);
+  const [showRequests, setShowRequests] = useState(false);
+
+  // Load incoming doctor requests
+  useEffect(() => {
+    if (user?.email) {
+      const requests = DoctorRequestManager.getPendingRequestsForDoctor(
+        user.email,
+      );
+      setIncomingRequests(requests);
+    }
+  }, [user?.email]);
 
   const filteredPatients = useMemo(() => {
     return patientsData.filter((patient) => {
