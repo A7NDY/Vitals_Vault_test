@@ -56,9 +56,33 @@ function persistAppts(appts: Appt[]) {
 }
 
 export default function Appointments() {
+  const { user } = useAuth();
   const [appts, setAppts] = useState<Appt[]>(() => loadAppts());
+  const [availableDoctors, setAvailableDoctors] = useState<DoctorProfile[]>([]);
+  const [acceptedDoctors, setAcceptedDoctors] = useState<DoctorProfile[]>([]);
+  const [pendingRequests, setPendingRequests] = useState<string[]>([]);
+  const [selectedDoctor, setSelectedDoctor] = useState<DoctorProfile | null>(null);
+  const [showDoctorRequests, setShowDoctorRequests] = useState(false);
 
   useEffect(() => persistAppts(appts), [appts]);
+
+  // Load available doctors and requests
+  useEffect(() => {
+    const doctors = DoctorRequestManager.getAvailableDoctors();
+    setAvailableDoctors(doctors);
+
+    if (user?.email) {
+      const accepted = DoctorRequestManager.getAcceptedDoctorsForPatient(user.email);
+      setAcceptedDoctors(accepted);
+
+      // Get pending request emails
+      const allRequests = DoctorRequestManager.getRequestsFromPatient(user.email);
+      const pending = allRequests
+        .filter((r) => r.status === "pending")
+        .map((r) => r.doctorEmail);
+      setPendingRequests(pending);
+    }
+  }, [user?.email]);
 
   const upcoming = useMemo(
     () =>
