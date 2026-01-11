@@ -205,13 +205,15 @@ export default function DoctorMessages() {
 
   // Filter conversations to only show connected patients
   const filteredConversations = useMemo(() => {
-    const filtered = allConversations.filter((conv) => connectedPatients.has(conv.patientEmail));
-    // Auto-select first conversation if none selected
-    if (!selectedConvId && filtered.length > 0) {
-      setSelectedConvId(filtered[0].id);
+    return allConversations.filter((conv) => connectedPatients.has(conv.patientEmail));
+  }, [allConversations, connectedPatients]);
+
+  // Auto-select first conversation if none selected
+  useEffect(() => {
+    if (!selectedConvId && filteredConversations.length > 0) {
+      setSelectedConvId(filteredConversations[0].id);
     }
-    return filtered;
-  }, [allConversations, connectedPatients, selectedConvId]);
+  }, [filteredConversations, selectedConvId]);
 
   const selectedConversation = useMemo(
     () => filteredConversations.find((c) => c.id === selectedConvId),
