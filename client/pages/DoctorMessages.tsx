@@ -42,6 +42,7 @@ interface SystemAlert {
 const SAMPLE_CONVERSATIONS: Conversation[] = [
   {
     id: "1",
+    patientEmail: "sarah@example.com",
     patientName: "Sarah Miller",
     avatar: "https://i.pravatar.cc/150?img=47",
     lastMessage: "Thanks for the update!",
@@ -77,6 +78,7 @@ const SAMPLE_CONVERSATIONS: Conversation[] = [
   },
   {
     id: "2",
+    patientEmail: "john@example.com",
     patientName: "John Smith",
     avatar: "https://i.pravatar.cc/150?img=33",
     lastMessage: "Will do, thanks!",
@@ -99,6 +101,7 @@ const SAMPLE_CONVERSATIONS: Conversation[] = [
   },
   {
     id: "3",
+    patientEmail: "emma@example.com",
     patientName: "Emma Davis",
     avatar: "https://i.pravatar.cc/150?img=23",
     lastMessage: "See you next week!",
