@@ -23,12 +23,36 @@ export default function MyPatients() {
   const [filterStatus, setFilterStatus] = useState<
     "All" | "Critical" | "Stable"
   >("All");
+  const [patients, setPatients] = useState<Patient[]>([]);
   const [incomingRequests, setIncomingRequests] = useState<any[]>([]);
   const [showRequests, setShowRequests] = useState(false);
 
-  // Load incoming doctor requests
+  // Load accepted patients and incoming requests
   useEffect(() => {
     if (user?.email) {
+      // Get accepted patients
+      const acceptedPatients = DoctorRequestManager.getAcceptedPatientsForDoctor(
+        user.email,
+      );
+
+      const patientsWithDetails: Patient[] = acceptedPatients.map((acceptedPatient) => {
+        const patientData = PatientDataStorage.getPatientData(acceptedPatient.email);
+        const age = patientData ? parseInt(patientData.age) : 0;
+        const gender = (patientData?.gender || "Other") as "Male" | "Female" | "Other";
+
+        return {
+          email: acceptedPatient.email,
+          name: acceptedPatient.fullName,
+          age,
+          gender,
+          lastUpdate: new Date().toLocaleDateString(),
+          status: "Stable" as const,
+        };
+      });
+
+      setPatients(patientsWithDetails);
+
+      // Get pending requests
       const requests = DoctorRequestManager.getPendingRequestsForDoctor(
         user.email,
       );
