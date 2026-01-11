@@ -231,7 +231,7 @@ export default function DoctorMessages() {
       time: new Date().toISOString(),
     };
 
-    setConversations((prev) =>
+    setAllConversations((prev) =>
       prev.map((conv) => {
         if (conv.id === selectedConvId) {
           return {
