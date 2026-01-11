@@ -260,7 +260,7 @@ export default function DoctorMessages() {
   }
 
   const unreadCount = useMemo(
-    () => conversations.filter((c) => c.unread).length,
+    () => conversations && conversations.filter((c) => c.unread).length,
     [conversations],
   );
 
