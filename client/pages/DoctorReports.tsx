@@ -84,6 +84,9 @@ export default function DoctorReports() {
 
   const filteredReports = useMemo(() => {
     return reports.filter((report) => {
+      // Only show reports for connected patients
+      const isConnectedPatient = connectedPatients.has(report.patientEmail);
+
       const matchesSearch = report.patientName
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
@@ -96,9 +99,9 @@ export default function DoctorReports() {
         matchesDateRange = matchesDateRange && report.date <= endDate;
       }
 
-      return matchesSearch && matchesDateRange;
+      return isConnectedPatient && matchesSearch && matchesDateRange;
     });
-  }, [reports, searchTerm, startDate, endDate]);
+  }, [reports, connectedPatients, searchTerm, startDate, endDate]);
 
   function handleGenerateReport() {
     toast({
