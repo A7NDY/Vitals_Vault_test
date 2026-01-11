@@ -272,6 +272,64 @@ export default function Appointments() {
               </tbody>
             </table>
           </div>
+
+          {/* Add Doctor Section */}
+          <h2 className="mt-8 mb-3 text-lg font-medium">Available Doctors</h2>
+          <div className="rounded-xl border bg-white p-4 shadow-sm">
+            {availableDoctors.length === 0 ? (
+              <div className="py-8 text-center text-sm text-slate-500">
+                No doctors available at the moment.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {availableDoctors.map((doc) => {
+                  const isAccepted = acceptedDoctors.some(
+                    (d) => d.email === doc.email,
+                  );
+                  const isPending = pendingRequests.includes(doc.email);
+
+                  return (
+                    <div
+                      key={doc.email}
+                      className="flex items-center justify-between rounded-md border border-slate-200 p-3"
+                    >
+                      <div>
+                        <div className="text-sm font-medium text-slate-900">
+                          {doc.fullName}
+                        </div>
+                        <div className="text-xs text-slate-500">
+                          {doc.specialization}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        {isAccepted && (
+                          <div className="flex items-center gap-1 rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                            <Check className="h-3 w-3" /> Connected
+                          </div>
+                        )}
+                        {isPending && (
+                          <button
+                            onClick={() => cancelDoctorRequest(doc.email)}
+                            className="flex items-center gap-1 rounded-md border border-orange-300 bg-orange-50 px-2 py-1 text-xs font-medium text-orange-700 hover:bg-orange-100"
+                          >
+                            <X className="h-3 w-3" /> Pending
+                          </button>
+                        )}
+                        {!isAccepted && !isPending && (
+                          <button
+                            onClick={() => requestDoctor(doc)}
+                            className="rounded-md bg-sky-600 px-3 py-1 text-xs font-medium text-white hover:bg-sky-700"
+                          >
+                            + Request
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         <aside>
