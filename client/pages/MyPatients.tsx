@@ -269,6 +269,66 @@ export default function MyPatients() {
             <p className="text-slate-500">No patients found</p>
           </div>
         )}
+
+        {/* Incoming Patient Requests */}
+        {incomingRequests.length > 0 && (
+          <div className="mt-8">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-slate-900">
+                Incoming Patient Requests
+              </h2>
+              <button
+                onClick={() => setShowRequests(!showRequests)}
+                className="text-sm text-sky-600 hover:underline"
+              >
+                {showRequests ? "Hide" : "Show"} ({incomingRequests.length})
+              </button>
+            </div>
+
+            {showRequests && (
+              <div className="space-y-3">
+                {incomingRequests.map((request) => (
+                  <div
+                    key={request.id}
+                    className="rounded-lg border border-blue-200 bg-blue-50 p-4"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-slate-900">
+                          {request.patientEmail}
+                        </div>
+                        <div className="text-xs text-slate-600">
+                          Requested: {new Date(request.createdAt).toLocaleString()}
+                        </div>
+                        <div className="mt-2 rounded-md bg-white/50 p-2 text-xs text-slate-700">
+                          <strong>Patient wants to connect with you on Vitals Vault</strong>
+                        </div>
+                      </div>
+                      <div className="ml-4 flex gap-2">
+                        <button
+                          onClick={() =>
+                            acceptRequest(request.id, request.patientEmail)
+                          }
+                          className="flex items-center gap-1 rounded-md bg-green-600 px-3 py-2 text-xs font-medium text-white hover:bg-green-700"
+                        >
+                          <Check className="h-3 w-3" /> Accept
+                        </button>
+                        <button
+                          onClick={() =>
+                            rejectRequest(request.id, request.patientEmail)
+                          }
+                          className="flex items-center gap-1 rounded-md border border-slate-300 bg-white px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                        >
+                          <X className="h-3 w-3" /> Reject
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </MainLayout>
   );
