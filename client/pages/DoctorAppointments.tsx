@@ -130,7 +130,7 @@ export default function DoctorAppointments() {
   );
 
   function handleSubmitRequest() {
-    if (!formDate || !formTime || !formPatient) {
+    if (!formDate || !formTime || !formPatientEmail) {
       toast({
         title: "Missing fields",
         description: "Please fill in all required fields.",
@@ -141,6 +141,7 @@ export default function DoctorAppointments() {
     const newAppt: DoctorAppt = {
       id: Date.now().toString(),
       patient: formPatient,
+      patientEmail: formPatientEmail,
       date: formDate,
       time: formTime,
       type: formType,
@@ -157,6 +158,8 @@ export default function DoctorAppointments() {
     setFormDate("");
     setFormTime("");
     setFormNotes("");
+    setFormPatientEmail("");
+    setFormPatient("");
   }
 
   const prevMonth = () => {
