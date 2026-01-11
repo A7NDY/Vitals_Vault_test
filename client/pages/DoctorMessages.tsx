@@ -271,7 +271,7 @@ export default function DoctorMessages() {
             Conversations
           </h2>
           <div className="space-y-2">
-            {conversations.map((conv) => (
+            {filteredConversations.map((conv) => (
               <button
                 key={conv.id}
                 onClick={() => setSelectedConvId(conv.id)}
