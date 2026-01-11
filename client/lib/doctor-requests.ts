@@ -168,6 +168,39 @@ class DoctorRequestManager {
   }
 
   /**
+   * Get registered users from localStorage
+   */
+  private static getRegisteredUsers(): any[] {
+    try {
+      const raw = localStorage.getItem("vv_registered_users");
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  /**
+   * Get accepted patients for a doctor with full details
+   */
+  static getAcceptedPatientsForDoctor(doctorEmail: string): Array<{ email: string; fullName: string }> {
+    const requests = this.getAllRequests().filter(
+      (r) => r.doctorEmail === doctorEmail && r.status === "accepted",
+    );
+
+    const registeredUsers = this.getRegisteredUsers();
+
+    return requests
+      .map((r) => {
+        const user = registeredUsers.find((u) => u.email === r.patientEmail);
+        return {
+          email: r.patientEmail,
+          fullName: user?.fullName || r.patientEmail,
+        };
+      })
+      .sort((a, b) => a.fullName.localeCompare(b.fullName));
+  }
+
+  /**
    * Persist requests to localStorage
    */
   private static persistRequests(requests: DoctorRequest[]): void {
