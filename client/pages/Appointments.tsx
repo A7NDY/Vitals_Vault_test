@@ -131,6 +131,45 @@ export default function Appointments() {
     // in real app, open meeting URL
   }
 
+  function requestDoctor(doctorProfile: DoctorProfile) {
+    if (!user?.email) {
+      toast({ title: "Error", description: "User not logged in." });
+      return;
+    }
+
+    DoctorRequestManager.createRequest(
+      user.email,
+      doctorProfile.email,
+      doctorProfile.fullName,
+    );
+
+    // Update pending requests
+    setPendingRequests((prev) => [...prev, doctorProfile.email]);
+
+    toast({
+      title: "Request sent",
+      description: `Doctor request sent to ${doctorProfile.fullName}. They will review and respond shortly.`,
+    });
+  }
+
+  function cancelDoctorRequest(doctorEmail: string) {
+    if (!user?.email) return;
+
+    const requests = DoctorRequestManager.getAllRequests();
+    const request = requests.find(
+      (r) =>
+        r.patientEmail === user.email &&
+        r.doctorEmail === doctorEmail &&
+        r.status === "pending",
+    );
+
+    if (request) {
+      DoctorRequestManager.rejectRequest(request.id);
+      setPendingRequests((prev) => prev.filter((e) => e !== doctorEmail));
+      toast({ title: "Request cancelled", description: "Doctor request cancelled." });
+    }
+  }
+
   return (
     <MainLayout>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
