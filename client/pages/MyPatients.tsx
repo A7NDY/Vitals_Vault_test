@@ -129,6 +129,24 @@ export default function MyPatients() {
     });
   }, [searchTerm, filterStatus]);
 
+  function acceptRequest(requestId: string, patientEmail: string) {
+    DoctorRequestManager.acceptRequest(requestId);
+    setIncomingRequests((prev) => prev.filter((r) => r.id !== requestId));
+    toast({
+      title: "Request accepted",
+      description: `You accepted ${patientEmail} as your patient.`,
+    });
+  }
+
+  function rejectRequest(requestId: string, patientEmail: string) {
+    DoctorRequestManager.rejectRequest(requestId);
+    setIncomingRequests((prev) => prev.filter((r) => r.id !== requestId));
+    toast({
+      title: "Request rejected",
+      description: `You rejected the request from ${patientEmail}.`,
+    });
+  }
+
   if (!user || user.role !== "Doctor") {
     return (
       <MainLayout>
