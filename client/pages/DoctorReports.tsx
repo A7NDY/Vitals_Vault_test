@@ -1,12 +1,14 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/context/AuthContext";
+import DoctorRequestManager from "@/lib/doctor-requests";
 import { Search, Download } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface PatientReport {
   id: string;
   patientName: string;
+  patientEmail: string;
   date: string; // YYYY-MM-DD
   reportType:
     | "Blood Test"
@@ -22,50 +24,16 @@ const SAMPLE_REPORTS: PatientReport[] = [
   {
     id: "1",
     patientName: "Sophia Carter",
+    patientEmail: "sophia@example.com",
     date: "2024-07-20",
     reportType: "Blood Test",
   },
   {
     id: "2",
     patientName: "Ethan Bennett",
+    patientEmail: "ethan@example.com",
     date: "2024-07-15",
     reportType: "MRI Scan",
-  },
-  {
-    id: "3",
-    patientName: "Olivia Hayes",
-    date: "2024-07-10",
-    reportType: "ECG",
-  },
-  {
-    id: "4",
-    patientName: "Liam Foster",
-    date: "2024-07-05",
-    reportType: "X-Ray",
-  },
-  {
-    id: "5",
-    patientName: "Ava Morgan",
-    date: "2024-06-30",
-    reportType: "Ultrasound",
-  },
-  {
-    id: "6",
-    patientName: "Noah Parker",
-    date: "2024-06-25",
-    reportType: "CT Scan",
-  },
-  {
-    id: "7",
-    patientName: "Isabella Reed",
-    date: "2024-06-20",
-    reportType: "Physical Exam",
-  },
-  {
-    id: "8",
-    patientName: "Jackson Cole",
-    date: "2024-06-15",
-    reportType: "Blood Test",
   },
 ];
 
