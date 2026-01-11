@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/context/AuthContext";
+import DoctorRequestManager from "@/lib/doctor-requests";
 import { toast } from "@/hooks/use-toast";
 import {
   Send,
@@ -21,6 +22,7 @@ interface DoctorMessage {
 
 interface Conversation {
   id: string;
+  patientEmail: string;
   patientName: string;
   avatar: string;
   lastMessage: string;
