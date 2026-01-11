@@ -1,8 +1,10 @@
 import MainLayout from "@/components/layout/MainLayout";
-import { Search } from "lucide-react";
+import { Search, Check, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import DoctorRequestManager from "@/lib/doctor-requests";
+import { toast } from "@/hooks/use-toast";
 
 interface Patient {
   id: string;
