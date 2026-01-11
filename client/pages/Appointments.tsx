@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
+import DoctorRequestManager, { DoctorProfile } from "@/lib/doctor-requests";
+import { Check, X } from "lucide-react";
 
 type Appt = {
   id: string;
