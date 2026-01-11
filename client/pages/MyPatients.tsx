@@ -4,99 +4,17 @@ import { useAuth } from "@/context/AuthContext";
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DoctorRequestManager from "@/lib/doctor-requests";
+import { PatientDataStorage, PatientData } from "@/lib/storage";
 import { toast } from "@/hooks/use-toast";
 
 interface Patient {
-  id: string;
+  email: string;
   name: string;
   age: number;
-  gender: "Male" | "Female";
+  gender: "Male" | "Female" | "Other";
   lastUpdate: string;
   status: "Critical" | "Stable";
 }
-
-const patientsData: Patient[] = [
-  {
-    id: "1",
-    name: "Sophia Carter",
-    age: 65,
-    gender: "Female",
-    lastUpdate: "2023-11-15",
-    status: "Critical",
-  },
-  {
-    id: "2",
-    name: "Ethan Bennett",
-    age: 72,
-    gender: "Male",
-    lastUpdate: "2023-11-18",
-    status: "Stable",
-  },
-  {
-    id: "3",
-    name: "Olivia Hayes",
-    age: 58,
-    gender: "Female",
-    lastUpdate: "2023-11-20",
-    status: "Stable",
-  },
-  {
-    id: "4",
-    name: "Liam Foster",
-    age: 60,
-    gender: "Male",
-    lastUpdate: "2023-11-17",
-    status: "Stable",
-  },
-  {
-    id: "5",
-    name: "Ava Morgan",
-    age: 68,
-    gender: "Female",
-    lastUpdate: "2023-11-19",
-    status: "Stable",
-  },
-  {
-    id: "6",
-    name: "Noah Parker",
-    age: 75,
-    gender: "Male",
-    lastUpdate: "2023-11-16",
-    status: "Stable",
-  },
-  {
-    id: "7",
-    name: "Isabella Reed",
-    age: 62,
-    gender: "Female",
-    lastUpdate: "2023-11-21",
-    status: "Stable",
-  },
-  {
-    id: "8",
-    name: "Jackson Cole",
-    age: 69,
-    gender: "Male",
-    lastUpdate: "2023-11-22",
-    status: "Stable",
-  },
-  {
-    id: "9",
-    name: "Mia Hughes",
-    age: 55,
-    gender: "Female",
-    lastUpdate: "2023-11-23",
-    status: "Stable",
-  },
-  {
-    id: "10",
-    name: "Aiden Brooks",
-    age: 70,
-    gender: "Male",
-    lastUpdate: "2023-11-24",
-    status: "Stable",
-  },
-];
 
 export default function MyPatients() {
   const { user } = useAuth();
