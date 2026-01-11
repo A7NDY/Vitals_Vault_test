@@ -61,7 +61,7 @@ export default function MyPatients() {
   }, [user?.email]);
 
   const filteredPatients = useMemo(() => {
-    return patientsData.filter((patient) => {
+    return patients.filter((patient) => {
       const matchesSearch = patient.name
         .toLowerCase()
         .includes(searchTerm.toLowerCase());
@@ -69,7 +69,7 @@ export default function MyPatients() {
         filterStatus === "All" || patient.status === filterStatus;
       return matchesSearch && matchesStatus;
     });
-  }, [searchTerm, filterStatus]);
+  }, [patients, searchTerm, filterStatus]);
 
   function acceptRequest(requestId: string, patientEmail: string) {
     DoctorRequestManager.acceptRequest(requestId);
