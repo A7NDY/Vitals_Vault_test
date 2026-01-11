@@ -59,9 +59,18 @@ export default function DoctorReports() {
   const [reports, setReports] = useState<PatientReport[]>(() =>
     loadDoctorReports(),
   );
+  const [connectedPatients, setConnectedPatients] = useState<Set<string>>(new Set());
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  // Load connected patients
+  useEffect(() => {
+    if (user?.email) {
+      const patients = DoctorRequestManager.getAcceptedPatientsForDoctor(user.email);
+      setConnectedPatients(new Set(patients.map((p) => p.email)));
+    }
+  }, [user?.email]);
 
   if (!user || user.role !== "Doctor") {
     return (
