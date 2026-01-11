@@ -2,11 +2,13 @@ import { useState, useEffect, useMemo } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/context/AuthContext";
 import { ChevronRight, ChevronLeft } from "lucide-react";
+import DoctorRequestManager from "@/lib/doctor-requests";
 import { toast } from "@/hooks/use-toast";
 
 interface DoctorAppt {
   id: string;
   patient: string;
+  patientEmail: string;
   date: string; // YYYY-MM-DD
   time: string; // HH:MM
   type: "Check-up" | "Consultation" | "Follow-up";
@@ -17,6 +19,7 @@ const SAMPLE_APPTS: DoctorAppt[] = [
   {
     id: "1",
     patient: "Ava Thompson",
+    patientEmail: "ava@example.com",
     date: "2024-09-15",
     time: "09:00",
     type: "Check-up",
@@ -25,46 +28,12 @@ const SAMPLE_APPTS: DoctorAppt[] = [
   {
     id: "2",
     patient: "Ethan Walker",
+    patientEmail: "ethan@example.com",
     date: "2024-08-20",
     time: "13:00",
     type: "Consultation",
     notes: "Discussed treatment options, scheduled follow-up.",
   },
-  {
-    id: "3",
-    patient: "Liam Harper",
-    date: "2024-10-28",
-    time: "10:00",
-    type: "Check-up",
-    notes: "",
-  },
-  {
-    id: "4",
-    patient: "Olivia Bennett",
-    date: "2024-11-01",
-    time: "14:30",
-    type: "Consultation",
-    notes: "",
-  },
-  {
-    id: "5",
-    patient: "Noah Carter",
-    date: "2024-11-15",
-    time: "11:00",
-    type: "Follow-up",
-    notes: "",
-  },
-];
-
-const PATIENTS = [
-  "Ava Thompson",
-  "Ethan Walker",
-  "Liam Harper",
-  "Olivia Bennett",
-  "Noah Carter",
-  "Sophia Clark",
-  "Isabella Reed",
-  "Jackson Cole",
 ];
 
 function loadDoctorAppts() {
