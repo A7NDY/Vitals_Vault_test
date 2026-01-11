@@ -376,17 +376,29 @@ export default function DoctorAppointments() {
                   <label className="block text-sm font-medium text-slate-700 mb-2">
                     Select Patient
                   </label>
-                  <select
-                    value={formPatient}
-                    onChange={(e) => setFormPatient(e.target.value)}
-                    className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:border-sky-400"
-                  >
-                    {PATIENTS.map((p) => (
-                      <option key={p} value={p}>
-                        {p}
-                      </option>
-                    ))}
-                  </select>
+                  {connectedPatients.length === 0 ? (
+                    <div className="rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-500 bg-slate-50">
+                      No connected patients. Connect with patients first.
+                    </div>
+                  ) : (
+                    <select
+                      value={formPatientEmail}
+                      onChange={(e) => {
+                        const email = e.target.value;
+                        setFormPatientEmail(email);
+                        const patient = connectedPatients.find((p) => p.email === email);
+                        if (patient) setFormPatient(patient.fullName);
+                      }}
+                      className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:border-sky-400"
+                    >
+                      <option value="">Choose a patient...</option>
+                      {connectedPatients.map((p) => (
+                        <option key={p.email} value={p.email}>
+                          {p.fullName}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
