@@ -179,19 +179,21 @@ export default function DoctorMessages() {
   const [alerts, setAlerts] = useState<SystemAlert[]>(SYSTEM_ALERTS);
   const endRef = useRef<HTMLDivElement | null>(null);
 
-  // Load connected patients
   useEffect(() => {
-    if (user?.email) {
-      const patients = DoctorRequestManager.getAcceptedPatientsForDoctor(user.email);
-      setConnectedPatients(new Set(patients.map((p) => p.email)));
-    }
-  }, [user?.email]);
-
-  useEffect(() => persistDoctorConversations(allConversations), [allConversations]);
+    persistDoctorConversations(allConversations);
+  }, [allConversations]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [selectedConvId, allConversations]);
+
+  useEffect(() => {
+    if (user?.email) {
+      const patients = DoctorRequestManager.getAcceptedPatientsForDoctor(user.email);
+      const patientEmails = new Set(patients.map((p) => p.email));
+      setConnectedPatients(patientEmails);
+    }
+  }, [user?.email]);
 
   if (!user || user.role !== "Doctor") {
     return (
@@ -203,22 +205,21 @@ export default function DoctorMessages() {
     );
   }
 
-  // Filter conversations to only show connected patients
   const filteredConversations = useMemo(() => {
-    return allConversations.filter((conv) => connectedPatients.has(conv.patientEmail));
+    return allConversations.filter((conv) =>
+      connectedPatients.has(conv.patientEmail),
+    );
   }, [allConversations, connectedPatients]);
 
-  // Auto-select first conversation if none selected
   useEffect(() => {
     if (!selectedConvId && filteredConversations.length > 0) {
       setSelectedConvId(filteredConversations[0].id);
     }
   }, [filteredConversations, selectedConvId]);
 
-  const selectedConversation = useMemo(
-    () => filteredConversations.find((c) => c.id === selectedConvId),
-    [filteredConversations, selectedConvId],
-  );
+  const selectedConversation = useMemo(() => {
+    return filteredConversations.find((c) => c.id === selectedConvId);
+  }, [filteredConversations, selectedConvId]);
 
   function handleSendMessage() {
     const trimmed = messageText.trim();
@@ -259,10 +260,9 @@ export default function DoctorMessages() {
     });
   }
 
-  const unreadCount = useMemo(
-    () => filteredConversations?.filter((c) => c.unread).length || 0,
-    [filteredConversations],
-  );
+  const unreadCount = useMemo(() => {
+    return filteredConversations.filter((c) => c.unread).length;
+  }, [filteredConversations]);
 
   return (
     <MainLayout>
@@ -273,39 +273,45 @@ export default function DoctorMessages() {
             Conversations
           </h2>
           <div className="space-y-2">
-            {filteredConversations.map((conv) => (
-              <button
-                key={conv.id}
-                onClick={() => setSelectedConvId(conv.id)}
-                className={`w-full rounded-lg p-3 text-left transition-colors ${
-                  selectedConvId === conv.id
-                    ? "bg-sky-50 border border-sky-200"
-                    : "hover:bg-slate-50 border border-transparent"
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <img
-                    src={conv.avatar}
-                    alt={conv.patientName}
-                    className="h-10 w-10 rounded-full"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-slate-900 text-sm">
-                      {conv.patientName}
-                    </p>
-                    <p className="text-xs text-slate-600 truncate">
-                      {conv.lastMessage}
-                    </p>
-                    <p className="text-xs text-slate-500 mt-1">
-                      {conv.lastTime}
-                    </p>
+            {filteredConversations.length === 0 ? (
+              <div className="text-sm text-slate-500 p-4">
+                No conversations with connected patients
+              </div>
+            ) : (
+              filteredConversations.map((conv) => (
+                <button
+                  key={conv.id}
+                  onClick={() => setSelectedConvId(conv.id)}
+                  className={`w-full rounded-lg p-3 text-left transition-colors ${
+                    selectedConvId === conv.id
+                      ? "bg-sky-50 border border-sky-200"
+                      : "hover:bg-slate-50 border border-transparent"
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <img
+                      src={conv.avatar}
+                      alt={conv.patientName}
+                      className="h-10 w-10 rounded-full"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-slate-900 text-sm">
+                        {conv.patientName}
+                      </p>
+                      <p className="text-xs text-slate-600 truncate">
+                        {conv.lastMessage}
+                      </p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        {conv.lastTime}
+                      </p>
+                    </div>
+                    {conv.unread && (
+                      <div className="h-2 w-2 rounded-full bg-sky-500 mt-2" />
+                    )}
                   </div>
-                  {conv.unread && (
-                    <div className="h-2 w-2 rounded-full bg-sky-500 mt-2" />
-                  )}
-                </div>
-              </button>
-            ))}
+                </button>
+              ))
+            )}
           </div>
         </div>
 
