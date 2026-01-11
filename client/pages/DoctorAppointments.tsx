@@ -70,9 +70,19 @@ export default function DoctorAppointments() {
   const [appts, setAppts] = useState<DoctorAppt[]>(() => loadDoctorAppts());
   const [currentDate, setCurrentDate] = useState(new Date(2024, 9, 4)); // Oct 4, 2024
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [connectedPatients, setConnectedPatients] = useState<Array<{ email: string; fullName: string }>>([]);
+
+  // Load connected patients
+  useEffect(() => {
+    if (user?.email) {
+      const patients = DoctorRequestManager.getAcceptedPatientsForDoctor(user.email);
+      setConnectedPatients(patients);
+    }
+  }, [user?.email]);
 
   // Form states
-  const [formPatient, setFormPatient] = useState("Ava Thompson");
+  const [formPatientEmail, setFormPatientEmail] = useState("");
+  const [formPatient, setFormPatient] = useState("");
   const [formType, setFormType] = useState<
     "Check-up" | "Consultation" | "Follow-up"
   >("Check-up");
