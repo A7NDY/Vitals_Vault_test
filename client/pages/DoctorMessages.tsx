@@ -170,21 +170,28 @@ function persistDoctorConversations(conversations: Conversation[]) {
 
 export default function DoctorMessages() {
   const { user } = useAuth();
-  const [conversations, setConversations] = useState<Conversation[]>(() =>
+  const [allConversations, setAllConversations] = useState<Conversation[]>(() =>
     loadDoctorConversations(),
   );
-  const [selectedConvId, setSelectedConvId] = useState(
-    SAMPLE_CONVERSATIONS[0].id,
-  );
+  const [connectedPatients, setConnectedPatients] = useState<Set<string>>(new Set());
+  const [selectedConvId, setSelectedConvId] = useState<string>("");
   const [messageText, setMessageText] = useState("");
   const [alerts, setAlerts] = useState<SystemAlert[]>(SYSTEM_ALERTS);
   const endRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => persistDoctorConversations(conversations), [conversations]);
+  // Load connected patients
+  useEffect(() => {
+    if (user?.email) {
+      const patients = DoctorRequestManager.getAcceptedPatientsForDoctor(user.email);
+      setConnectedPatients(new Set(patients.map((p) => p.email)));
+    }
+  }, [user?.email]);
+
+  useEffect(() => persistDoctorConversations(allConversations), [allConversations]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [selectedConvId, conversations]);
+  }, [selectedConvId, allConversations]);
 
   if (!user || user.role !== "Doctor") {
     return (
