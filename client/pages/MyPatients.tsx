@@ -167,7 +167,7 @@ export default function MyPatients() {
               </thead>
               <tbody className="divide-y divide-slate-200 bg-white">
                 {filteredPatients.map((patient) => (
-                  <tr key={patient.id} className="hover:bg-slate-50/40">
+                  <tr key={patient.email} className="hover:bg-slate-50/40">
                     <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-900">
                       {patient.name}
                     </td>
@@ -193,7 +193,7 @@ export default function MyPatients() {
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm">
                       <button
-                        onClick={() => navigate(`/patient/${patient.id}`)}
+                        onClick={() => navigate(`/patient/${patient.email}`)}
                         className="text-sky-600 hover:text-sky-700 hover:underline"
                       >
                         View Profile
