@@ -74,6 +74,12 @@ export default function Medications() {
     setMeds((prev) => prev.map((p) => (p.id === id ? { ...p, status: p.status === "Active" ? "Paused" : "Active" } : p)));
   }
 
+  function removeMed(id: string) {
+    const med = meds.find((m) => m.id === id);
+    setMeds((prev) => prev.filter((m) => m.id !== id));
+    toast({ title: "Removed", description: `${med?.name} removed from your schedule.` });
+  }
+
   function upcomingSeconds(nextTime: string) {
     const now = new Date();
     const [hh, mm] = nextTime.split(":").map(Number);
