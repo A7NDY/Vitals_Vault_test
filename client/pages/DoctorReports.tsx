@@ -20,23 +20,6 @@ interface PatientReport {
     | "Physical Exam";
 }
 
-const SAMPLE_REPORTS: PatientReport[] = [
-  {
-    id: "1",
-    patientName: "Sophia Carter",
-    patientEmail: "sophia@example.com",
-    date: "2024-07-20",
-    reportType: "Blood Test",
-  },
-  {
-    id: "2",
-    patientName: "Ethan Bennett",
-    patientEmail: "ethan@example.com",
-    date: "2024-07-15",
-    reportType: "MRI Scan",
-  },
-];
-
 function loadDoctorReports() {
   try {
     const raw = localStorage.getItem("vv_doctor_reports");
