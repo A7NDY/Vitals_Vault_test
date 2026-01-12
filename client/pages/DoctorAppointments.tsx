@@ -18,9 +18,9 @@ interface DoctorAppt {
 function loadDoctorAppts() {
   try {
     const raw = localStorage.getItem("vv_doctor_appts");
-    return raw ? (JSON.parse(raw) as DoctorAppt[]) : SAMPLE_APPTS;
+    return raw ? (JSON.parse(raw) as DoctorAppt[]) : [];
   } catch (e) {
-    return SAMPLE_APPTS;
+    return [];
   }
 }
 
