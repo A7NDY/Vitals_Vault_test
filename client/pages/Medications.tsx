@@ -13,12 +13,6 @@ type Med = {
   refillInDays: number;
 };
 
-const SAMPLE: Med[] = [
-  { id: "m1", name: "Metformin", dosage: "500mg", frequency: "Twice daily", time: "08:00", status: "Active", refillInDays: 7 },
-  { id: "m2", name: "Lisinopril", dosage: "10mg", frequency: "Once daily", time: "09:00", status: "Active", refillInDays: 14 },
-  { id: "m3", name: "Atorvastatin", dosage: "20mg", frequency: "Once daily", time: "22:00", status: "Active", refillInDays: 3 },
-];
-
 function loadMeds() {
   try {
     const raw = localStorage.getItem("vv_meds");
