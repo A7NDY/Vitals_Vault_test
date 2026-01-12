@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
+import { Trash2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 type Med = {
