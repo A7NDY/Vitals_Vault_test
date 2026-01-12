@@ -11,12 +11,6 @@ type Msg = {
   time: string; // ISO
 };
 
-const SAMPLE: Msg[] = [
-  { id: "m1", sender: "doctor", text: "Hi Rachel, how are you feeling today?", time: new Date().toISOString() },
-  { id: "m2", sender: "patient", text: "Hi Dr. Olivia — I'm feeling better, thanks.", time: new Date().toISOString() },
-  { id: "m3", sender: "doctor", text: "Great, continue your medication and monitor blood pressure.", time: new Date().toISOString() },
-];
-
 function loadMessages() {
   try {
     const raw = localStorage.getItem("vv_messages");
