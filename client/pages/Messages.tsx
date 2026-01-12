@@ -14,9 +14,9 @@ type Msg = {
 function loadMessages() {
   try {
     const raw = localStorage.getItem("vv_messages");
-    return raw ? (JSON.parse(raw) as Msg[]) : SAMPLE;
+    return raw ? (JSON.parse(raw) as Msg[]) : [];
   } catch (e) {
-    return SAMPLE;
+    return [];
   }
 }
 
