@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 
 type Series = number[];
@@ -8,7 +8,7 @@ function buildPath(values: number[], w = 700, h = 220, padding = 20) {
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
-  const stepX = (w - padding * 2) / (values.length - 1);
+  const stepX = (w - padding * 2) / (values.length - 1 || 1);
 
   return values
     .map((v, i) => {
@@ -19,30 +19,81 @@ function buildPath(values: number[], w = 700, h = 220, padding = 20) {
     .join(" ");
 }
 
-const demo = {
-  bp: [120, 122, 118, 121, 119, 125, 121],
-  hr: [70, 72, 71, 73, 69, 75, 72],
-  spo2: [98, 97, 98, 99, 98, 97, 98],
-  sugar: [102, 100, 98, 105, 99, 101, 100],
-};
-
 export default function Reports() {
   const [range, setRange] = useState<"Daily" | "Weekly" | "Monthly">("Weekly");
+  const [vitals, setVitals] = useState<any[]>([]);
 
-  const metrics = useMemo(
-    () => [
-      { key: "bp", label: "Blood Pressure", unit: "mmHg", value: "120/80", delta: -2 },
-      { key: "hr", label: "Heart Rate", unit: "bpm", value: "72", delta: +1 },
-      { key: "spo2", label: "SpO2", unit: "%", value: "98", delta: 0 },
-      { key: "sugar", label: "Blood Sugar", unit: "mg/dL", value: "100", delta: -3 },
-    ],
-    [],
-  );
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("vv_vitals");
+      setVitals(raw ? JSON.parse(raw) : []);
+    } catch (e) {
+      setVitals([]);
+    }
+  }, []);
 
-  const seriesMap: Record<string, Series> = useMemo(
-    () => ({ bp: demo.bp, hr: demo.hr, spo2: demo.spo2, sugar: demo.sugar }),
-    [],
-  );
+  // Filter vitals based on selected time range
+  const filteredVitals = useMemo(() => {
+    const now = new Date();
+    let daysBack = 7;
+
+    if (range === "Daily") {
+      daysBack = 1;
+    } else if (range === "Weekly") {
+      daysBack = 7;
+    } else if (range === "Monthly") {
+      daysBack = 30;
+    }
+
+    const cutoffDate = new Date(now.getTime() - daysBack * 24 * 60 * 60 * 1000);
+    return vitals.filter((v) => new Date(v.datetime) >= cutoffDate).sort((a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime());
+  }, [vitals, range]);
+
+  // Extract data series from vitals
+  const seriesMap: Record<string, Series> = useMemo(() => {
+    return {
+      bp: filteredVitals.map((v) => v.systolicBP || 0).filter((x) => x > 0),
+      hr: filteredVitals.map((v) => v.hr || 0).filter((x) => x > 0),
+      spo2: filteredVitals.map((v) => v.spO2 || 0).filter((x) => x > 0),
+      sugar: filteredVitals.map((v) => v.bg || 0).filter((x) => x > 0),
+    };
+  }, [filteredVitals]);
+
+  // Calculate metrics from filtered vitals
+  const metrics = useMemo(() => {
+    const getLastValue = (key: "hr" | "spO2" | "bg" | "systolicBP") => {
+      if (filteredVitals.length === 0) return null;
+      const last = filteredVitals[filteredVitals.length - 1];
+      return last[key];
+    };
+
+    const getFirstValue = (key: "hr" | "spO2" | "bg" | "systolicBP") => {
+      if (filteredVitals.length === 0) return null;
+      const first = filteredVitals[0];
+      return first[key];
+    };
+
+    const calcDelta = (current: number | null, previous: number | null) => {
+      if (!current || !previous) return 0;
+      return Math.round(((current - previous) / previous) * 100);
+    };
+
+    const hrLast = getLastValue("hr");
+    const hrFirst = getFirstValue("hr");
+    const spO2Last = getLastValue("spO2");
+    const spO2First = getFirstValue("spO2");
+    const bgLast = getLastValue("bg");
+    const bgFirst = getFirstValue("bg");
+    const bpLast = getLastValue("systolicBP");
+    const bpFirst = getFirstValue("systolicBP");
+
+    return [
+      { key: "bp", label: "Blood Pressure", unit: "mmHg", value: bpLast ? `${bpLast}/80` : "—", delta: calcDelta(bpLast, bpFirst) },
+      { key: "hr", label: "Heart Rate", unit: "bpm", value: hrLast ? `${hrLast}` : "—", delta: calcDelta(hrLast, hrFirst) },
+      { key: "spo2", label: "SpO2", unit: "%", value: spO2Last ? `${spO2Last}` : "—", delta: calcDelta(spO2Last, spO2First) },
+      { key: "sugar", label: "Blood Sugar", unit: "mg/dL", value: bgLast ? `${bgLast}` : "—", delta: calcDelta(bgLast, bgFirst) },
+    ];
+  }, [filteredVitals]);
 
   return (
     <MainLayout>
