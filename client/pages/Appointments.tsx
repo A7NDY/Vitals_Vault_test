@@ -347,15 +347,28 @@ export default function Appointments() {
             <div className="space-y-3">
               <div>
                 <label className="block text-sm text-slate-600">Doctor</label>
-                <select
-                  value={doctor}
-                  onChange={(e) => setDoctor(e.target.value)}
-                  className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
-                >
-                  <option>Dr. Emily Carter</option>
-                  <option>Dr. Robert Harris</option>
-                  <option>Dr. David Lee</option>
-                </select>
+                {acceptedDoctors.length === 0 ? (
+                  <div className="mt-2 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500">
+                    Connect with doctors first to request appointments
+                  </div>
+                ) : (
+                  <select
+                    value={doctorEmail}
+                    onChange={(e) => {
+                      const email = e.target.value;
+                      setDoctorEmail(email);
+                      const doc = acceptedDoctors.find((d) => d.email === email);
+                      if (doc) setDoctor(doc.fullName);
+                    }}
+                    className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+                  >
+                    {acceptedDoctors.map((doc) => (
+                      <option key={doc.email} value={doc.email}>
+                        {doc.fullName}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
 
               <div>
