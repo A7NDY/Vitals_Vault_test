@@ -76,23 +76,56 @@ export default function Messages() {
     toast({ title: "Message sent" });
   }
 
+  if (connectedDoctors.length === 0) {
+    return (
+      <MainLayout>
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <p className="text-lg font-medium text-slate-900">No Connected Doctors</p>
+            <p className="mt-2 text-slate-600">Connect with doctors in the Appointments page to start messaging.</p>
+          </div>
+        </div>
+      </MainLayout>
+    );
+  }
+
   return (
     <MainLayout>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <h1 className="text-3xl font-semibold mb-4">Dr. Olivia Bennett</h1>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-slate-700 mb-2">Message Doctor</label>
+            <select
+              value={selectedDoctorEmail}
+              onChange={(e) => setSelectedDoctorEmail(e.target.value)}
+              className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm"
+            >
+              {connectedDoctors.map((doc) => (
+                <option key={doc.email} value={doc.email}>
+                  {doc.fullName}
+                </option>
+              ))}
+            </select>
+          </div>
+          <h1 className="text-3xl font-semibold mb-4">{selectedDoctor?.name || "Doctor"}</h1>
 
           <div className="rounded-xl border bg-white p-6 shadow-sm">
             <div className="flex flex-col gap-6">
               <div className="max-h-[60vh] overflow-y-auto px-2">
-                {messages.map((m) => (
-                  <div key={m.id} className={`mb-4 flex ${m.sender === "patient" ? "justify-end" : "justify-start"}`}>
-                    <div className={`${m.sender === "patient" ? "bg-sky-600 text-white" : "bg-slate-100 text-slate-800"} max-w-[70%] rounded-lg px-4 py-2 text-sm`}>
-                      <div className="whitespace-pre-wrap">{m.text}</div>
-                      <div className={`${m.sender === "patient" ? "text-sky-100" : "text-slate-500"} mt-1 text-xs`}>{new Date(m.time).toLocaleString()}</div>
-                    </div>
+                {messages.length === 0 ? (
+                  <div className="text-center py-8 text-slate-500">
+                    No messages yet. Start the conversation!
                   </div>
-                ))}
+                ) : (
+                  messages.map((m) => (
+                    <div key={m.id} className={`mb-4 flex ${m.sender === "patient" ? "justify-end" : "justify-start"}`}>
+                      <div className={`${m.sender === "patient" ? "bg-sky-600 text-white" : "bg-slate-100 text-slate-800"} max-w-[70%] rounded-lg px-4 py-2 text-sm`}>
+                        <div className="whitespace-pre-wrap">{m.text}</div>
+                        <div className={`${m.sender === "patient" ? "text-sky-100" : "text-slate-500"} mt-1 text-xs`}>{new Date(m.time).toLocaleString()}</div>
+                      </div>
+                    </div>
+                  ))
+                )}
                 <div ref={endRef} />
               </div>
 
@@ -100,39 +133,47 @@ export default function Messages() {
                 <input
                   value={text}
                   onChange={(e) => setText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      send();
+                    }
+                  }}
                   placeholder="Type your message..."
                   className="flex-1 rounded-full border border-slate-200 px-4 py-2 text-sm focus:border-slate-300"
                 />
-                <button onClick={send} className="rounded-full bg-sky-600 px-4 py-2 text-sm font-medium text-white">Send</button>
+                <button onClick={send} className="rounded-full bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700">Send</button>
               </div>
             </div>
           </div>
         </div>
 
         <aside>
-          <div className="rounded-xl border bg-white p-4 shadow-sm">
-            <div className="flex items-center gap-3">
-              <img src={doctor.avatar} alt="doc" className="h-10 w-10 rounded-full" />
-              <div>
-                <div className="text-sm font-medium">{doctor.name}</div>
-                <div className="text-xs text-slate-500">{doctor.specialty}</div>
-              </div>
-            </div>
-
-            <div className="mt-6 space-y-3 text-sm text-slate-600">
-              <div>
-                <div className="text-xs text-slate-500">Activity</div>
-                <div className="mt-1">Last message: {messages.length ? new Date(messages[messages.length - 1].time).toLocaleString() : "—"}</div>
+          {selectedDoctor && (
+            <div className="rounded-xl border bg-white p-4 shadow-sm">
+              <div className="flex items-center gap-3">
+                <img src={selectedDoctor.avatar} alt="doc" className="h-10 w-10 rounded-full" />
+                <div>
+                  <div className="text-sm font-medium">{selectedDoctor.name}</div>
+                  <div className="text-xs text-slate-500">{selectedDoctor.specialty}</div>
+                </div>
               </div>
 
-              <div>
-                <button className="w-full rounded-md border px-3 py-2 text-sm">Mark as Read</button>
-              </div>
-              <div>
-                <button className="w-full rounded-md border px-3 py-2 text-sm">Archive</button>
+              <div className="mt-6 space-y-3 text-sm text-slate-600">
+                <div>
+                  <div className="text-xs text-slate-500">Activity</div>
+                  <div className="mt-1">Last message: {messages.length ? new Date(messages[messages.length - 1].time).toLocaleString() : "—"}</div>
+                </div>
+
+                <div>
+                  <button className="w-full rounded-md border px-3 py-2 text-sm">Mark as Read</button>
+                </div>
+                <div>
+                  <button className="w-full rounded-md border px-3 py-2 text-sm">Archive</button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </aside>
       </div>
     </MainLayout>
