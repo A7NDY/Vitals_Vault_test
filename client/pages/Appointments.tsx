@@ -407,7 +407,12 @@ export default function Appointments() {
               <div className="flex justify-end">
                 <button
                   onClick={submitRequest}
-                  className="rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white"
+                  disabled={acceptedDoctors.length === 0}
+                  className={`rounded-md px-4 py-2 text-sm font-medium ${
+                    acceptedDoctors.length === 0
+                      ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                      : "bg-sky-600 text-white hover:bg-sky-700"
+                  }`}
                 >
                   Submit Request
                 </button>
