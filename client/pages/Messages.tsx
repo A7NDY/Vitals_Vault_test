@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/context/AuthContext";
+import DoctorRequestManager from "@/lib/doctor-requests";
 import { toast } from "@/hooks/use-toast";
 
 type Msg = {
