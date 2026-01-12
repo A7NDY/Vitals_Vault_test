@@ -99,14 +99,23 @@ export default function Appointments() {
     [appts],
   );
 
-  // form
-  const [doctor, setDoctor] = useState("Dr. Emily Carter");
+  // form - filter to show only connected doctors
+  const [doctorEmail, setDoctorEmail] = useState("");
+  const [doctor, setDoctor] = useState("");
   const [type, setType] = useState("Consultation");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
 
+  // Initialize form with first connected doctor
+  useEffect(() => {
+    if (acceptedDoctors.length > 0 && !doctorEmail) {
+      setDoctorEmail(acceptedDoctors[0].email);
+      setDoctor(acceptedDoctors[0].fullName);
+    }
+  }, [acceptedDoctors, doctorEmail]);
+
   function submitRequest() {
-    if (!date || !time || !doctor) {
+    if (!date || !time || !doctorEmail) {
       toast({
         title: "Missing fields",
         description: "Please select a doctor, date and time.",
@@ -117,7 +126,7 @@ export default function Appointments() {
     setAppts((s) => [a, ...s]);
     toast({
       title: "Request submitted",
-      description: `Appointment requested for ${date} ${time}`,
+      description: `Appointment requested with ${doctor} for ${date} at ${time}`,
     });
     setDate("");
     setTime("");
