@@ -16,9 +16,9 @@ type Med = {
 function loadMeds() {
   try {
     const raw = localStorage.getItem("vv_meds");
-    return raw ? (JSON.parse(raw) as Med[]) : SAMPLE;
+    return raw ? (JSON.parse(raw) as Med[]) : [];
   } catch (e) {
-    return SAMPLE;
+    return [];
   }
 }
 
