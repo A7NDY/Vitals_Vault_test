@@ -38,6 +38,8 @@ export default function Messages() {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Msg[]>(() => loadMessages());
   const [text, setText] = useState("");
+  const [connectedDoctors, setConnectedDoctors] = useState<any[]>([]);
+  const [selectedDoctorEmail, setSelectedDoctorEmail] = useState("");
   const endRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => persistMessages(messages), [messages]);
@@ -46,7 +48,22 @@ export default function Messages() {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const doctor = useMemo(() => ({ name: "Dr. Olivia Bennett", specialty: "Cardiology", avatar: "https://i.pravatar.cc/40?u=olivia" }), []);
+  // Load connected doctors
+  useEffect(() => {
+    if (user?.email) {
+      const doctors = DoctorRequestManager.getAcceptedDoctorsForPatient(user.email);
+      setConnectedDoctors(doctors);
+      if (doctors.length > 0 && !selectedDoctorEmail) {
+        setSelectedDoctorEmail(doctors[0].email);
+      }
+    }
+  }, [user?.email, selectedDoctorEmail]);
+
+  const selectedDoctor = useMemo(() => {
+    const doc = connectedDoctors.find((d) => d.email === selectedDoctorEmail);
+    return doc ? { name: doc.fullName, specialty: "General Practitioner", avatar: `https://i.pravatar.cc/40?img=${doc.email.charCodeAt(0) % 70}` } : null;
+  }, [connectedDoctors, selectedDoctorEmail]);
+
   const patientName = useMemo(() => (user?.email ? user.email.split("@")[0] : "Patient"), [user]);
 
   function send() {
