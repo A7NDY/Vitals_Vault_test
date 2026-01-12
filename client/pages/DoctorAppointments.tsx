@@ -15,27 +15,6 @@ interface DoctorAppt {
   notes: string;
 }
 
-const SAMPLE_APPTS: DoctorAppt[] = [
-  {
-    id: "1",
-    patient: "Ava Thompson",
-    patientEmail: "ava@example.com",
-    date: "2024-09-15",
-    time: "09:00",
-    type: "Check-up",
-    notes: "Patient is doing well, continue current medication.",
-  },
-  {
-    id: "2",
-    patient: "Ethan Walker",
-    patientEmail: "ethan@example.com",
-    date: "2024-08-20",
-    time: "13:00",
-    type: "Consultation",
-    notes: "Discussed treatment options, scheduled follow-up.",
-  },
-];
-
 function loadDoctorAppts() {
   try {
     const raw = localStorage.getItem("vv_doctor_appts");
