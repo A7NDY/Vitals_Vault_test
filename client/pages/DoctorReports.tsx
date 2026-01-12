@@ -23,9 +23,9 @@ interface PatientReport {
 function loadDoctorReports() {
   try {
     const raw = localStorage.getItem("vv_doctor_reports");
-    return raw ? (JSON.parse(raw) as PatientReport[]) : SAMPLE_REPORTS;
+    return raw ? (JSON.parse(raw) as PatientReport[]) : [];
   } catch (e) {
-    return SAMPLE_REPORTS;
+    return [];
   }
 }
 
