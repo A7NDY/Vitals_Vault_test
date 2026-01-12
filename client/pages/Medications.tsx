@@ -134,7 +134,12 @@ export default function Medications() {
                       </span>
                     </td>
                     <td className="py-3 px-4 text-sm">
-                      <button onClick={() => toggleStatus(m.id)} className="text-sky-600 hover:underline">{m.status === "Active" ? "Pause" : "Resume"}</button>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => toggleStatus(m.id)} className="text-sky-600 hover:underline">{m.status === "Active" ? "Pause" : "Resume"}</button>
+                        <button onClick={() => removeMed(m.id)} className="text-rose-600 hover:text-rose-700">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
