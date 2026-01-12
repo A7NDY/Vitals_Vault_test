@@ -105,6 +105,53 @@ export default function Patients() {
   // If logged-in user is a patient, show patient dashboard
   if (user && user.role === "Patient") {
     const shortName = user.email.split("@")[0];
+
+    // Load real vitals from storage
+    const [vitals, setVitals] = useState<any[]>([]);
+    const [connectedDoctors, setConnectedDoctors] = useState<any[]>([]);
+    const [medications, setMedications] = useState<any[]>([]);
+
+    useEffect(() => {
+      // Load vitals
+      try {
+        const vv = localStorage.getItem("vv_vitals");
+        const vitalsData = vv ? JSON.parse(vv) : [];
+        setVitals(vitalsData);
+      } catch (e) {
+        setVitals([]);
+      }
+
+      // Load connected doctors
+      const doctors = DoctorRequestManager.getAcceptedDoctorsForPatient(user.email);
+      setConnectedDoctors(doctors);
+
+      // Load medications
+      try {
+        const med = localStorage.getItem("vv_meds");
+        const medsData = med ? JSON.parse(med) : [];
+        setMedications(medsData.filter((m: any) => m.status === "Active"));
+      } catch (e) {
+        setMedications([]);
+      }
+    }, [user.email]);
+
+    // Get last vital reading
+    const lastVital = vitals.length > 0 ? vitals[vitals.length - 1] : null;
+
+    // Get recent messages from connected doctors
+    const [messages, setMessages] = useState<any[]>([]);
+    useEffect(() => {
+      try {
+        const msgs = localStorage.getItem("vv_messages");
+        const allMsgs = msgs ? JSON.parse(msgs) : [];
+        const doctorEmails = new Set(connectedDoctors.map((d: any) => d.email));
+        const filtered = allMsgs.filter((m: any) => m.sender === "doctor").slice(-1);
+        setMessages(filtered);
+      } catch (e) {
+        setMessages([]);
+      }
+    }, [connectedDoctors]);
+
     return (
       <MainLayout>
         <div className="mb-8">
@@ -115,56 +162,57 @@ export default function Patients() {
 
           <div className="mt-6 grid grid-cols-3 gap-4 md:grid-cols-6">
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">120/80 mmHg</div>
+              <div className="text-sm text-slate-500">{lastVital?.bp || "—"}</div>
               <div className="mt-2 text-xs text-slate-400">Blood Pressure</div>
             </div>
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">72 bpm</div>
+              <div className="text-sm text-slate-500">{lastVital?.hr ? `${lastVital.hr} bpm` : "—"}</div>
               <div className="mt-2 text-xs text-slate-400">Heart Rate</div>
             </div>
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">98%</div>
+              <div className="text-sm text-slate-500">{lastVital?.spO2 ? `${lastVital.spO2}%` : "—"}</div>
               <div className="mt-2 text-xs text-slate-400">SpO2</div>
             </div>
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">100 mg/dL</div>
+              <div className="text-sm text-slate-500">{lastVital?.bg ? `${lastVital.bg} mg/dL` : "—"}</div>
               <div className="mt-2 text-xs text-slate-400">Blood Sugar</div>
             </div>
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">5,000 steps</div>
-              <div className="mt-2 text-xs text-slate-400">Steps</div>
+              <div className="text-sm text-slate-500">{lastVital?.weight ? `${lastVital.weight} kg` : "—"}</div>
+              <div className="mt-2 text-xs text-slate-400">Weight</div>
             </div>
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">Low</div>
-              <div className="mt-2 text-xs text-slate-400">AI Risk Score</div>
+              <div className="text-sm text-slate-500">{connectedDoctors.length}</div>
+              <div className="mt-2 text-xs text-slate-400">Connected Doctors</div>
             </div>
           </div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             <div>
               <h3 className="text-lg font-medium">Medication Reminders</h3>
-              <ul className="mt-4 space-y-4">
-                <li className="flex items-center justify-between rounded-md bg-white p-3 shadow-sm">
-                  <div>
-                    <div className="text-sm font-medium">Metformin</div>
-                    <div className="text-xs text-slate-500">Take 1 tablet</div>
-                  </div>
-                  <div className="text-sm text-slate-400">8:00 AM</div>
-                </li>
-                <li className="flex items-center justify-between rounded-md bg-white p-3 shadow-sm">
-                  <div>
-                    <div className="text-sm font-medium">Lisinopril</div>
-                    <div className="text-xs text-slate-500">Take 1 tablet</div>
-                  </div>
-                  <div className="text-sm text-slate-400">8:00 AM</div>
-                </li>
-              </ul>
+              {medications.length === 0 ? (
+                <div className="mt-4 rounded-md bg-slate-50 p-4 text-center text-sm text-slate-500">
+                  No active medications. Go to Medications page to add them.
+                </div>
+              ) : (
+                <ul className="mt-4 space-y-4">
+                  {medications.slice(0, 2).map((m: any) => (
+                    <li key={m.id} className="flex items-center justify-between rounded-md bg-white p-3 shadow-sm">
+                      <div>
+                        <div className="text-sm font-medium">{m.name}</div>
+                        <div className="text-xs text-slate-500">{m.dosage}</div>
+                      </div>
+                      <div className="text-sm text-slate-400">{m.time}</div>
+                    </li>
+                  ))}
+                </ul>
+              )}
 
               <div className="mt-6 flex gap-3">
-                <button className="rounded-md bg-sky-600 px-3 py-2 text-sm text-white">
+                <button onClick={() => navigate("/vitals")} className="rounded-md bg-sky-600 px-3 py-2 text-sm text-white">
                   Log Vitals
                 </button>
-                <button className="rounded-md border px-3 py-2 text-sm">
+                <button onClick={() => navigate("/reports")} className="rounded-md border px-3 py-2 text-sm">
                   View Reports
                 </button>
               </div>
@@ -172,21 +220,29 @@ export default function Patients() {
 
             <div>
               <h3 className="text-lg font-medium">Recent Messages</h3>
-              <div className="mt-4 rounded-md bg-white p-4 shadow-sm">
-                <div className="flex items-start gap-3">
-                  <img
-                    src="https://i.pravatar.cc/40?img=65"
-                    className="h-9 w-9 rounded-full"
-                  />
-                  <div>
-                    <div className="text-sm font-medium">Dr. Emily Carter</div>
-                    <div className="text-xs text-slate-500">
-                      Your blood pressure is slightly elevated. Please monitor
-                      it closely.
-                    </div>
-                  </div>
+              {messages.length === 0 ? (
+                <div className="mt-4 rounded-md bg-slate-50 p-4 text-center text-sm text-slate-500">
+                  {connectedDoctors.length === 0 ? "Connect with doctors to receive messages" : "No messages yet"}
                 </div>
-              </div>
+              ) : (
+                <div className="mt-4 space-y-3">
+                  {messages.map((m: any) => (
+                    <div key={m.id} className="rounded-md bg-white p-4 shadow-sm">
+                      <div className="flex items-start gap-3">
+                        <img
+                          src={`https://i.pravatar.cc/40?img=${Math.floor(Math.random() * 70)}`}
+                          className="h-9 w-9 rounded-full"
+                        />
+                        <div className="flex-1">
+                          <div className="text-sm font-medium">Doctor</div>
+                          <div className="text-xs text-slate-500">{m.text}</div>
+                          <div className="mt-1 text-xs text-slate-400">{new Date(m.time).toLocaleDateString()}</div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
