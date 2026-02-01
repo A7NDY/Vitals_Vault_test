@@ -180,16 +180,15 @@ export default function Patients() {
   // Admin-facing patients management (table matching design)
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("All");
-  const [genderFilter, setGenderFilter] = useState<string>("All");
+  const patients: Patient[] = [];
 
   const filtered = useMemo(() => {
-    return PATIENTS.filter((p) => {
+    return patients.filter((p) => {
       if (statusFilter !== "All" && p.status !== statusFilter) return false;
-      if (genderFilter !== "All" && p.gender !== genderFilter) return false;
       if (!query) return true;
       return p.name.toLowerCase().includes(query.toLowerCase());
     });
-  }, [query, statusFilter, genderFilter]);
+  }, [query, statusFilter]);
 
   return (
     <MainLayout>
