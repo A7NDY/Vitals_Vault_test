@@ -84,6 +84,58 @@ export default function DoctorMessages() {
       const patients = DoctorRequestManager.getAcceptedPatientsForDoctor(user.email);
       const patientEmails = new Set(patients.map((p) => p.email));
       setConnectedPatients(patientEmails);
+
+      // Load messages from patients and build conversations
+      try {
+        const allMessages = JSON.parse(localStorage.getItem("vv_messages") || "[]");
+
+        // Group messages by patient email
+        const messagesByPatient: Record<string, any[]> = {};
+        allMessages.forEach((msg: any) => {
+          // Messages from patients going to doctors are marked with sender="patient"
+          // We need to create conversations for these
+          if (!messagesByPatient[msg.patientEmail || "unknown"]) {
+            messagesByPatient[msg.patientEmail || "unknown"] = [];
+          }
+          messagesByPatient[msg.patientEmail || "unknown"].push(msg);
+        });
+
+        // Build conversations from messages
+        const conversationsFromMessages: Conversation[] = Object.entries(messagesByPatient)
+          .filter(([email]) => patientEmails.has(email))
+          .map(([email, messages]: [string, any[]]) => {
+            const patient = patients.find((p) => p.email === email);
+            const patientData = PatientDataStorage.getPatientData(email);
+            const lastMsg = messages[messages.length - 1];
+
+            return {
+              id: `conv-${email}`,
+              patientEmail: email,
+              patientName: patientData?.fullName || patient?.fullName || email,
+              avatar: `https://i.pravatar.cc/40?img=${email.charCodeAt(0) % 70}`,
+              lastMessage: lastMsg?.text || "",
+              lastTime: lastMsg ? new Date(lastMsg.time).toLocaleTimeString() : "",
+              unread: false,
+              messages: messages.map((m: any) => ({
+                id: m.id,
+                sender: m.sender as "doctor" | "patient",
+                text: m.text,
+                time: m.time,
+              })),
+            };
+          });
+
+        // Merge with existing doctor conversations
+        const existingConvs = loadDoctorConversations();
+        const mergedConversations = [
+          ...conversationsFromMessages,
+          ...existingConvs.filter((ec) => !conversationsFromMessages.some((cm) => cm.patientEmail === ec.patientEmail)),
+        ];
+
+        setAllConversations(mergedConversations);
+      } catch (e) {
+        console.error("Error loading messages:", e);
+      }
     }
   }, [user?.email]);
 
