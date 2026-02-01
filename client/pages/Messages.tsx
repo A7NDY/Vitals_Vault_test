@@ -9,6 +9,7 @@ type Msg = {
   sender: "doctor" | "patient";
   text: string;
   time: string; // ISO
+  patientEmail?: string;
 };
 
 function loadMessages() {
