@@ -261,23 +261,70 @@ export default function DoctorMessages() {
 
         {/* Main Chat Area */}
         <div className="lg:col-span-2">
-          {selectedConversation ? (
+          {selectedConversation || (filteredConversations.length === 0 && connectedPatients.size > 0) ? (
             <div className="rounded-lg border bg-white shadow-sm overflow-hidden flex flex-col h-[600px]">
               {/* Chat Header */}
               <div className="border-b bg-slate-50/50 p-4">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={selectedConversation.avatar}
-                    alt={selectedConversation.patientName}
-                    className="h-10 w-10 rounded-full"
-                  />
-                  <div>
-                    <h3 className="font-semibold text-slate-900">
-                      {selectedConversation.patientName}
-                    </h3>
-                    <p className="text-xs text-slate-600">Patient</p>
+                {selectedConversation ? (
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={selectedConversation.avatar}
+                      alt={selectedConversation.patientName}
+                      className="h-10 w-10 rounded-full"
+                    />
+                    <div>
+                      <h3 className="font-semibold text-slate-900">
+                        {selectedConversation.patientName}
+                      </h3>
+                      <p className="text-xs text-slate-600">Patient</p>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div>
+                    <p className="text-sm text-slate-600 mb-3">Start a conversation with a connected patient</p>
+                    <select
+                      onChange={(e) => {
+                        const patientEmail = e.target.value;
+                        if (patientEmail) {
+                          const existingConv = filteredConversations.find((c) => c.patientEmail === patientEmail);
+                          if (existingConv) {
+                            setSelectedConvId(existingConv.id);
+                          } else {
+                            // Create new conversation
+                            const patient = Array.from(connectedPatients).find((p) => p === patientEmail);
+                            if (patient) {
+                              const patientData = PatientDataStorage.getPatientData(patientEmail);
+                              const newConv: Conversation = {
+                                id: `conv-${patientEmail}`,
+                                patientEmail,
+                                patientName: patientData?.fullName || patientEmail,
+                                avatar: `https://i.pravatar.cc/40?img=${patientEmail.charCodeAt(0) % 70}`,
+                                lastMessage: "",
+                                lastTime: "",
+                                unread: false,
+                                messages: [],
+                              };
+                              setAllConversations((prev) => [...prev, newConv]);
+                              setSelectedConvId(newConv.id);
+                            }
+                          }
+                        }
+                      }}
+                      className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:border-sky-400"
+                    >
+                      <option value="">Select a patient...</option>
+                      {Array.from(connectedPatients).map((email) => {
+                        const patient = Array.from(connectedPatients).find((p) => p === email);
+                        const patientData = PatientDataStorage.getPatientData(email);
+                        return (
+                          <option key={email} value={email}>
+                            {patientData?.fullName || email}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                )}
               </div>
 
               {/* Messages */}
