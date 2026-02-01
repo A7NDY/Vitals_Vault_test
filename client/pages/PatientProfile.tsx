@@ -28,11 +28,73 @@ const tabs = [
   "Reports",
 ];
 
+const tabs = [
+  "Vitals Graphs",
+  "Symptoms Log",
+  "Medications",
+  "Prescriptions",
+  "Reports",
+];
+
 export default function PatientProfile() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("Vitals Graphs");
+  const [patient, setPatient] = useState<PatientData | null>(null);
+  const [vitals, setVitals] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!id) return;
+
+    // Load patient data from storage
+    const patientData = PatientDataStorage.getPatientData(id);
+    if (!patientData) {
+      setPatient(null);
+      return;
+    }
+
+    // Load vitals for this patient
+    try {
+      const allVitals = JSON.parse(localStorage.getItem("vv_vitals") || "[]");
+      const patientVitals = allVitals.filter((v: any) => v.patientEmail === id);
+      setVitals(patientVitals);
+    } catch (e) {
+      setVitals([]);
+    }
+
+    // Build patient profile
+    const lastVital = vitals.length > 0 ? vitals[vitals.length - 1] : null;
+
+    const profileData: PatientData = {
+      id,
+      name: patientData.fullName,
+      age: parseInt(patientData.age),
+      gender: patientData.gender,
+      email: id,
+      riskScore: 50,
+      vitals: {
+        bloodPressure: {
+          value: lastVital?.bp ? `${lastVital.bp} mmHg` : "—",
+          change: "+2%",
+        },
+        bloodSugar: {
+          value: lastVital?.bg ? `${lastVital.bg} mg/dL` : "—",
+          change: "-1%",
+        },
+        spO2: {
+          value: lastVital?.spO2 ? `${lastVital.spO2}%` : "—",
+          change: "+0.5%",
+        },
+        heartRate: {
+          value: lastVital?.hr ? `${lastVital.hr} bpm` : "—",
+          change: "-0.2%",
+        },
+      },
+    };
+
+    setPatient(profileData);
+  }, [id, vitals.length]);
 
   // Check access - only Doctor or Admin can view
   if (!user || (user.role !== "Doctor" && user.role !== "Admin")) {
@@ -44,8 +106,6 @@ export default function PatientProfile() {
       </MainLayout>
     );
   }
-
-  const patient = id ? patientProfiles[id] : null;
 
   if (!patient) {
     return (
