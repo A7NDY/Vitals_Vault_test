@@ -67,7 +67,7 @@ export default function DoctorMessages() {
   const [connectedPatients, setConnectedPatients] = useState<Set<string>>(new Set());
   const [selectedConvId, setSelectedConvId] = useState<string>("");
   const [messageText, setMessageText] = useState("");
-  const [alerts, setAlerts] = useState<SystemAlert[]>(SYSTEM_ALERTS);
+  const [alerts, setAlerts] = useState<SystemAlert[]>([]);
   const endRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
