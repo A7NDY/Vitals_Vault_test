@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { useAuth } from "@/context/AuthContext";
 import DoctorRequestManager from "@/lib/doctor-requests";
+import { PatientDataStorage } from "@/lib/storage";
 import { toast } from "@/hooks/use-toast";
 import {
   Send,
