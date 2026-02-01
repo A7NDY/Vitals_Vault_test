@@ -165,14 +165,96 @@ export default function DoctorReports() {
     <MainLayout>
       <div>
         {/* Header Section */}
-        <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-slate-900">Reports</h1>
-          <button
-            onClick={handleGenerateReport}
-            className="rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700"
-          >
-            Generate New Report
-          </button>
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-3xl font-bold text-slate-900">Reports</h1>
+            <button
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700"
+            >
+              {showAddForm ? "Cancel" : "Add New Report"}
+            </button>
+          </div>
+
+          {/* Add Report Form */}
+          {showAddForm && (
+            <div className="rounded-lg border bg-white p-6 shadow-sm mb-6">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Add Report</h2>
+              <div className="space-y-4 max-w-2xl">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Patient
+                  </label>
+                  {connectedPatients.length === 0 ? (
+                    <div className="rounded-md border border-slate-200 px-3 py-2 text-sm text-slate-500 bg-slate-50">
+                      No connected patients
+                    </div>
+                  ) : (
+                    <select
+                      value={formPatientEmail}
+                      onChange={(e) => setFormPatientEmail(e.target.value)}
+                      className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:border-sky-400"
+                    >
+                      <option value="">Select a patient...</option>
+                      {connectedPatients.map((p) => (
+                        <option key={p.email} value={p.email}>
+                          {p.fullName}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Report Type
+                    </label>
+                    <select
+                      value={formReportType}
+                      onChange={(e) => setFormReportType(e.target.value as PatientReport["reportType"])}
+                      className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:border-sky-400"
+                    >
+                      <option>Blood Test</option>
+                      <option>MRI Scan</option>
+                      <option>ECG</option>
+                      <option>X-Ray</option>
+                      <option>Ultrasound</option>
+                      <option>CT Scan</option>
+                      <option>Physical Exam</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Date
+                    </label>
+                    <input
+                      type="date"
+                      value={formDate}
+                      onChange={(e) => setFormDate(e.target.value)}
+                      className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:border-sky-400"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <button
+                    onClick={() => setShowAddForm(false)}
+                    className="rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddReport}
+                    className="rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white hover:bg-sky-700"
+                  >
+                    Add Report
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Search Section */}
