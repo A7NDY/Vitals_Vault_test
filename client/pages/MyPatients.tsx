@@ -37,7 +37,8 @@ export default function MyPatients() {
 
       const patientsWithDetails: Patient[] = acceptedPatients.map((acceptedPatient) => {
         const patientData = PatientDataStorage.getPatientData(acceptedPatient.email);
-        const age = patientData ? parseInt(patientData.age) : 0;
+        const parsedAge = patientData?.age ? parseInt(patientData.age, 10) : 0;
+        const age = isNaN(parsedAge) ? 0 : parsedAge;
         const gender = (patientData?.gender || "Other") as "Male" | "Female" | "Other";
 
         return {
