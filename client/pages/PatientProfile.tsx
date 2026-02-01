@@ -1,15 +1,16 @@
 import MainLayout from "@/components/layout/MainLayout";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Download, Phone } from "lucide-react";
+import { PatientDataStorage } from "@/lib/storage";
 
 interface PatientData {
   id: string;
   name: string;
   age: number;
   gender: string;
-  contact: string;
+  email: string;
   riskScore: number;
   vitals: {
     bloodPressure: { value: string; change: string };
@@ -18,79 +19,6 @@ interface PatientData {
     heartRate: { value: string; change: string };
   };
 }
-
-const patientProfiles: Record<string, PatientData> = {
-  "1": {
-    id: "1",
-    name: "Sophia Clark",
-    age: 32,
-    gender: "Female",
-    contact: "(555) 123-4567",
-    riskScore: 75,
-    vitals: {
-      bloodPressure: { value: "120/80 mmHg", change: "+2%" },
-      bloodSugar: { value: "90 mg/dL", change: "-1%" },
-      spO2: { value: "98%", change: "+0.5%" },
-      heartRate: { value: "72 bpm", change: "-0.2%" },
-    },
-  },
-  "2": {
-    id: "2",
-    name: "Ethan Bennett",
-    age: 72,
-    gender: "Male",
-    contact: "(555) 234-5678",
-    riskScore: 45,
-    vitals: {
-      bloodPressure: { value: "130/85 mmHg", change: "+1%" },
-      bloodSugar: { value: "110 mg/dL", change: "+2%" },
-      spO2: { value: "96%", change: "-0.3%" },
-      heartRate: { value: "68 bpm", change: "-0.1%" },
-    },
-  },
-  "3": {
-    id: "3",
-    name: "Olivia Hayes",
-    age: 58,
-    gender: "Female",
-    contact: "(555) 345-6789",
-    riskScore: 30,
-    vitals: {
-      bloodPressure: { value: "118/76 mmHg", change: "-1%" },
-      bloodSugar: { value: "85 mg/dL", change: "-2%" },
-      spO2: { value: "99%", change: "+0.2%" },
-      heartRate: { value: "70 bpm", change: "+0.5%" },
-    },
-  },
-  "4": {
-    id: "4",
-    name: "Liam Foster",
-    age: 60,
-    gender: "Male",
-    contact: "(555) 456-7890",
-    riskScore: 50,
-    vitals: {
-      bloodPressure: { value: "125/82 mmHg", change: "+0.5%" },
-      bloodSugar: { value: "95 mg/dL", change: "-0.5%" },
-      spO2: { value: "97%", change: "+0.1%" },
-      heartRate: { value: "71 bpm", change: "+0.3%" },
-    },
-  },
-  "5": {
-    id: "5",
-    name: "Ava Morgan",
-    age: 68,
-    gender: "Female",
-    contact: "(555) 567-8901",
-    riskScore: 55,
-    vitals: {
-      bloodPressure: { value: "128/80 mmHg", change: "+1.5%" },
-      bloodSugar: { value: "100 mg/dL", change: "+1%" },
-      spO2: { value: "96%", change: "-0.5%" },
-      heartRate: { value: "74 bpm", change: "+0.2%" },
-    },
-  },
-};
 
 const tabs = [
   "Vitals Graphs",
