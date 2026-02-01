@@ -227,59 +227,65 @@ export default function Patients() {
       </div>
 
       <div className="rounded-xl border bg-white shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200">
-            <thead className="bg-slate-50/60">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Age
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Gender
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Last Update
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  Action
-                </th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y divide-slate-200 bg-white">
-              {filtered.map((p) => (
-                <tr key={p.name}>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
-                    {p.name}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600">{p.age}</td>
-                  <td className="px-6 py-4 text-sm text-slate-600">
-                    {p.gender}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-600">
-                    {p.lastUpdate}
-                  </td>
-                  <td className="px-6 py-4 text-sm">
-                    <span
-                      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${p.status === "Critical" ? "bg-rose-50 text-rose-600" : "bg-slate-100 text-slate-700"}`}
-                    >
-                      {p.status}
-                    </span>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-sky-600">
-                    View Profile
-                  </td>
+        {filtered.length === 0 ? (
+          <div className="py-12 text-center">
+            <p className="text-slate-600">No patients available</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200">
+              <thead className="bg-slate-50/60">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    Age
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    Gender
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    Last Update
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    Action
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+
+              <tbody className="divide-y divide-slate-200 bg-white">
+                {filtered.map((p) => (
+                  <tr key={p.name}>
+                    <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
+                      {p.name}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-slate-600">{p.age}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">
+                      {p.gender}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-slate-600">
+                      {p.lastUpdate}
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      <span
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${p.status === "Critical" ? "bg-rose-50 text-rose-600" : "bg-slate-100 text-slate-700"}`}
+                      >
+                        {p.status}
+                      </span>
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 text-sm text-sky-600">
+                      View Profile
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </MainLayout>
   );
