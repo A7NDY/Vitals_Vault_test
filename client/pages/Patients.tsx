@@ -217,6 +217,12 @@ export default function Patients() {
             <option>Stable</option>
             <option>Recovering</option>
           </select>
+
+          <div className="mt-4">
+            <p className="text-sm text-slate-600">
+              No patients data available. Patients will appear here as they register and enter their health information.
+            </p>
+          </div>
         </div>
       </div>
 
