@@ -42,9 +42,9 @@ interface SystemAlert {
 function loadDoctorConversations() {
   try {
     const raw = localStorage.getItem("vv_doctor_conversations");
-    return raw ? (JSON.parse(raw) as Conversation[]) : SAMPLE_CONVERSATIONS;
+    return raw ? (JSON.parse(raw) as Conversation[]) : [];
   } catch (e) {
-    return SAMPLE_CONVERSATIONS;
+    return [];
   }
 }
 
