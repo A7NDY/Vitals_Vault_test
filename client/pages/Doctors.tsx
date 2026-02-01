@@ -1,132 +1,13 @@
 import MainLayout from "@/components/layout/MainLayout";
 import { Search } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import DoctorRequestManager from "@/lib/doctor-requests";
+import { PatientDataStorage } from "@/lib/storage";
 
-const pending = [
-  {
-    name: "Dr. Emily Carter",
-    email: "emily.carter@example.com",
-    specialization: "Cardiology",
-    proof: "License.pdf",
-  },
-  {
-    name: "Dr. Robert Harris",
-    email: "robert.harris@example.com",
-    specialization: "Dermatology",
-    proof: "License.pdf",
-  },
-  {
-    name: "Dr. Olivia Bennett",
-    email: "olivia.bennett@example.com",
-    specialization: "Neurology",
-    proof: "License.pdf",
-  },
-];
-
-const approved = [
-  {
-    name: "Dr. Ethan Walker",
-    specialization: "Pediatrics",
-    patients: 250,
-    status: "Active",
-  },
-  {
-    name: "Dr. Sophia Clark",
-    specialization: "Orthopedics",
-    patients: 320,
-    status: "Active",
-  },
-  {
-    name: "Dr. Noah Turner",
-    specialization: "Ophthalmology",
-    patients: 180,
-    status: "Suspended",
-  },
-  {
-    name: "Dr. Ava Mitchell",
-    specialization: "Psychiatry",
-    patients: 210,
-    status: "Active",
-  },
-  {
-    name: "Dr. Liam Foster",
-    specialization: "Urology",
-    patients: 150,
-    status: "Active",
-  },
-];
-
-// Data used by doctor dashboard
-const doctorPatients = [
-  {
-    id: "1",
-    name: "Liam Carter",
-    age: 65,
-    lastUpdate: "2023-11-15",
-    risk: "Critical",
-  },
-  {
-    id: "2",
-    name: "Olivia Bennett",
-    age: 72,
-    lastUpdate: "2023-11-10",
-    risk: "Critical",
-  },
-  {
-    id: "3",
-    name: "Noah Harper",
-    age: 58,
-    lastUpdate: "2023-11-05",
-    risk: "Critical",
-  },
-  {
-    id: "4",
-    name: "Ethan Clark",
-    age: 48,
-    lastUpdate: "2023-11-20",
-    risk: "Intermediate",
-  },
-  {
-    id: "5",
-    name: "Ava Foster",
-    age: 55,
-    lastUpdate: "2023-11-18",
-    risk: "Intermediate",
-  },
-  {
-    id: "6",
-    name: "Mia Turner",
-    age: 60,
-    lastUpdate: "2023-11-12",
-    risk: "Intermediate",
-  },
-];
-
-const vitalsOverview = [
-  {
-    title: "Blood Pressure",
-    value: "120/80 mmHg",
-    change: "+2%",
-    note: "Last 7 Days",
-  },
-  {
-    title: "Blood Sugar",
-    value: "90 mg/dL",
-    change: "-1%",
-    note: "Last 7 Days",
-  },
-  { title: "SpO₂", value: "95%", change: "+0.5%", note: "Last 7 Days" },
-];
-
-const upcoming = [
-  { dt: "2023-12-05 10:00 AM", type: "Routine Checkup" },
-  { dt: "2023-12-10 02:00 PM", type: "Follow-up" },
-  { dt: "2023-12-15 11:00 AM", type: "Consultation" },
-];
-
-const reports = ["Report 1", "Report 2", "Report 3", "Report 4", "Report 5"];
+const pending: any[] = [];
+const approved: any[] = [];
 
 export default function Doctors() {
   const { user } = useAuth();
