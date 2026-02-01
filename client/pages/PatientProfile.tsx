@@ -28,14 +28,6 @@ const tabs = [
   "Reports",
 ];
 
-const tabs = [
-  "Vitals Graphs",
-  "Symptoms Log",
-  "Medications",
-  "Prescriptions",
-  "Reports",
-];
-
 export default function PatientProfile() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
