@@ -176,6 +176,7 @@ export default function DoctorMessages() {
       time: new Date().toISOString(),
     };
 
+    // Update doctor conversations
     setAllConversations((prev) =>
       prev.map((conv) => {
         if (conv.id === selectedConvId) {
@@ -189,6 +190,21 @@ export default function DoctorMessages() {
         return conv;
       }),
     );
+
+    // Also save to vv_messages so patient sees it
+    try {
+      const allMessages = JSON.parse(localStorage.getItem("vv_messages") || "[]");
+      allMessages.push({
+        id: newMessage.id,
+        sender: "doctor",
+        text: trimmed,
+        time: newMessage.time,
+        patientEmail: selectedConversation.patientEmail,
+      });
+      localStorage.setItem("vv_messages", JSON.stringify(allMessages));
+    } catch (e) {
+      console.error("Error saving message:", e);
+    }
 
     setMessageText("");
     toast({
