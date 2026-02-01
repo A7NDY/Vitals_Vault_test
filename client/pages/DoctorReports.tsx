@@ -55,9 +55,11 @@ export default function DoctorReports() {
   useEffect(() => {
     if (user?.email) {
       const patients = DoctorRequestManager.getAcceptedPatientsForDoctor(user.email);
-      setConnectedPatients(new Set(patients.map((p) => p.email)));
+      setConnectedPatients(patients);
     }
   }, [user?.email]);
+
+  useEffect(() => persistDoctorReports(reports), [reports]);
 
   if (!user || user.role !== "Doctor") {
     return (
@@ -69,10 +71,12 @@ export default function DoctorReports() {
     );
   }
 
+  const connectedPatientEmails = useMemo(() => new Set(connectedPatients.map((p) => p.email)), [connectedPatients]);
+
   const filteredReports = useMemo(() => {
     return reports.filter((report) => {
       // Only show reports for connected patients
-      const isConnectedPatient = connectedPatients.has(report.patientEmail);
+      const isConnectedPatient = connectedPatientEmails.has(report.patientEmail);
 
       const matchesSearch = report.patientName
         .toLowerCase()
@@ -88,13 +92,39 @@ export default function DoctorReports() {
 
       return isConnectedPatient && matchesSearch && matchesDateRange;
     });
-  }, [reports, connectedPatients, searchTerm, startDate, endDate]);
+  }, [reports, connectedPatientEmails, searchTerm, startDate, endDate]);
 
-  function handleGenerateReport() {
+  function handleAddReport() {
+    if (!formPatientEmail || !formDate) {
+      toast({
+        title: "Missing fields",
+        description: "Please select a patient and date.",
+      });
+      return;
+    }
+
+    const patient = connectedPatients.find((p) => p.email === formPatientEmail);
+    if (!patient) return;
+
+    const newReport: PatientReport = {
+      id: Date.now().toString(),
+      patientName: patient.fullName,
+      patientEmail: patient.email,
+      date: formDate,
+      reportType: formReportType,
+    };
+
+    setReports((prev) => [newReport, ...prev]);
     toast({
-      title: "Generating report",
-      description: "The new report is being generated...",
+      title: "Report added",
+      description: `Report added for ${patient.fullName}`,
     });
+
+    // Reset form
+    setFormPatientEmail("");
+    setFormDate("");
+    setFormReportType("Physical Exam");
+    setShowAddForm(false);
   }
 
   function handleDownload(reportId: string) {
