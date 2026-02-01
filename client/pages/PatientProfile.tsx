@@ -134,7 +134,7 @@ export default function PatientProfile() {
             <div className="rounded-lg border bg-white p-6 shadow-sm">
               <div className="flex items-start gap-6">
                 <img
-                  src={`https://i.pravatar.cc/150?img=${parseInt(patient.id) * 10}`}
+                  src={`https://i.pravatar.cc/150?img=${patient.email.charCodeAt(0) % 70}`}
                   alt={patient.name}
                   className="h-24 w-24 rounded-full border-2 border-slate-200"
                 />
@@ -146,7 +146,7 @@ export default function PatientProfile() {
                     {patient.gender}, {patient.age} years old
                   </p>
                   <p className="text-sm text-slate-600">
-                    Contact: {patient.contact}
+                    Email: {patient.email}
                   </p>
 
                   {/* AI Risk Score */}
