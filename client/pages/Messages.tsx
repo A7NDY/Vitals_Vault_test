@@ -61,11 +61,6 @@ export default function Messages() {
 
   const patientName = useMemo(() => (user?.email ? user.email.split("@")[0] : "Patient"), [user]);
 
-  const filteredMessages = useMemo(() => {
-    // Filter messages to show only those from the selected doctor or sent by patient to this conversation
-    return messages;
-  }, [messages]);
-
   function send() {
     const trimmed = text.trim();
     if (!trimmed) return;
