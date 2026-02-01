@@ -14,36 +14,12 @@ type Appt = {
   notes?: string;
 };
 
-const SAMPLE: Appt[] = [
-  {
-    id: "a1",
-    date: "2024-07-15",
-    time: "10:00",
-    doctor: "Dr. Emily Carter",
-    type: "Check-up",
-  },
-  {
-    id: "a2",
-    date: "2024-07-22",
-    time: "14:00",
-    doctor: "Dr. Robert Harris",
-    type: "Consultation",
-  },
-  {
-    id: "a3",
-    date: "2024-08-05",
-    time: "11:30",
-    doctor: "Dr. Emily Carter",
-    type: "Follow-up",
-  },
-];
-
 function loadAppts() {
   try {
     const raw = localStorage.getItem("vv_appts");
-    return raw ? (JSON.parse(raw) as Appt[]) : SAMPLE;
+    return raw ? (JSON.parse(raw) as Appt[]) : [];
   } catch (e) {
-    return SAMPLE;
+    return [];
   }
 }
 
