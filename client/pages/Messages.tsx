@@ -65,7 +65,13 @@ export default function Messages() {
     const trimmed = text.trim();
     if (!trimmed) return;
     const sender = user && user.role === "Patient" ? "patient" : "doctor";
-    const m: Msg = { id: Date.now().toString(), sender, text: trimmed, time: new Date().toISOString() };
+    const m: Msg = {
+      id: Date.now().toString(),
+      sender,
+      text: trimmed,
+      time: new Date().toISOString(),
+      patientEmail: user?.email,
+    };
     setMessages((s) => [...s, m]);
     setText("");
     toast({ title: "Message sent" });
