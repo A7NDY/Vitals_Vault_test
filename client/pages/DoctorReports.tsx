@@ -42,10 +42,14 @@ export default function DoctorReports() {
   const [reports, setReports] = useState<PatientReport[]>(() =>
     loadDoctorReports(),
   );
-  const [connectedPatients, setConnectedPatients] = useState<Set<string>>(new Set());
+  const [connectedPatients, setConnectedPatients] = useState<Array<{ email: string; fullName: string }>>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [formPatientEmail, setFormPatientEmail] = useState("");
+  const [formReportType, setFormReportType] = useState<PatientReport["reportType"]>("Physical Exam");
+  const [formDate, setFormDate] = useState("");
 
   // Load connected patients
   useEffect(() => {
