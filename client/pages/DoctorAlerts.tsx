@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import { AlertTriangle, AlertCircle, Check } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
+import { PatientDataStorage } from "@/lib/storage";
 
 interface DoctorAlert {
   id: string;
   patientEmail: string;
+  patientName?: string;
   timestamp: string;
   readingTime: string;
   severity: "Normal" | "Warning" | "Critical";
