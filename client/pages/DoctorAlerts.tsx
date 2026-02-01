@@ -73,7 +73,20 @@ export default function DoctorAlerts() {
     toast({ title: "Alert dismissed", description: "The alert has been removed." });
   }
 
-  const filteredAlerts = alerts.filter((alert) => {
+  const alertsWithNames = useMemo(() => {
+    return alerts.map((alert) => {
+      if (!alert.patientName) {
+        const patientData = PatientDataStorage.getPatientData(alert.patientEmail);
+        return {
+          ...alert,
+          patientName: patientData?.fullName || alert.patientEmail.split("@")[0],
+        };
+      }
+      return alert;
+    });
+  }, [alerts]);
+
+  const filteredAlerts = alertsWithNames.filter((alert) => {
     if (filter === "Critical") return alert.severity === "Critical";
     if (filter === "Warning") return alert.severity === "Warning";
     if (filter === "Unread") return !alert.read;
