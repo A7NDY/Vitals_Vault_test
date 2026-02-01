@@ -175,12 +175,15 @@ export default function DoctorAlerts() {
                         {isWarning && <AlertCircle className="h-5 w-5 text-orange-600" />}
                       </div>
                       <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <div>
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className="flex-1">
                             <div className="font-semibold text-slate-900">
-                              {alert.patientEmail}
+                              {alert.patientName || alert.patientEmail}
                             </div>
                             <div className="text-xs text-slate-600">
+                              {alert.patientEmail}
+                            </div>
+                            <div className="text-xs text-slate-600 mt-1">
                               Reading: {new Date(alert.readingTime).toLocaleString()}
                             </div>
                           </div>
