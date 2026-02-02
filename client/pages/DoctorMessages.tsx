@@ -392,31 +392,33 @@ export default function DoctorMessages() {
               </div>
 
               {/* Message Input */}
-              <div className="border-t bg-slate-50/50 p-4">
-                <div className="flex items-end gap-3">
-                  <button className="p-2 text-slate-600 hover:text-slate-900 rounded hover:bg-slate-200">
-                    <Paperclip className="h-5 w-5" />
-                  </button>
-                  <input
-                    value={messageText}
-                    onChange={(e) => setMessageText(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSendMessage();
-                      }
-                    }}
-                    placeholder="Type message..."
-                    className="flex-1 rounded-md border border-slate-200 px-3 py-2 text-sm focus:border-sky-400 focus:outline-none"
-                  />
-                  <button
-                    onClick={handleSendMessage}
-                    className="rounded-md bg-sky-600 p-2 text-white hover:bg-sky-700"
-                  >
-                    <Send className="h-5 w-5" />
-                  </button>
+              {selectedConversation && (
+                <div className="border-t bg-slate-50/50 p-4">
+                  <div className="flex items-end gap-3">
+                    <button className="p-2 text-slate-600 hover:text-slate-900 rounded hover:bg-slate-200">
+                      <Paperclip className="h-5 w-5" />
+                    </button>
+                    <input
+                      value={messageText}
+                      onChange={(e) => setMessageText(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSendMessage();
+                        }
+                      }}
+                      placeholder="Type message..."
+                      className="flex-1 rounded-md border border-slate-200 px-3 py-2 text-sm focus:border-sky-400 focus:outline-none"
+                    />
+                    <button
+                      onClick={handleSendMessage}
+                      className="rounded-md bg-sky-600 p-2 text-white hover:bg-sky-700"
+                    >
+                      <Send className="h-5 w-5" />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ) : (
             <div className="rounded-lg border bg-white p-12 text-center">
