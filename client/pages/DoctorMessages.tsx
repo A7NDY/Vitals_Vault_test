@@ -345,42 +345,48 @@ export default function DoctorMessages() {
 
               {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {selectedConversation.messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`flex ${
-                      msg.sender === "doctor" ? "justify-end" : "justify-start"
-                    }`}
-                  >
+                {selectedConversation && selectedConversation.messages.length > 0 ? (
+                  selectedConversation.messages.map((msg) => (
                     <div
-                      className={`max-w-[70%] rounded-lg p-3 ${
-                        msg.sender === "doctor"
-                          ? "bg-sky-600 text-white"
-                          : "bg-slate-100 text-slate-900"
+                      key={msg.id}
+                      className={`flex ${
+                        msg.sender === "doctor" ? "justify-end" : "justify-start"
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
-                      {msg.attachment && (
-                        <div className="mt-2 flex items-center gap-2 rounded bg-white/20 p-2">
-                          <FileText className="h-4 w-4" />
-                          <span className="text-xs">{msg.attachment}</span>
-                        </div>
-                      )}
-                      <p
-                        className={`mt-1 text-xs ${
+                      <div
+                        className={`max-w-[70%] rounded-lg p-3 ${
                           msg.sender === "doctor"
-                            ? "text-sky-100"
-                            : "text-slate-500"
+                            ? "bg-sky-600 text-white"
+                            : "bg-slate-100 text-slate-900"
                         }`}
                       >
-                        {new Date(msg.time).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
+                        <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
+                        {msg.attachment && (
+                          <div className="mt-2 flex items-center gap-2 rounded bg-white/20 p-2">
+                            <FileText className="h-4 w-4" />
+                            <span className="text-xs">{msg.attachment}</span>
+                          </div>
+                        )}
+                        <p
+                          className={`mt-1 text-xs ${
+                            msg.sender === "doctor"
+                              ? "text-sky-100"
+                              : "text-slate-500"
+                          }`}
+                        >
+                          {new Date(msg.time).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <p className="text-sm text-slate-500">No messages yet. Start typing to begin the conversation!</p>
                   </div>
-                ))}
+                )}
                 <div ref={endRef} />
               </div>
 
