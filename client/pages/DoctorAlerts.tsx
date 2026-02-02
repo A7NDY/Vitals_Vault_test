@@ -115,7 +115,7 @@ export default function DoctorAlerts() {
           </div>
           <div className="rounded-lg border bg-white p-4">
             <div className="text-sm text-slate-600">Warnings</div>
-            <div className="mt-2 text-2xl font-bold text-orange-600">{warningCount}</div>
+            <div className="mt-2 text-2xl font-bold text-yellow-600">{warningCount}</div>
           </div>
           <div className="rounded-lg border bg-white p-4">
             <div className="text-sm text-slate-600">Unread</div>
