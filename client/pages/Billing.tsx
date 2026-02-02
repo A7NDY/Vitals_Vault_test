@@ -136,44 +136,50 @@ export default function Billing() {
           Payment History
         </div>
         <div className="rounded-xl border bg-white shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200">
-              <thead className="bg-slate-50/60">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Transaction ID
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Amount
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Date
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Method
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200 bg-white">
-                {payments.map((t) => (
-                  <tr key={t.id}>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-sky-600">
-                      {t.id}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-700">
-                      {t.amount}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">
-                      {t.date}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">
-                      {t.method}
-                    </td>
+          {payments.length === 0 ? (
+            <div className="py-8 text-center text-slate-500">
+              <p>No payment records</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-slate-200">
+                <thead className="bg-slate-50/60">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Transaction ID
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Amount
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Method
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-slate-200 bg-white">
+                  {payments.map((t) => (
+                    <tr key={t.id}>
+                      <td className="whitespace-nowrap px-6 py-4 text-sm text-sky-600">
+                        {t.id}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-700">
+                        {t.amount}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-600">
+                        {t.date}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-600">
+                        {t.method}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </section>
     </MainLayout>
