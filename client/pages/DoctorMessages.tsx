@@ -307,13 +307,12 @@ export default function DoctorMessages() {
                             setSelectedConvId(existingConv.id);
                           } else {
                             // Create new conversation
-                            const patient = Array.from(connectedPatients).find((p) => p === patientEmail);
-                            if (patient) {
-                              const patientData = PatientDataStorage.getPatientData(patientEmail);
+                            const patientFromList = patients.find((p) => p.email === patientEmail);
+                            if (patientFromList) {
                               const newConv: Conversation = {
                                 id: `conv-${patientEmail}`,
                                 patientEmail,
-                                patientName: patientData?.fullName || patientEmail,
+                                patientName: patientFromList.fullName || patientEmail,
                                 avatar: `https://i.pravatar.cc/40?img=${patientEmail.charCodeAt(0) % 70}`,
                                 lastMessage: "",
                                 lastTime: "",
