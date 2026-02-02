@@ -164,7 +164,7 @@ export default function DoctorAlerts() {
                     isCritical
                       ? "border-red-300 bg-red-50"
                       : isWarning
-                        ? "border-orange-300 bg-orange-50"
+                        ? "border-yellow-300 bg-yellow-50"
                         : "border-slate-300 bg-white"
                   }`}
                 >
@@ -172,7 +172,7 @@ export default function DoctorAlerts() {
                     <div className="flex items-start gap-3 flex-1">
                       <div className="mt-1">
                         {isCritical && <AlertTriangle className="h-5 w-5 text-red-600" />}
-                        {isWarning && <AlertCircle className="h-5 w-5 text-orange-600" />}
+                        {isWarning && <AlertCircle className="h-5 w-5 text-yellow-600" />}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 flex-1">
