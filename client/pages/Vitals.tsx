@@ -328,7 +328,7 @@ export default function Vitals() {
                     hasCritical
                       ? "border-red-300 bg-red-50"
                       : hasWarning
-                        ? "border-orange-300 bg-orange-50"
+                        ? "border-yellow-300 bg-yellow-50"
                         : hasAnalysis
                           ? "border-green-300 bg-green-50"
                           : "bg-white"
@@ -346,9 +346,9 @@ export default function Vitals() {
                       </div>
                     )}
                     {hasWarning && !hasCritical && (
-                      <div className="flex items-center gap-1 rounded-md bg-orange-100 px-2 py-1">
-                        <AlertCircle className="h-4 w-4 text-orange-600" />
-                        <span className="text-xs font-bold text-orange-700">WARNING</span>
+                      <div className="flex items-center gap-1 rounded-md bg-yellow-100 px-2 py-1">
+                        <AlertCircle className="h-4 w-4 text-yellow-600" />
+                        <span className="text-xs font-bold text-yellow-700">WARNING</span>
                       </div>
                     )}
                   </div>
