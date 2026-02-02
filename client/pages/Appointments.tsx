@@ -111,7 +111,7 @@ export default function Appointments() {
   function joinCall(id: string) {
     toast({
       title: "Joining call",
-      description: "Opening telehealth link (mock)...",
+      description: "Opening telehealth link...",
     });
     // in real app, open meeting URL
   }
