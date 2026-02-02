@@ -49,7 +49,9 @@ export default function Patients() {
       }
 
       // Load connected doctors
-      const doctors = DoctorRequestManager.getAcceptedDoctorsForPatient(user.email);
+      const doctors = DoctorRequestManager.getAcceptedDoctorsForPatient(
+        user.email,
+      );
       setConnectedDoctors(doctors);
 
       // Load medications
@@ -72,7 +74,9 @@ export default function Patients() {
         const msgs = localStorage.getItem("vv_messages");
         const allMsgs = msgs ? JSON.parse(msgs) : [];
         const doctorEmails = new Set(connectedDoctors.map((d: any) => d.email));
-        const filtered = allMsgs.filter((m: any) => m.sender === "doctor").slice(-1);
+        const filtered = allMsgs
+          .filter((m: any) => m.sender === "doctor")
+          .slice(-1);
         setMessages(filtered);
       } catch (e) {
         setMessages([]);
@@ -89,31 +93,45 @@ export default function Patients() {
 
           <div className="mt-6 grid grid-cols-3 gap-4 md:grid-cols-6">
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">{lastVital?.bp || "—"}</div>
+              <div className="text-sm text-slate-500">
+                {lastVital?.bp || "—"}
+              </div>
               <div className="mt-2 text-xs text-slate-400">Blood Pressure</div>
             </div>
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">{lastVital?.hr ? `${lastVital.hr} bpm` : "—"}</div>
+              <div className="text-sm text-slate-500">
+                {lastVital?.hr ? `${lastVital.hr} bpm` : "—"}
+              </div>
               <div className="mt-2 text-xs text-slate-400">Heart Rate</div>
             </div>
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">{lastVital?.spO2 ? `${lastVital.spO2}%` : "—"}</div>
+              <div className="text-sm text-slate-500">
+                {lastVital?.spO2 ? `${lastVital.spO2}%` : "—"}
+              </div>
               <div className="mt-2 text-xs text-slate-400">SpO2</div>
             </div>
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">{lastVital?.bg ? `${lastVital.bg} mg/dL` : "—"}</div>
+              <div className="text-sm text-slate-500">
+                {lastVital?.bg ? `${lastVital.bg} mg/dL` : "—"}
+              </div>
               <div className="mt-2 text-xs text-slate-400">Blood Sugar</div>
             </div>
             <div className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="text-sm text-slate-500">{lastVital?.weight ? `${lastVital.weight} kg` : "—"}</div>
+              <div className="text-sm text-slate-500">
+                {lastVital?.weight ? `${lastVital.weight} kg` : "—"}
+              </div>
               <div className="mt-2 text-xs text-slate-400">Weight</div>
             </div>
             <button
               onClick={() => navigate("/appointments")}
               className="rounded-lg bg-white p-4 shadow-sm hover:shadow-md transition-shadow text-left"
             >
-              <div className="text-sm text-slate-500">{connectedDoctors.length}</div>
-              <div className="mt-2 text-xs text-slate-400">Connected Doctors</div>
+              <div className="text-sm text-slate-500">
+                {connectedDoctors.length}
+              </div>
+              <div className="mt-2 text-xs text-slate-400">
+                Connected Doctors
+              </div>
             </button>
           </div>
 
@@ -127,7 +145,10 @@ export default function Patients() {
               ) : (
                 <ul className="mt-4 space-y-4">
                   {medications.slice(0, 2).map((m: any) => (
-                    <li key={m.id} className="flex items-center justify-between rounded-md bg-white p-3 shadow-sm">
+                    <li
+                      key={m.id}
+                      className="flex items-center justify-between rounded-md bg-white p-3 shadow-sm"
+                    >
                       <div>
                         <div className="text-sm font-medium">{m.name}</div>
                         <div className="text-xs text-slate-500">{m.dosage}</div>
@@ -139,13 +160,22 @@ export default function Patients() {
               )}
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <button onClick={() => navigate("/vitals")} className="rounded-md bg-sky-600 px-3 py-2 text-sm text-white hover:bg-sky-700">
+                <button
+                  onClick={() => navigate("/vitals")}
+                  className="rounded-md bg-sky-600 px-3 py-2 text-sm text-white hover:bg-sky-700"
+                >
                   Log Vitals
                 </button>
-                <button onClick={() => navigate("/reports")} className="rounded-md border px-3 py-2 text-sm hover:bg-slate-50">
+                <button
+                  onClick={() => navigate("/reports")}
+                  className="rounded-md border px-3 py-2 text-sm hover:bg-slate-50"
+                >
                   View Reports
                 </button>
-                <button onClick={() => navigate("/appointments")} className="rounded-md border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-600 hover:bg-sky-100">
+                <button
+                  onClick={() => navigate("/appointments")}
+                  className="rounded-md border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-600 hover:bg-sky-100"
+                >
                   Connect Doctors
                 </button>
               </div>
@@ -155,12 +185,17 @@ export default function Patients() {
               <h3 className="text-lg font-medium">Recent Messages</h3>
               {messages.length === 0 ? (
                 <div className="mt-4 rounded-md bg-slate-50 p-4 text-center text-sm text-slate-500">
-                  {connectedDoctors.length === 0 ? "Connect with doctors to receive messages" : "No messages yet"}
+                  {connectedDoctors.length === 0
+                    ? "Connect with doctors to receive messages"
+                    : "No messages yet"}
                 </div>
               ) : (
                 <div className="mt-4 space-y-3">
                   {messages.map((m: any) => (
-                    <div key={m.id} className="rounded-md bg-white p-4 shadow-sm">
+                    <div
+                      key={m.id}
+                      className="rounded-md bg-white p-4 shadow-sm"
+                    >
                       <div className="flex items-start gap-3">
                         <img
                           src={`https://i.pravatar.cc/40?img=${Math.floor(Math.random() * 70)}`}
@@ -169,7 +204,9 @@ export default function Patients() {
                         <div className="flex-1">
                           <div className="text-sm font-medium">Doctor</div>
                           <div className="text-xs text-slate-500">{m.text}</div>
-                          <div className="mt-1 text-xs text-slate-400">{new Date(m.time).toLocaleDateString()}</div>
+                          <div className="mt-1 text-xs text-slate-400">
+                            {new Date(m.time).toLocaleDateString()}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -226,7 +263,8 @@ export default function Patients() {
 
           <div className="mt-4">
             <p className="text-sm text-slate-600">
-              No patients data available. Patients will appear here as they register and enter their health information.
+              No patients data available. Patients will appear here as they
+              register and enter their health information.
             </p>
           </div>
         </div>
@@ -269,7 +307,9 @@ export default function Patients() {
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
                       {p.name}
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-600">{p.age}</td>
+                    <td className="px-6 py-4 text-sm text-slate-600">
+                      {p.age}
+                    </td>
                     <td className="px-6 py-4 text-sm text-slate-600">
                       {p.gender}
                     </td>

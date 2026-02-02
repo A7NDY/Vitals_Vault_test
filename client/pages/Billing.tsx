@@ -100,7 +100,9 @@ export default function Billing() {
                       <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-700">
                         {s.doctor}
                       </td>
-                      <td className="px-6 py-4 text-sm text-sky-600">{s.plan}</td>
+                      <td className="px-6 py-4 text-sm text-sky-600">
+                        {s.plan}
+                      </td>
                       <td className="px-6 py-4 text-sm text-slate-600">
                         {s.renewal}
                       </td>

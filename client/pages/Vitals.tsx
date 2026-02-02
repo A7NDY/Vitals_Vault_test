@@ -3,7 +3,10 @@ import MainLayout from "@/components/layout/MainLayout";
 import { Activity, Zap, AlertTriangle, AlertCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/context/AuthContext";
-import VitalsAnalyzer, { VitalAnalysis, PatientBaseline } from "@/lib/vitals-analysis";
+import VitalsAnalyzer, {
+  VitalAnalysis,
+  PatientBaseline,
+} from "@/lib/vitals-analysis";
 import { PatientDataStorage } from "@/lib/storage";
 
 export default function Vitals() {
@@ -57,12 +60,19 @@ export default function Vitals() {
 
   function handleSave() {
     if (!datetime) {
-      toast({ title: "Missing date", description: "Please select date & time for the reading." });
+      toast({
+        title: "Missing date",
+        description: "Please select date & time for the reading.",
+      });
       return;
     }
 
     if (!bp && !hr && !bg && !spO2 && !weight) {
-      toast({ title: "No vitals", description: "Please enter at least one vital value or sync from a wearable." });
+      toast({
+        title: "No vitals",
+        description:
+          "Please enter at least one vital value or sync from a wearable.",
+      });
       return;
     }
 
@@ -120,7 +130,10 @@ export default function Vitals() {
     setSaved(next);
     persist(next);
 
-    toast({ title: "Vitals saved", description: "Your vitals have been recorded and analyzed." });
+    toast({
+      title: "Vitals saved",
+      description: "Your vitals have been recorded and analyzed.",
+    });
 
     setDatetime("");
     setBp("");
@@ -131,7 +144,11 @@ export default function Vitals() {
     setSymptoms("");
   }
 
-  function createDoctorAlert(record: any, analyses: VitalAnalysis[], patientEmail?: string) {
+  function createDoctorAlert(
+    record: any,
+    analyses: VitalAnalysis[],
+    patientEmail?: string,
+  ) {
     if (!patientEmail) return;
 
     // Get all doctor alerts from localStorage
@@ -172,7 +189,10 @@ export default function Vitals() {
   }
 
   function handleSync(source: string) {
-    toast({ title: `Sync requested`, description: `Attempting to sync from ${source}...` });
+    toast({
+      title: `Sync requested`,
+      description: `Attempting to sync from ${source}...`,
+    });
     setTimeout(() => {
       setBp("120/80");
       setHr("72");
@@ -188,64 +208,135 @@ export default function Vitals() {
 
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Date &amp; Time</label>
-            <input value={datetime} onChange={(e) => setDatetime(e.target.value)} type="datetime-local" className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300" />
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Date &amp; Time
+            </label>
+            <input
+              value={datetime}
+              onChange={(e) => setDatetime(e.target.value)}
+              type="datetime-local"
+              className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Blood Pressure (mmHg)</label>
-            <input value={bp} onChange={(e) => setBp(e.target.value)} placeholder="e.g., 120/80" className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300" />
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Blood Pressure (mmHg)
+            </label>
+            <input
+              value={bp}
+              onChange={(e) => setBp(e.target.value)}
+              placeholder="e.g., 120/80"
+              className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Heart Rate (bpm)</label>
-            <input value={hr} onChange={(e) => setHr(e.target.value)} placeholder="e.g., 72" type="number" className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300" />
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Heart Rate (bpm)
+            </label>
+            <input
+              value={hr}
+              onChange={(e) => setHr(e.target.value)}
+              placeholder="e.g., 72"
+              type="number"
+              className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Blood Sugar (mg/dL)</label>
-            <input value={bg} onChange={(e) => setBg(e.target.value)} placeholder="e.g., 100" type="number" className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300" />
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Blood Sugar (mg/dL)
+            </label>
+            <input
+              value={bg}
+              onChange={(e) => setBg(e.target.value)}
+              placeholder="e.g., 100"
+              type="number"
+              className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">SpO2 (%)</label>
-            <input value={spO2} onChange={(e) => setSpO2(e.target.value)} placeholder="e.g., 98" type="number" className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300" />
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              SpO2 (%)
+            </label>
+            <input
+              value={spO2}
+              onChange={(e) => setSpO2(e.target.value)}
+              placeholder="e.g., 98"
+              type="number"
+              className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Weight (lbs)</label>
-            <input value={weight} onChange={(e) => setWeight(e.target.value)} placeholder="e.g., 150" type="number" className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300" />
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Weight (lbs)
+            </label>
+            <input
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}
+              placeholder="e.g., 150"
+              type="number"
+              className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-2">Symptoms</label>
-            <textarea value={symptoms} onChange={(e) => setSymptoms(e.target.value)} rows={5} className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300" />
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Symptoms
+            </label>
+            <textarea
+              value={symptoms}
+              onChange={(e) => setSymptoms(e.target.value)}
+              rows={5}
+              className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-300"
+            />
           </div>
 
           <div>
-            <div className="text-sm font-medium text-slate-700 mb-3">Sync from Wearables</div>
+            <div className="text-sm font-medium text-slate-700 mb-3">
+              Sync from Wearables
+            </div>
             <div className="flex gap-3">
-              <button onClick={() => handleSync("Fitbit")} className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+              <button
+                onClick={() => handleSync("Fitbit")}
+                className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+              >
                 <Activity className="h-4 w-4" /> Fitbit
               </button>
-              <button onClick={() => handleSync("Google Fit")} className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+              <button
+                onClick={() => handleSync("Google Fit")}
+                className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+              >
                 <Activity className="h-4 w-4" /> Google Fit
               </button>
-              <button onClick={() => handleSync("Apple Health")} className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+              <button
+                onClick={() => handleSync("Apple Health")}
+                className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
+              >
                 <Zap className="h-4 w-4" /> Apple Health
               </button>
             </div>
           </div>
 
           <div className="flex justify-end">
-            <button onClick={handleSave} className="rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-sky-700">Save &amp; Send</button>
+            <button
+              onClick={handleSave}
+              className="rounded-md bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-sky-700"
+            >
+              Save &amp; Send
+            </button>
           </div>
         </div>
 
         {/* Analysis Results */}
         {showAnalysis && analysisResults.length > 0 && (
           <div className="mt-8 rounded-lg border-2 border-sky-200 bg-sky-50 p-6">
-            <h2 className="text-lg font-semibold text-slate-900 mb-4">📊 Vitals Analysis</h2>
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">
+              📊 Vitals Analysis
+            </h2>
             <div className="space-y-4">
               {analysisResults.map((analysis) => {
                 const isNormal = analysis.status === "Normal";
@@ -265,13 +356,21 @@ export default function Vitals() {
                   >
                     <div className="flex items-start gap-3">
                       <div className="mt-1">
-                        {isCritical && <AlertTriangle className="h-5 w-5 text-red-600" />}
-                        {isWarning && <AlertCircle className="h-5 w-5 text-yellow-600" />}
-                        {isNormal && <div className="h-5 w-5 rounded-full bg-green-600" />}
+                        {isCritical && (
+                          <AlertTriangle className="h-5 w-5 text-red-600" />
+                        )}
+                        {isWarning && (
+                          <AlertCircle className="h-5 w-5 text-yellow-600" />
+                        )}
+                        {isNormal && (
+                          <div className="h-5 w-5 rounded-full bg-green-600" />
+                        )}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
-                          <div className="font-semibold text-slate-900">{analysis.vital}</div>
+                          <div className="font-semibold text-slate-900">
+                            {analysis.vital}
+                          </div>
                           <div
                             className={`text-xs font-bold px-2 py-1 rounded ${
                               isCritical
@@ -288,17 +387,31 @@ export default function Vitals() {
                         <div className="mt-2 text-sm text-slate-700">
                           <div>
                             <strong>Current:</strong> {analysis.currentValue}
-                            {analysis.vital.includes("Pressure") ? " mmHg" : analysis.vital === "Oxygen Saturation" ? "%" : ""}
+                            {analysis.vital.includes("Pressure")
+                              ? " mmHg"
+                              : analysis.vital === "Oxygen Saturation"
+                                ? "%"
+                                : ""}
                           </div>
                           <div>
-                            <strong>Normal Range:</strong> {analysis.lowerLimit.toFixed(1)}-{analysis.upperLimit.toFixed(1)}
-                            {analysis.vital.includes("Pressure") ? " mmHg" : analysis.vital === "Oxygen Saturation" ? "%" : ""}
+                            <strong>Normal Range:</strong>{" "}
+                            {analysis.lowerLimit.toFixed(1)}-
+                            {analysis.upperLimit.toFixed(1)}
+                            {analysis.vital.includes("Pressure")
+                              ? " mmHg"
+                              : analysis.vital === "Oxygen Saturation"
+                                ? "%"
+                                : ""}
                           </div>
                         </div>
 
                         <div className="mt-2 text-sm">
-                          <div className="text-slate-700">{analysis.reason}</div>
-                          <div className={`mt-2 font-medium ${isCritical ? "text-red-700" : isWarning ? "text-yellow-700" : "text-green-700"}`}>
+                          <div className="text-slate-700">
+                            {analysis.reason}
+                          </div>
+                          <div
+                            className={`mt-2 font-medium ${isCritical ? "text-red-700" : isWarning ? "text-yellow-700" : "text-green-700"}`}
+                          >
                             {analysis.recommendedAction}
                           </div>
                         </div>
@@ -315,10 +428,18 @@ export default function Vitals() {
         <div className="mt-8">
           <h2 className="text-lg font-semibold mb-4">Recent Vitals</h2>
           <div className="space-y-3">
-            {saved.length === 0 && <div className="text-sm text-slate-500">No vitals recorded yet.</div>}
+            {saved.length === 0 && (
+              <div className="text-sm text-slate-500">
+                No vitals recorded yet.
+              </div>
+            )}
             {saved.map((r) => {
-              const hasCritical = r.analysis?.some((a: VitalAnalysis) => a.status === "Critical");
-              const hasWarning = r.analysis?.some((a: VitalAnalysis) => a.status === "Warning");
+              const hasCritical = r.analysis?.some(
+                (a: VitalAnalysis) => a.status === "Critical",
+              );
+              const hasWarning = r.analysis?.some(
+                (a: VitalAnalysis) => a.status === "Warning",
+              );
               const hasAnalysis = r.analysis && r.analysis.length > 0;
 
               return (
@@ -336,19 +457,28 @@ export default function Vitals() {
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <div className="text-sm font-medium">{new Date(r.datetime).toLocaleString()}</div>
-                      <div className="mt-1 text-sm text-slate-600">BP: {r.bp || "—"} • HR: {r.hr || "—"} • SpO2: {r.spO2 || "—"}</div>
+                      <div className="text-sm font-medium">
+                        {new Date(r.datetime).toLocaleString()}
+                      </div>
+                      <div className="mt-1 text-sm text-slate-600">
+                        BP: {r.bp || "—"} • HR: {r.hr || "—"} • SpO2:{" "}
+                        {r.spO2 || "—"}
+                      </div>
                     </div>
                     {hasCritical && (
                       <div className="flex items-center gap-1 rounded-md bg-red-100 px-2 py-1">
                         <AlertTriangle className="h-4 w-4 text-red-600" />
-                        <span className="text-xs font-bold text-red-700">CRITICAL</span>
+                        <span className="text-xs font-bold text-red-700">
+                          CRITICAL
+                        </span>
                       </div>
                     )}
                     {hasWarning && !hasCritical && (
                       <div className="flex items-center gap-1 rounded-md bg-yellow-100 px-2 py-1">
                         <AlertCircle className="h-4 w-4 text-yellow-600" />
-                        <span className="text-xs font-bold text-yellow-700">WARNING</span>
+                        <span className="text-xs font-bold text-yellow-700">
+                          WARNING
+                        </span>
                       </div>
                     )}
                   </div>
@@ -356,7 +486,9 @@ export default function Vitals() {
                     <div className="mt-2 pt-2 border-t border-current border-opacity-20">
                       <div className="text-xs text-slate-600">
                         {r.analysis.map((a: VitalAnalysis) => (
-                          <div key={a.vital}>• {a.vital}: {a.status}</div>
+                          <div key={a.vital}>
+                            • {a.vital}: {a.status}
+                          </div>
                         ))}
                       </div>
                     </div>

@@ -11,7 +11,9 @@ export default function ActivityTable() {
 
     // Check for recent user registrations
     try {
-      const users = JSON.parse(localStorage.getItem("vv_registered_users") || "[]");
+      const users = JSON.parse(
+        localStorage.getItem("vv_registered_users") || "[]",
+      );
       if (users.length > 0) {
         const lastUser = users[users.length - 1];
         activities.push({
@@ -26,7 +28,9 @@ export default function ActivityTable() {
 
     // Check for recent doctor requests
     try {
-      const requests = JSON.parse(localStorage.getItem("vv_doctor_requests") || "[]");
+      const requests = JSON.parse(
+        localStorage.getItem("vv_doctor_requests") || "[]",
+      );
       const pending = requests.filter((r: any) => r.status === "pending");
       if (pending.length > 0) {
         activities.push({

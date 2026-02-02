@@ -64,7 +64,9 @@ export default function DoctorMessages() {
   const [allConversations, setAllConversations] = useState<Conversation[]>(() =>
     loadDoctorConversations(),
   );
-  const [connectedPatients, setConnectedPatients] = useState<Set<string>>(new Set());
+  const [connectedPatients, setConnectedPatients] = useState<Set<string>>(
+    new Set(),
+  );
   const [selectedConvId, setSelectedConvId] = useState<string>("");
   const [messageText, setMessageText] = useState("");
   const [alerts, setAlerts] = useState<SystemAlert[]>([]);
@@ -80,13 +82,17 @@ export default function DoctorMessages() {
 
   useEffect(() => {
     if (user?.email) {
-      const patients = DoctorRequestManager.getAcceptedPatientsForDoctor(user.email);
+      const patients = DoctorRequestManager.getAcceptedPatientsForDoctor(
+        user.email,
+      );
       const patientEmails = new Set(patients.map((p) => p.email));
       setConnectedPatients(patientEmails);
 
       // Load messages from patients and build conversations
       try {
-        const allMessages = JSON.parse(localStorage.getItem("vv_messages") || "[]");
+        const allMessages = JSON.parse(
+          localStorage.getItem("vv_messages") || "[]",
+        );
 
         // Group messages by patient email
         const messagesByPatient: Record<string, any[]> = {};
@@ -100,7 +106,9 @@ export default function DoctorMessages() {
         });
 
         // Build conversations from messages
-        const conversationsFromMessages: Conversation[] = Object.entries(messagesByPatient)
+        const conversationsFromMessages: Conversation[] = Object.entries(
+          messagesByPatient,
+        )
           .filter(([email]) => patientEmails.has(email))
           .map(([email, messages]: [string, any[]]) => {
             const patient = patients.find((p) => p.email === email);
@@ -112,7 +120,9 @@ export default function DoctorMessages() {
               patientName: patient?.fullName || email,
               avatar: `https://i.pravatar.cc/40?img=${email.charCodeAt(0) % 70}`,
               lastMessage: lastMsg?.text || "",
-              lastTime: lastMsg ? new Date(lastMsg.time).toLocaleTimeString() : "",
+              lastTime: lastMsg
+                ? new Date(lastMsg.time).toLocaleTimeString()
+                : "",
               unread: false,
               messages: messages.map((m: any) => ({
                 id: m.id,
@@ -127,7 +137,12 @@ export default function DoctorMessages() {
         const existingConvs = loadDoctorConversations();
         const mergedConversations = [
           ...conversationsFromMessages,
-          ...existingConvs.filter((ec) => !conversationsFromMessages.some((cm) => cm.patientEmail === ec.patientEmail)),
+          ...existingConvs.filter(
+            (ec) =>
+              !conversationsFromMessages.some(
+                (cm) => cm.patientEmail === ec.patientEmail,
+              ),
+          ),
         ];
 
         setAllConversations(mergedConversations);
@@ -192,7 +207,9 @@ export default function DoctorMessages() {
 
     // Also save to vv_messages so patient sees it
     try {
-      const allMessages = JSON.parse(localStorage.getItem("vv_messages") || "[]");
+      const allMessages = JSON.parse(
+        localStorage.getItem("vv_messages") || "[]",
+      );
       allMessages.push({
         id: newMessage.id,
         sender: "doctor",
@@ -276,7 +293,8 @@ export default function DoctorMessages() {
 
         {/* Main Chat Area */}
         <div className="lg:col-span-2">
-          {selectedConversation || (filteredConversations.length === 0 && connectedPatients.size > 0) ? (
+          {selectedConversation ||
+          (filteredConversations.length === 0 && connectedPatients.size > 0) ? (
             <div className="rounded-lg border bg-white shadow-sm overflow-hidden flex flex-col h-[600px]">
               {/* Chat Header */}
               <div className="border-b bg-slate-50/50 p-4">
@@ -296,22 +314,29 @@ export default function DoctorMessages() {
                   </div>
                 ) : (
                   <div>
-                    <p className="text-sm text-slate-600 mb-3">Start a conversation with a connected patient</p>
+                    <p className="text-sm text-slate-600 mb-3">
+                      Start a conversation with a connected patient
+                    </p>
                     <select
                       onChange={(e) => {
                         const patientEmail = e.target.value;
                         if (patientEmail) {
-                          const existingConv = filteredConversations.find((c) => c.patientEmail === patientEmail);
+                          const existingConv = filteredConversations.find(
+                            (c) => c.patientEmail === patientEmail,
+                          );
                           if (existingConv) {
                             setSelectedConvId(existingConv.id);
                           } else {
                             // Create new conversation
-                            const patientFromList = patients.find((p) => p.email === patientEmail);
+                            const patientFromList = patients.find(
+                              (p) => p.email === patientEmail,
+                            );
                             if (patientFromList) {
                               const newConv: Conversation = {
                                 id: `conv-${patientEmail}`,
                                 patientEmail,
-                                patientName: patientFromList.fullName || patientEmail,
+                                patientName:
+                                  patientFromList.fullName || patientEmail,
                                 avatar: `https://i.pravatar.cc/40?img=${patientEmail.charCodeAt(0) % 70}`,
                                 lastMessage: "",
                                 lastTime: "",
@@ -339,12 +364,15 @@ export default function DoctorMessages() {
 
               {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {selectedConversation && selectedConversation.messages.length > 0 ? (
+                {selectedConversation &&
+                selectedConversation.messages.length > 0 ? (
                   selectedConversation.messages.map((msg) => (
                     <div
                       key={msg.id}
                       className={`flex ${
-                        msg.sender === "doctor" ? "justify-end" : "justify-start"
+                        msg.sender === "doctor"
+                          ? "justify-end"
+                          : "justify-start"
                       }`}
                     >
                       <div
@@ -354,7 +382,9 @@ export default function DoctorMessages() {
                             : "bg-slate-100 text-slate-900"
                         }`}
                       >
-                        <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
+                        <p className="text-sm whitespace-pre-wrap">
+                          {msg.text}
+                        </p>
                         {msg.attachment && (
                           <div className="mt-2 flex items-center gap-2 rounded bg-white/20 p-2">
                             <FileText className="h-4 w-4" />
@@ -378,7 +408,9 @@ export default function DoctorMessages() {
                   ))
                 ) : (
                   <div className="flex h-full items-center justify-center">
-                    <p className="text-sm text-slate-500">No messages yet. Start typing to begin the conversation!</p>
+                    <p className="text-sm text-slate-500">
+                      No messages yet. Start typing to begin the conversation!
+                    </p>
                   </div>
                 )}
                 <div ref={endRef} />

@@ -37,7 +37,9 @@ export default function Appointments() {
   const [availableDoctors, setAvailableDoctors] = useState<DoctorProfile[]>([]);
   const [acceptedDoctors, setAcceptedDoctors] = useState<DoctorProfile[]>([]);
   const [pendingRequests, setPendingRequests] = useState<string[]>([]);
-  const [selectedDoctor, setSelectedDoctor] = useState<DoctorProfile | null>(null);
+  const [selectedDoctor, setSelectedDoctor] = useState<DoctorProfile | null>(
+    null,
+  );
   const [showDoctorRequests, setShowDoctorRequests] = useState(false);
 
   useEffect(() => persistAppts(appts), [appts]);
@@ -48,11 +50,15 @@ export default function Appointments() {
     setAvailableDoctors(doctors);
 
     if (user?.email) {
-      const accepted = DoctorRequestManager.getAcceptedDoctorsForPatient(user.email);
+      const accepted = DoctorRequestManager.getAcceptedDoctorsForPatient(
+        user.email,
+      );
       setAcceptedDoctors(accepted);
 
       // Get pending request emails
-      const allRequests = DoctorRequestManager.getRequestsFromPatient(user.email);
+      const allRequests = DoctorRequestManager.getRequestsFromPatient(
+        user.email,
+      );
       const pending = allRequests
         .filter((r) => r.status === "pending")
         .map((r) => r.doctorEmail);
@@ -151,7 +157,10 @@ export default function Appointments() {
     if (request) {
       DoctorRequestManager.rejectRequest(request.id);
       setPendingRequests((prev) => prev.filter((e) => e !== doctorEmail));
-      toast({ title: "Request cancelled", description: "Doctor request cancelled." });
+      toast({
+        title: "Request cancelled",
+        description: "Doctor request cancelled.",
+      });
     }
   }
 
@@ -333,7 +342,9 @@ export default function Appointments() {
                     onChange={(e) => {
                       const email = e.target.value;
                       setDoctorEmail(email);
-                      const doc = acceptedDoctors.find((d) => d.email === email);
+                      const doc = acceptedDoctors.find(
+                        (d) => d.email === email,
+                      );
                       if (doc) setDoctor(doc.fullName);
                     }}
                     className="mt-2 w-full rounded-md border border-slate-200 px-3 py-2 text-sm"

@@ -14,7 +14,9 @@ export default function Index() {
   useEffect(() => {
     // Count total doctors from registered users
     try {
-      const users = JSON.parse(localStorage.getItem("vv_registered_users") || "[]");
+      const users = JSON.parse(
+        localStorage.getItem("vv_registered_users") || "[]",
+      );
       const doctors = users.filter((u: any) => u.role === "Doctor").length;
       const patients = users.filter((u: any) => u.role === "Patient").length;
       setDoctorCount(doctors);
@@ -34,7 +36,9 @@ export default function Index() {
   const [alertCount, setAlertCount] = useState(0);
   useEffect(() => {
     try {
-      const alerts = JSON.parse(localStorage.getItem("vv_doctor_alerts") || "[]");
+      const alerts = JSON.parse(
+        localStorage.getItem("vv_doctor_alerts") || "[]",
+      );
       setAlertCount(alerts.length);
     } catch (e) {
       setAlertCount(0);

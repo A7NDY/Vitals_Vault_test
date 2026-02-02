@@ -31,7 +31,9 @@ interface DoctorAlert {
 export default function DoctorAlerts() {
   const { user } = useAuth();
   const [alerts, setAlerts] = useState<DoctorAlert[]>([]);
-  const [filter, setFilter] = useState<"All" | "Critical" | "Warning" | "Unread">("All");
+  const [filter, setFilter] = useState<
+    "All" | "Critical" | "Warning" | "Unread"
+  >("All");
 
   useEffect(() => {
     loadAlerts();
@@ -49,11 +51,15 @@ export default function DoctorAlerts() {
 
   function markAsRead(alertId: string) {
     setAlerts((prev) =>
-      prev.map((alert) => (alert.id === alertId ? { ...alert, read: true } : alert)),
+      prev.map((alert) =>
+        alert.id === alertId ? { ...alert, read: true } : alert,
+      ),
     );
 
     try {
-      const updated = alerts.map((alert) => (alert.id === alertId ? { ...alert, read: true } : alert));
+      const updated = alerts.map((alert) =>
+        alert.id === alertId ? { ...alert, read: true } : alert,
+      );
       localStorage.setItem("vv_doctor_alerts", JSON.stringify(updated));
     } catch (e) {
       console.error("Error updating alert:", e);
@@ -70,16 +76,22 @@ export default function DoctorAlerts() {
       console.error("Error dismissing alert:", e);
     }
 
-    toast({ title: "Alert dismissed", description: "The alert has been removed." });
+    toast({
+      title: "Alert dismissed",
+      description: "The alert has been removed.",
+    });
   }
 
   const alertsWithNames = useMemo(() => {
     return alerts.map((alert) => {
       if (!alert.patientName) {
-        const patientData = PatientDataStorage.getPatientData(alert.patientEmail);
+        const patientData = PatientDataStorage.getPatientData(
+          alert.patientEmail,
+        );
         return {
           ...alert,
-          patientName: patientData?.fullName || alert.patientEmail.split("@")[0],
+          patientName:
+            patientData?.fullName || alert.patientEmail.split("@")[0],
         };
       }
       return alert;
@@ -101,7 +113,9 @@ export default function DoctorAlerts() {
     <MainLayout>
       <div className="max-w-4xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900">Patient Vitals Alerts</h1>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Patient Vitals Alerts
+          </h1>
           <p className="mt-2 text-slate-600">
             Monitor and manage alerts from your patients' vitals readings.
           </p>
@@ -111,15 +125,21 @@ export default function DoctorAlerts() {
         <div className="mb-6 grid grid-cols-3 gap-4">
           <div className="rounded-lg border bg-white p-4">
             <div className="text-sm text-slate-600">Critical Alerts</div>
-            <div className="mt-2 text-2xl font-bold text-red-600">{criticalCount}</div>
+            <div className="mt-2 text-2xl font-bold text-red-600">
+              {criticalCount}
+            </div>
           </div>
           <div className="rounded-lg border bg-white p-4">
             <div className="text-sm text-slate-600">Warnings</div>
-            <div className="mt-2 text-2xl font-bold text-yellow-600">{warningCount}</div>
+            <div className="mt-2 text-2xl font-bold text-yellow-600">
+              {warningCount}
+            </div>
           </div>
           <div className="rounded-lg border bg-white p-4">
             <div className="text-sm text-slate-600">Unread</div>
-            <div className="mt-2 text-2xl font-bold text-sky-600">{unreadCount}</div>
+            <div className="mt-2 text-2xl font-bold text-sky-600">
+              {unreadCount}
+            </div>
           </div>
         </div>
 
@@ -171,8 +191,12 @@ export default function DoctorAlerts() {
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-3 flex-1">
                       <div className="mt-1">
-                        {isCritical && <AlertTriangle className="h-5 w-5 text-red-600" />}
-                        {isWarning && <AlertCircle className="h-5 w-5 text-yellow-600" />}
+                        {isCritical && (
+                          <AlertTriangle className="h-5 w-5 text-red-600" />
+                        )}
+                        {isWarning && (
+                          <AlertCircle className="h-5 w-5 text-yellow-600" />
+                        )}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 flex-1">
@@ -184,7 +208,8 @@ export default function DoctorAlerts() {
                               {alert.patientEmail}
                             </div>
                             <div className="text-xs text-slate-600 mt-1">
-                              Reading: {new Date(alert.readingTime).toLocaleString()}
+                              Reading:{" "}
+                              {new Date(alert.readingTime).toLocaleString()}
                             </div>
                           </div>
                           {!alert.read && (
@@ -195,12 +220,24 @@ export default function DoctorAlerts() {
                         </div>
 
                         <div className="mt-3 rounded-md bg-white/50 p-3">
-                          <div className="text-sm font-medium text-slate-700 mb-2">Vitals Reading:</div>
+                          <div className="text-sm font-medium text-slate-700 mb-2">
+                            Vitals Reading:
+                          </div>
                           <div className="grid gap-1 text-sm text-slate-600">
-                            {alert.vitals.bp && <div>• Blood Pressure: {alert.vitals.bp}</div>}
-                            {alert.vitals.hr && <div>• Heart Rate: {alert.vitals.hr} bpm</div>}
-                            {alert.vitals.spO2 && <div>• SpO2: {alert.vitals.spO2}%</div>}
-                            {alert.vitals.bloodSugar && <div>• Blood Sugar: {alert.vitals.bloodSugar} mg/dL</div>}
+                            {alert.vitals.bp && (
+                              <div>• Blood Pressure: {alert.vitals.bp}</div>
+                            )}
+                            {alert.vitals.hr && (
+                              <div>• Heart Rate: {alert.vitals.hr} bpm</div>
+                            )}
+                            {alert.vitals.spO2 && (
+                              <div>• SpO2: {alert.vitals.spO2}%</div>
+                            )}
+                            {alert.vitals.bloodSugar && (
+                              <div>
+                                • Blood Sugar: {alert.vitals.bloodSugar} mg/dL
+                              </div>
+                            )}
                           </div>
                         </div>
 
@@ -220,7 +257,9 @@ export default function DoctorAlerts() {
                                     {analysis.status}
                                   </span>
                                 </div>
-                                <div className="text-slate-600">{analysis.reason}</div>
+                                <div className="text-slate-600">
+                                  {analysis.reason}
+                                </div>
                                 <div className="mt-1 font-medium text-slate-700">
                                   ⚕️ {analysis.recommendedAction}
                                 </div>

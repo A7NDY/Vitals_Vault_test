@@ -11,7 +11,9 @@ export default function NotificationsList() {
 
     // Check for critical vitals alerts
     try {
-      const alerts = JSON.parse(localStorage.getItem("vv_doctor_alerts") || "[]");
+      const alerts = JSON.parse(
+        localStorage.getItem("vv_doctor_alerts") || "[]",
+      );
       if (alerts.length > 0) {
         notifications.push({
           title: "Critical Alerts",
@@ -24,8 +26,12 @@ export default function NotificationsList() {
 
     // Check for pending doctor requests
     try {
-      const requests = JSON.parse(localStorage.getItem("vv_doctor_requests") || "[]");
-      const pending = requests.filter((r: any) => r.status === "pending").length;
+      const requests = JSON.parse(
+        localStorage.getItem("vv_doctor_requests") || "[]",
+      );
+      const pending = requests.filter(
+        (r: any) => r.status === "pending",
+      ).length;
       if (pending > 0) {
         notifications.push({
           title: "Pending Doctor Requests",
@@ -38,11 +44,14 @@ export default function NotificationsList() {
 
     // Check system health
     try {
-      const users = JSON.parse(localStorage.getItem("vv_registered_users") || "[]");
+      const users = JSON.parse(
+        localStorage.getItem("vv_registered_users") || "[]",
+      );
       if (users.length === 0) {
         notifications.push({
           title: "No Users Registered",
-          description: "Start by having doctors and patients register in the system",
+          description:
+            "Start by having doctors and patients register in the system",
         });
       }
     } catch (e) {
