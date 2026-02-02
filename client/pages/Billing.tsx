@@ -1,41 +1,10 @@
 import MainLayout from "@/components/layout/MainLayout";
+import { useState, useEffect } from "react";
 
 const plans = [
   { name: "Basic", price: "199", note: "Up to 20 patients" },
   { name: "Standard", price: "499", note: "Up to 50 patients" },
   { name: "Premium", price: "999", note: "Unlimited patients" },
-];
-
-const subscriptions = [
-  {
-    doctor: "Dr. Emily Carter",
-    plan: "Standard",
-    renewal: "2024-08-15",
-    status: "Active",
-  },
-  {
-    doctor: "Dr. David Lee",
-    plan: "Basic",
-    renewal: "2024-07-20",
-    status: "Expired",
-  },
-  {
-    doctor: "Dr. Sarah Jones",
-    plan: "Premium",
-    renewal: "2024-09-05",
-    status: "Active",
-  },
-];
-
-const payments = [
-  {
-    id: "TXN123456",
-    amount: "₹499",
-    date: "2024-06-15",
-    method: "Credit Card",
-  },
-  { id: "TXN789012", amount: "₹199", date: "2024-05-20", method: "Debit Card" },
-  { id: "TXN345678", amount: "₹999", date: "2024-07-05", method: "UPI" },
 ];
 
 export default function Billing() {
