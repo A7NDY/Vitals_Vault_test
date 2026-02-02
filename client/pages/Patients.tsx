@@ -138,12 +138,15 @@ export default function Patients() {
                 </ul>
               )}
 
-              <div className="mt-6 flex gap-3">
-                <button onClick={() => navigate("/vitals")} className="rounded-md bg-sky-600 px-3 py-2 text-sm text-white">
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button onClick={() => navigate("/vitals")} className="rounded-md bg-sky-600 px-3 py-2 text-sm text-white hover:bg-sky-700">
                   Log Vitals
                 </button>
-                <button onClick={() => navigate("/reports")} className="rounded-md border px-3 py-2 text-sm">
+                <button onClick={() => navigate("/reports")} className="rounded-md border px-3 py-2 text-sm hover:bg-slate-50">
                   View Reports
+                </button>
+                <button onClick={() => navigate("/appointments")} className="rounded-md border border-sky-200 bg-sky-50 px-3 py-2 text-sm text-sky-600 hover:bg-sky-100">
+                  Connect Doctors
                 </button>
               </div>
             </div>
