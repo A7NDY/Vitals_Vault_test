@@ -167,7 +167,8 @@ export default function DoctorMessages() {
 
   function handleSendMessage() {
     const trimmed = messageText.trim();
-    if (!trimmed || !selectedConversation) return;
+    const conv = filteredConversations.find((c) => c.id === selectedConvId);
+    if (!trimmed || !conv) return;
 
     const newMessage: DoctorMessage = {
       id: Date.now().toString(),
