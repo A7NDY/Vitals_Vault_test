@@ -179,16 +179,16 @@ export default function DoctorMessages() {
 
     // Update doctor conversations
     setAllConversations((prev) =>
-      prev.map((conv) => {
-        if (conv.id === selectedConvId) {
+      prev.map((c) => {
+        if (c.id === selectedConvId) {
           return {
-            ...conv,
-            messages: [...conv.messages, newMessage],
+            ...c,
+            messages: [...c.messages, newMessage],
             lastMessage: trimmed,
             lastTime: "now",
           };
         }
-        return conv;
+        return c;
       }),
     );
 
@@ -200,7 +200,7 @@ export default function DoctorMessages() {
         sender: "doctor",
         text: trimmed,
         time: newMessage.time,
-        patientEmail: selectedConversation.patientEmail,
+        patientEmail: conv.patientEmail,
       });
       localStorage.setItem("vv_messages", JSON.stringify(allMessages));
     } catch (e) {
@@ -210,7 +210,7 @@ export default function DoctorMessages() {
     setMessageText("");
     toast({
       title: "Message sent",
-      description: `Message sent to ${selectedConversation.patientName}`,
+      description: `Message sent to ${conv.patientName}`,
     });
   }
 
