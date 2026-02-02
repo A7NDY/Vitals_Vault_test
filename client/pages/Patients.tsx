@@ -108,10 +108,13 @@ export default function Patients() {
               <div className="text-sm text-slate-500">{lastVital?.weight ? `${lastVital.weight} kg` : "—"}</div>
               <div className="mt-2 text-xs text-slate-400">Weight</div>
             </div>
-            <div className="rounded-lg bg-white p-4 shadow-sm">
+            <button
+              onClick={() => navigate("/appointments")}
+              className="rounded-lg bg-white p-4 shadow-sm hover:shadow-md transition-shadow text-left"
+            >
               <div className="text-sm text-slate-500">{connectedDoctors.length}</div>
               <div className="mt-2 text-xs text-slate-400">Connected Doctors</div>
-            </div>
+            </button>
           </div>
 
           <div className="mt-8 grid gap-6 md:grid-cols-2">
