@@ -105,13 +105,12 @@ export default function DoctorMessages() {
           .filter(([email]) => patientEmails.has(email))
           .map(([email, messages]: [string, any[]]) => {
             const patient = patients.find((p) => p.email === email);
-            const patientData = PatientDataStorage.getPatientData(email);
             const lastMsg = messages[messages.length - 1];
 
             return {
               id: `conv-${email}`,
               patientEmail: email,
-              patientName: patientData?.fullName || patient?.fullName || email,
+              patientName: patient?.fullName || email,
               avatar: `https://i.pravatar.cc/40?img=${email.charCodeAt(0) % 70}`,
               lastMessage: lastMsg?.text || "",
               lastTime: lastMsg ? new Date(lastMsg.time).toLocaleTimeString() : "",
