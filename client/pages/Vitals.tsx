@@ -259,14 +259,14 @@ export default function Vitals() {
                       isCritical
                         ? "border-l-4 border-red-600 bg-red-50"
                         : isWarning
-                          ? "border-l-4 border-orange-600 bg-orange-50"
+                          ? "border-l-4 border-yellow-600 bg-yellow-50"
                           : "border-l-4 border-green-600 bg-green-50"
                     }`}
                   >
                     <div className="flex items-start gap-3">
                       <div className="mt-1">
                         {isCritical && <AlertTriangle className="h-5 w-5 text-red-600" />}
-                        {isWarning && <AlertCircle className="h-5 w-5 text-orange-600" />}
+                        {isWarning && <AlertCircle className="h-5 w-5 text-yellow-600" />}
                         {isNormal && <div className="h-5 w-5 rounded-full bg-green-600" />}
                       </div>
                       <div className="flex-1">
@@ -277,7 +277,7 @@ export default function Vitals() {
                               isCritical
                                 ? "bg-red-100 text-red-800"
                                 : isWarning
-                                  ? "bg-orange-100 text-orange-800"
+                                  ? "bg-yellow-100 text-yellow-800"
                                   : "bg-green-100 text-green-800"
                             }`}
                           >
@@ -298,7 +298,7 @@ export default function Vitals() {
 
                         <div className="mt-2 text-sm">
                           <div className="text-slate-700">{analysis.reason}</div>
-                          <div className={`mt-2 font-medium ${isCritical ? "text-red-700" : isWarning ? "text-orange-700" : "text-green-700"}`}>
+                          <div className={`mt-2 font-medium ${isCritical ? "text-red-700" : isWarning ? "text-yellow-700" : "text-green-700"}`}>
                             {analysis.recommendedAction}
                           </div>
                         </div>
