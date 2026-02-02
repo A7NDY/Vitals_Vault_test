@@ -328,15 +328,11 @@ export default function DoctorMessages() {
                       className="w-full rounded-md border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:border-sky-400"
                     >
                       <option value="">Select a patient...</option>
-                      {Array.from(connectedPatients).map((email) => {
-                        const patient = Array.from(connectedPatients).find((p) => p === email);
-                        const patientData = PatientDataStorage.getPatientData(email);
-                        return (
-                          <option key={email} value={email}>
-                            {patientData?.fullName || email}
-                          </option>
-                        );
-                      })}
+                      {patients.map((patient) => (
+                        <option key={patient.email} value={patient.email}>
+                          {patient.fullName}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 )}
