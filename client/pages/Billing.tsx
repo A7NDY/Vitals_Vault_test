@@ -8,6 +8,27 @@ const plans = [
 ];
 
 export default function Billing() {
+  const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const [payments, setPayments] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Load real subscriptions from localStorage (if any)
+    try {
+      const subs = JSON.parse(localStorage.getItem("vv_subscriptions") || "[]");
+      setSubscriptions(subs);
+    } catch (e) {
+      setSubscriptions([]);
+    }
+
+    // Load real payments from localStorage (if any)
+    try {
+      const pays = JSON.parse(localStorage.getItem("vv_payments") || "[]");
+      setPayments(pays);
+    } catch (e) {
+      setPayments([]);
+    }
+  }, []);
+
   return (
     <MainLayout>
       <h1 className="mb-6 text-3xl font-semibold tracking-tight text-slate-900">
