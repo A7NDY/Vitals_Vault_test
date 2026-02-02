@@ -1,24 +1,69 @@
+import { useEffect, useState } from "react";
+
 type Row = { activity: string; details: string; timestamp: string };
 
-const rows: Row[] = [
-  {
-    activity: "Last Login",
-    details: "Dr. Emily Carter logged in",
-    timestamp: "2 hours ago",
-  },
-  {
-    activity: "Latest Doctor Registration",
-    details: "Dr. David Lee registered",
-    timestamp: "5 hours ago",
-  },
-  {
-    activity: "Recent AI Alert",
-    details: "AI detected anomaly in patient data for patient Sarah Miller",
-    timestamp: "10 hours ago",
-  },
-];
-
 export default function ActivityTable() {
+  const [rows, setRows] = useState<Row[]>([]);
+
+  useEffect(() => {
+    // Load real activities from system
+    const activities: Row[] = [];
+
+    // Check for recent user registrations
+    try {
+      const users = JSON.parse(localStorage.getItem("vv_registered_users") || "[]");
+      if (users.length > 0) {
+        const lastUser = users[users.length - 1];
+        activities.push({
+          activity: "Latest Registration",
+          details: `${lastUser.fullName} (${lastUser.role}) registered`,
+          timestamp: "Recently",
+        });
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    // Check for recent doctor requests
+    try {
+      const requests = JSON.parse(localStorage.getItem("vv_doctor_requests") || "[]");
+      const pending = requests.filter((r: any) => r.status === "pending");
+      if (pending.length > 0) {
+        activities.push({
+          activity: "Pending Requests",
+          details: `${pending.length} doctor connection request(s) awaiting approval`,
+          timestamp: "Recent",
+        });
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    // Check for recent vitals
+    try {
+      const vitals = JSON.parse(localStorage.getItem("vv_vitals") || "[]");
+      if (vitals.length > 0) {
+        activities.push({
+          activity: "Recent Vitals Entry",
+          details: `Patient submitted vital signs reading`,
+          timestamp: "Recently",
+        });
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    if (activities.length === 0) {
+      activities.push({
+        activity: "No Activities",
+        details: "No recent activities to display",
+        timestamp: "—",
+      });
+    }
+
+    setRows(activities.slice(0, 5));
+  }, []);
+
   return (
     <div className="rounded-xl border bg-white shadow-sm">
       <div className="border-b p-4 text-sm font-medium text-slate-700">
