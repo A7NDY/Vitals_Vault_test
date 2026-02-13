@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Watch, Activity, Zap, Moon, Heart } from "lucide-react";
+import { Watch, Activity, Zap, Moon, Heart, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 type SmartwatchData = {
   connected: boolean;
@@ -13,6 +14,7 @@ type SmartwatchData = {
 };
 
 export default function SmartwatchIntegration() {
+  const { toast } = useToast();
   const [smartwatchData, setSmartwatchData] = useState<SmartwatchData>({
     connected: false,
     lastSyncTime: "",
@@ -24,72 +26,211 @@ export default function SmartwatchIntegration() {
     },
   });
 
-  // Load smartwatch data from localStorage on component mount
+  const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingStatus, setIsCheckingStatus] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Check smartwatch connection status on component mount
   useEffect(() => {
-    try {
-      const stored = localStorage.getItem("vv_smartwatch");
-      if (stored) {
-        setSmartwatchData(JSON.parse(stored));
-      }
-    } catch (e) {
-      console.error("Error loading smartwatch data:", e);
-    }
+    checkConnectionStatus();
   }, []);
 
-  // Save smartwatch data to localStorage
-  const saveSmartwatchData = (data: SmartwatchData) => {
-    localStorage.setItem("vv_smartwatch", JSON.stringify(data));
-    setSmartwatchData(data);
+  // Check connection status from API
+  const checkConnectionStatus = async () => {
+    try {
+      setIsCheckingStatus(true);
+      setError(null);
+
+      const response = await fetch("/api/vitals/status", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        // If 401 or not found, smartwatch not connected
+        if (response.status === 401 || response.status === 404) {
+          setSmartwatchData((prev) => ({
+            ...prev,
+            connected: false,
+            lastSyncTime: "",
+          }));
+          setIsCheckingStatus(false);
+          return;
+        }
+        throw new Error("Failed to check smartwatch status");
+      }
+
+      const data = await response.json();
+
+      if (data.connected) {
+        setSmartwatchData((prev) => ({
+          ...prev,
+          connected: true,
+          lastSyncTime: data.lastSyncTime
+            ? new Date(data.lastSyncTime).toLocaleString()
+            : prev.lastSyncTime,
+          vitals: data.vitals ? {
+            heartRate: data.vitals.heartRate || prev.vitals.heartRate,
+            steps: data.vitals.steps || prev.vitals.steps,
+            calories: data.vitals.calories || prev.vitals.calories,
+            sleepDuration: data.vitals.sleepDuration || prev.vitals.sleepDuration,
+          } : prev.vitals,
+        }));
+      }
+    } catch (err) {
+      console.error("Error checking smartwatch status:", err);
+      setError("Failed to check smartwatch status");
+    } finally {
+      setIsCheckingStatus(false);
+    }
   };
 
-  // Handle smartwatch connection
+  // Handle redirect to Google Fit authentication
   const handleConnectSmartwatch = () => {
-    // Simulate connecting smartwatch and syncing data
-    const newData: SmartwatchData = {
-      connected: true,
-      lastSyncTime: new Date().toLocaleString(),
-      vitals: {
-        heartRate: 72 + Math.floor(Math.random() * 20),
-        steps: 8500 + Math.floor(Math.random() * 3000),
-        calories: 2100 + Math.floor(Math.random() * 500),
-        sleepDuration: 7.5 + Math.random() * 1.5,
-      },
-    };
-    saveSmartwatchData(newData);
+    try {
+      setError(null);
+      // Redirect to Google Fit authentication endpoint
+      window.location.href = "/api/auth/google-fit";
+    } catch (err) {
+      console.error("Error connecting smartwatch:", err);
+      setError("Failed to initiate smartwatch connection");
+      toast({
+        title: "Connection Error",
+        description: "Failed to connect to Google Fit. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   // Handle smartwatch disconnection
-  const handleDisconnectSmartwatch = () => {
-    const newData = {
-      ...smartwatchData,
-      connected: false,
-      lastSyncTime: "",
-    };
-    saveSmartwatchData(newData);
-  };
+  const handleDisconnectSmartwatch = async () => {
+    try {
+      setError(null);
+      setIsLoading(true);
 
-  // Handle manual sync
-  const handleSync = () => {
-    if (smartwatchData.connected) {
-      const updatedData = {
-        ...smartwatchData,
-        lastSyncTime: new Date().toLocaleString(),
-        vitals: {
-          heartRate: 72 + Math.floor(Math.random() * 20),
-          steps: smartwatchData.vitals.steps + Math.floor(Math.random() * 500),
-          calories: smartwatchData.vitals.calories + Math.floor(Math.random() * 150),
-          sleepDuration: smartwatchData.vitals.sleepDuration + (Math.random() * 0.5),
+      // Call API to disconnect (optional - depends on backend implementation)
+      const response = await fetch("/api/auth/google-fit/disconnect", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      };
-      saveSmartwatchData(updatedData);
+      });
+
+      if (response.ok) {
+        setSmartwatchData({
+          connected: false,
+          lastSyncTime: "",
+          vitals: {
+            heartRate: 0,
+            steps: 0,
+            calories: 0,
+            sleepDuration: 0,
+          },
+        });
+
+        toast({
+          title: "Disconnected",
+          description: "Smartwatch disconnected successfully.",
+        });
+      } else {
+        throw new Error("Failed to disconnect smartwatch");
+      }
+    } catch (err) {
+      console.error("Error disconnecting smartwatch:", err);
+      const errorMsg =
+        err instanceof Error ? err.message : "Failed to disconnect smartwatch";
+      setError(errorMsg);
+      toast({
+        title: "Disconnection Error",
+        description: errorMsg,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  // Sync latest vitals from smartwatch
+  const handleSyncLatestVitals = async () => {
+    try {
+      setError(null);
+      setIsSyncing(true);
+
+      const response = await fetch("/api/vitals/fetch", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch latest vitals");
+      }
+
+      const data = await response.json();
+
+      // Update smartwatch data with latest vitals
+      setSmartwatchData((prev) => ({
+        ...prev,
+        lastSyncTime: new Date().toLocaleString(),
+        vitals: {
+          heartRate: data.vitals?.heartRate || prev.vitals.heartRate,
+          steps: data.vitals?.steps || prev.vitals.steps,
+          calories: data.vitals?.calories || prev.vitals.calories,
+          sleepDuration: data.vitals?.sleepDuration || prev.vitals.sleepDuration,
+        },
+      }));
+
+      toast({
+        title: "Sync Successful",
+        description: "Latest vitals synced from your smartwatch.",
+      });
+    } catch (err) {
+      console.error("Error syncing vitals:", err);
+      const errorMsg =
+        err instanceof Error ? err.message : "Failed to sync vitals";
+      setError(errorMsg);
+      toast({
+        title: "Sync Error",
+        description: errorMsg,
+        variant: "destructive",
+      });
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  if (isCheckingStatus) {
+    return (
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold text-slate-800 mb-4">
+          Smartwatch Integration
+        </h2>
+        <div className="rounded-lg bg-white p-6 shadow-sm border border-slate-200 flex items-center justify-center h-32">
+          <div className="flex items-center gap-2 text-slate-600">
+            <Loader2 className="w-5 h-5 animate-spin" />
+            <span>Checking smartwatch status...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-8">
       <h2 className="text-xl font-semibold text-slate-800 mb-4">
         Smartwatch Integration
       </h2>
+
+      {/* Error Alert */}
+      {error && (
+        <div className="rounded-lg bg-red-50 border border-red-200 p-4 mb-4">
+          <p className="text-sm text-red-700">{error}</p>
+        </div>
+      )}
 
       {/* Connection Card */}
       <div className="rounded-lg bg-white p-6 shadow-sm border border-slate-200 mb-6">
@@ -129,21 +270,26 @@ export default function SmartwatchIntegration() {
           {!smartwatchData.connected ? (
             <button
               onClick={handleConnectSmartwatch}
-              className="rounded-md bg-sky-600 px-4 py-2 text-sm text-white font-medium hover:bg-sky-700 transition-colors"
+              disabled={isLoading}
+              className="rounded-md bg-sky-600 px-4 py-2 text-sm text-white font-medium hover:bg-sky-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
+              {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
               Connect Smartwatch
             </button>
           ) : (
             <>
               <button
-                onClick={handleSync}
-                className="rounded-md bg-sky-600 px-4 py-2 text-sm text-white font-medium hover:bg-sky-700 transition-colors"
+                onClick={handleSyncLatestVitals}
+                disabled={isLoading || isSyncing}
+                className="rounded-md bg-sky-600 px-4 py-2 text-sm text-white font-medium hover:bg-sky-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                Sync Now
+                {isSyncing && <Loader2 className="w-4 h-4 animate-spin" />}
+                Sync Latest Vitals
               </button>
               <button
                 onClick={handleDisconnectSmartwatch}
-                className="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700 font-medium hover:bg-slate-50 transition-colors"
+                disabled={isLoading || isSyncing}
+                className="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700 font-medium hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Disconnect
               </button>
@@ -175,7 +321,7 @@ export default function SmartwatchIntegration() {
                 <Heart className="w-4 h-4 text-red-600" />
               </div>
               <div className="text-2xl font-bold text-red-900">
-                {smartwatchData.vitals.heartRate}
+                {smartwatchData.vitals.heartRate || "—"}
               </div>
               <div className="text-xs text-red-700 mt-1">BPM</div>
             </div>
@@ -189,7 +335,9 @@ export default function SmartwatchIntegration() {
                 <Activity className="w-4 h-4 text-blue-600" />
               </div>
               <div className="text-2xl font-bold text-blue-900">
-                {smartwatchData.vitals.steps.toLocaleString()}
+                {smartwatchData.vitals.steps > 0
+                  ? smartwatchData.vitals.steps.toLocaleString()
+                  : "—"}
               </div>
               <div className="text-xs text-blue-700 mt-1">steps</div>
             </div>
@@ -203,7 +351,7 @@ export default function SmartwatchIntegration() {
                 <Zap className="w-4 h-4 text-orange-600" />
               </div>
               <div className="text-2xl font-bold text-orange-900">
-                {smartwatchData.vitals.calories}
+                {smartwatchData.vitals.calories || "—"}
               </div>
               <div className="text-xs text-orange-700 mt-1">kcal</div>
             </div>
@@ -217,7 +365,9 @@ export default function SmartwatchIntegration() {
                 <Moon className="w-4 h-4 text-purple-600" />
               </div>
               <div className="text-2xl font-bold text-purple-900">
-                {smartwatchData.vitals.sleepDuration.toFixed(1)}
+                {smartwatchData.vitals.sleepDuration > 0
+                  ? smartwatchData.vitals.sleepDuration.toFixed(1)
+                  : "—"}
               </div>
               <div className="text-xs text-purple-700 mt-1">hours</div>
             </div>
