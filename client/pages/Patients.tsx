@@ -4,6 +4,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import { Search, Plus } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import DoctorRequestManager from "@/lib/doctor-requests";
+import SmartwatchIntegration from "@/components/SmartwatchIntegration";
 
 type Patient = {
   name: string;
@@ -215,6 +216,9 @@ export default function Patients() {
               )}
             </div>
           </div>
+
+          {/* Smartwatch Integration Section */}
+          <SmartwatchIntegration />
         </div>
       </MainLayout>
     );
