@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useState, useEffect, useMemo } from "react";
 import { Download, Phone } from "lucide-react";
 import { PatientDataStorage } from "@/lib/storage";
+import WearableVitalsSection from "@/components/WearableVitalsSection";
 
 interface PatientData {
   id: string;
@@ -22,6 +23,7 @@ interface PatientData {
 
 const tabs = [
   "Vitals Graphs",
+  "Wearable Vitals",
   "Symptoms Log",
   "Medications",
   "Prescriptions",
@@ -197,6 +199,11 @@ export default function PatientProfile() {
             ))}
           </div>
         </div>
+
+        {/* Wearable Vitals Tab */}
+        {activeTab === "Wearable Vitals" && (
+          <WearableVitalsSection patientEmail={id || ""} isConnected={true} />
+        )}
 
         {/* Vitals Graphs Tab */}
         {activeTab === "Vitals Graphs" && (
