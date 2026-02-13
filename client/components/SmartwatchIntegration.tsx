@@ -36,6 +36,24 @@ export default function SmartwatchIntegration() {
     checkConnectionStatus();
   }, []);
 
+  /**
+   * Get authentication headers from current session
+   */
+  function getAuthHeaders(): Record<string, string> {
+    try {
+      const user = JSON.parse(localStorage.getItem("vv_user") || "{}");
+      return {
+        "Content-Type": "application/json",
+        "x-user-email": user.email || "",
+        "x-user-role": user.role || "Patient",
+      };
+    } catch {
+      return {
+        "Content-Type": "application/json",
+      };
+    }
+  }
+
   // Check connection status from API
   const checkConnectionStatus = async () => {
     try {
@@ -44,9 +62,7 @@ export default function SmartwatchIntegration() {
 
       const response = await fetch("/api/vitals/status", {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
@@ -60,7 +76,7 @@ export default function SmartwatchIntegration() {
           setIsCheckingStatus(false);
           return;
         }
-        throw new Error("Failed to check smartwatch status");
+        throw new Error(`Failed to check smartwatch status (${response.status})`);
       }
 
       const data = await response.json();
@@ -81,27 +97,54 @@ export default function SmartwatchIntegration() {
         }));
       }
     } catch (err) {
-      console.error("Error checking smartwatch status:", err);
-      setError("Failed to check smartwatch status");
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      console.error("Error checking smartwatch status:", errorMessage);
+      setError("Could not check smartwatch status. Please try again later.");
+      setSmartwatchData((prev) => ({
+        ...prev,
+        connected: false,
+        lastSyncTime: "",
+      }));
     } finally {
       setIsCheckingStatus(false);
     }
   };
 
   // Handle redirect to Google Fit authentication
-  const handleConnectSmartwatch = () => {
+  const handleConnectSmartwatch = async () => {
     try {
       setError(null);
-      // Redirect to Google Fit authentication endpoint
-      window.location.href = "/api/auth/google-fit";
+      setIsLoading(true);
+
+      // Call API to get authorization URL
+      const response = await fetch("/api/auth/google-fit", {
+        method: "POST",
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to initiate authentication");
+      }
+
+      const data = await response.json();
+
+      // Redirect to Google's authorization URL
+      if (data.authUrl) {
+        window.location.href = data.authUrl;
+      } else {
+        throw new Error("No authorization URL returned");
+      }
     } catch (err) {
       console.error("Error connecting smartwatch:", err);
-      setError("Failed to initiate smartwatch connection");
+      const errorMsg =
+        err instanceof Error ? err.message : "Failed to connect to Google Fit";
+      setError(errorMsg);
       toast({
         title: "Connection Error",
-        description: "Failed to connect to Google Fit. Please try again.",
+        description: errorMsg + ". Please try again.",
         variant: "destructive",
       });
+      setIsLoading(false);
     }
   };
 
@@ -114,9 +157,7 @@ export default function SmartwatchIntegration() {
       // Call API to disconnect (optional - depends on backend implementation)
       const response = await fetch("/api/auth/google-fit/disconnect", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
       });
 
       if (response.ok) {
@@ -161,9 +202,7 @@ export default function SmartwatchIntegration() {
 
       const response = await fetch("/api/vitals/fetch", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getAuthHeaders(),
       });
 
       if (!response.ok) {
